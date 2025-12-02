@@ -30,9 +30,17 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '0.0.0.0',
     '.railway.app',  # Railway domains
-    config('RAILWAY_STATIC_URL', default='').replace('https://', '').replace('http://', ''),
-    config('RAILWAY_PUBLIC_DOMAIN', default=''),
+    '*',  # Allow all hosts for now (Railway will handle routing)
 ]
+
+# Add Railway-specific hosts if available
+railway_url = config('RAILWAY_STATIC_URL', default='')
+railway_domain = config('RAILWAY_PUBLIC_DOMAIN', default='')
+
+if railway_url:
+    ALLOWED_HOSTS.append(railway_url.replace('https://', '').replace('http://', ''))
+if railway_domain:
+    ALLOWED_HOSTS.append(railway_domain)
 
 # Remove empty strings from ALLOWED_HOSTS
 ALLOWED_HOSTS = [host for host in ALLOWED_HOSTS if host]
@@ -64,10 +72,15 @@ CSRF_TRUSTED_ORIGINS = [origin for origin in CSRF_TRUSTED_ORIGINS if origin]
 CORS_ALLOW_ALL_ORIGINS = False
 
 # Static files with WhiteNoise
-MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+if 'whitenoise.middleware.WhiteNoiseMiddleware' not in MIDDLEWARE:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Disable HTTPS redirect for Railway health checks
+if config('RAILWAY_ENVIRONMENT', default='') == 'production':
+    SECURE_SSL_REDIRECT = False
 
 # Security settings for production
 if not DEBUG:

@@ -10,3 +10,6 @@ restartPolicyMaxRetries = 10
 [env]
 PYTHONPATH = "/app/wacebackend"
 DJANGO_SETTINGS_MODULE = "wace_api.settings_production"
+DEBUG = "False"
+USE_HTTPS = "False"
+RAILWAY_ENVIRONMENT = "production"
