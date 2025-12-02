@@ -1,0 +1,14 @@
+[build]
+builder = "nixpacks"
+buildCommand = "cd wacebackend && pip install -r requirements.txt"
+
+[deploy]
+startCommand = "cd wacebackend && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn wace_api.wsgi:application --bind 0.0.0.0:$PORT"
+healthcheckPath = "/api/health/"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[env]
+PYTHONPATH = "/app/wacebackend"
+DJANGO_SETTINGS_MODULE = "wace_api.settings_production"

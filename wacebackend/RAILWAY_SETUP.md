@@ -18,7 +18,7 @@
    - Click "New Project"
    - Select "Deploy from GitHub repo"
    - Choose your repository
-   - Set root directory to `wacebackend`
+   - **Important**: Keep root directory as default (Railway will use the root-level configuration files)
 
 2. **Add PostgreSQL Database**
    - In your Railway project dashboard
@@ -64,11 +64,17 @@ Railway will automatically:
 
 The following files are configured for Railway:
 
-- **`railway.json`** - Railway-specific configuration
-- **`Procfile`** - Process definition for deployment
-- **`nixpacks.toml`** - Build configuration
-- **`requirements.txt`** - Updated with production dependencies
-- **`settings_production.py`** - Production Django settings
+### Root Directory Files (for Railway detection):
+- **`railway.toml`** - Railway-specific configuration
+- **`nixpacks.toml`** - Build configuration for monorepo
+- **`start.sh`** - Startup script
+- **`requirements.txt`** - Points to backend requirements
+
+### Backend Directory Files:
+- **`wacebackend/railway.json`** - Backend-specific Railway config
+- **`wacebackend/Procfile`** - Process definition
+- **`wacebackend/requirements.txt`** - Production dependencies
+- **`wacebackend/settings_production.py`** - Production Django settings
 
 ## Post-Deployment Steps
 
