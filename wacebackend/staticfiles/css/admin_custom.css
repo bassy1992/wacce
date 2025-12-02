@@ -1,0 +1,108 @@
+/* Custom CSS for Django Admin with Jazzmin - GradeUp Online */
+
+/* ============================================
+   LOGIN PAGE LOGO
+   ============================================ */
+.login-box .login-logo img,
+.login-logo img {
+    max-width: 280px !important;
+    max-height: 90px !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 auto 20px !important;
+    display: block !important;
+    object-fit: contain !important;
+}
+
+/* ============================================
+   SIDEBAR LOGO (Main Admin Dashboard)
+   ============================================ */
+
+/* Brand link container */
+.brand-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 1rem !important;
+    min-height: 70px !important;
+    background-color: #fff !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+/* Logo image in sidebar */
+.brand-link .brand-image,
+.brand-link img {
+    max-width: 160px !important;
+    max-height: 45px !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    float: none !important;
+    display: block !important;
+    object-fit: contain !important;
+}
+
+/* Hide brand text since we have logo */
+.brand-link .brand-text {
+    display: none !important;
+}
+
+/* ============================================
+   SIDEBAR COLLAPSED STATE
+   ============================================ */
+.sidebar-collapse .brand-link {
+    justify-content: center !important;
+    padding: 0.5rem !important;
+}
+
+.sidebar-collapse .brand-link .brand-image,
+.sidebar-collapse .brand-link img {
+    max-width: 45px !important;
+    max-height: 45px !important;
+}
+
+/* ============================================
+   NAVBAR LOGO (Top Bar)
+   ============================================ */
+.navbar-brand img,
+.navbar .brand-image {
+    max-width: 140px !important;
+    max-height: 35px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+}
+
+/* ============================================
+   GENERAL LOGO STYLING
+   ============================================ */
+img[src*="grade up"],
+img[src*="gradeup"] {
+    object-fit: contain !important;
+    image-rendering: -webkit-optimize-contrast !important;
+    image-rendering: crisp-edges !important;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 768px) {
+    .brand-link .brand-image,
+    .brand-link img {
+        max-width: 120px !important;
+        max-height: 35px !important;
+    }
+    
+    .login-logo img {
+        max-width: 200px !important;
+        max-height: 70px !important;
+    }
+}
+
+/* ============================================
+   DARK MODE ADJUSTMENTS
+   ============================================ */
+.dark-mode .brand-link {
+    background-color: #343a40 !important;
+    border-bottom-color: #4b545c !important;
+}

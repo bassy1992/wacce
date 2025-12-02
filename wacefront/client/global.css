@@ -1,0 +1,215 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Modern Tech Color Palette
+   * #222831 - Dark charcoal (primary dark)
+   * #393E46 - Medium gray (secondary dark)
+   * #00ADB5 - Cyan/Teal (accent)
+   * #EEEEEE - Light gray (light text/backgrounds)
+   */
+  :root {
+    /* Main backgrounds */
+    --background: 0 0% 93%; /* #EEEEEE */
+    --foreground: 217 19% 17%; /* #222831 */
+
+    /* Cards */
+    --card: 0 0% 100%; /* White for contrast */
+    --card-foreground: 217 19% 17%; /* #222831 */
+
+    /* Popovers */
+    --popover: 0 0% 100%;
+    --popover-foreground: 217 19% 17%;
+
+    /* Primary colors */
+    --primary: 186 100% 35%; /* #00ADB5 - Cyan/Teal */
+    --primary-foreground: 0 0% 100%; /* White */
+
+    /* Secondary colors */
+    --secondary: 215 12% 27%; /* #393E46 - Medium gray */
+    --secondary-foreground: 0 0% 93%; /* #EEEEEE */
+
+    /* Muted colors */
+    --muted: 0 0% 93%; /* #EEEEEE */
+    --muted-foreground: 215 12% 27%; /* #393E46 */
+
+    /* Accent colors */
+    --accent: 186 100% 35%; /* #00ADB5 - Cyan/Teal */
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive (keep red for errors) */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Borders and inputs */
+    --border: 215 12% 27%; /* #393E46 */
+    --input: 0 0% 93%; /* #EEEEEE */
+    --ring: 186 100% 35%; /* #00ADB5 */
+
+    --radius: 0.5rem;
+
+    /* Sidebar */
+    --sidebar-background: 217 19% 17%; /* #222831 */
+    --sidebar-foreground: 0 0% 93%; /* #EEEEEE */
+    --sidebar-primary: 186 100% 35%; /* #00ADB5 */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 12% 27%; /* #393E46 */
+    --sidebar-accent-foreground: 0 0% 93%; /* #EEEEEE */
+    --sidebar-border: 215 12% 27%; /* #393E46 */
+    --sidebar-ring: 186 100% 35%; /* #00ADB5 */
+  }
+
+  .dark {
+    /* Dark mode - using the darker colors as primary */
+    --background: 217 19% 17%; /* #222831 */
+    --foreground: 0 0% 93%; /* #EEEEEE */
+
+    --card: 215 12% 27%; /* #393E46 */
+    --card-foreground: 0 0% 93%; /* #EEEEEE */
+
+    --popover: 217 19% 17%; /* #222831 */
+    --popover-foreground: 0 0% 93%; /* #EEEEEE */
+
+    --primary: 186 100% 35%; /* #00ADB5 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 12% 27%; /* #393E46 */
+    --secondary-foreground: 0 0% 93%; /* #EEEEEE */
+
+    --muted: 215 12% 27%; /* #393E46 */
+    --muted-foreground: 0 0% 93%; /* #EEEEEE */
+
+    --accent: 186 100% 35%; /* #00ADB5 */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 12% 27%; /* #393E46 */
+    --input: 215 12% 27%; /* #393E46 */
+    --ring: 186 100% 35%; /* #00ADB5 */
+
+    --sidebar-background: 217 19% 17%; /* #222831 */
+    --sidebar-foreground: 0 0% 93%; /* #EEEEEE */
+    --sidebar-primary: 186 100% 35%; /* #00ADB5 */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 12% 27%; /* #393E46 */
+    --sidebar-accent-foreground: 0 0% 93%; /* #EEEEEE */
+    --sidebar-border: 215 12% 27%; /* #393E46 */
+    --sidebar-ring: 186 100% 35%; /* #00ADB5 */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom tech color utility classes */
+@layer utilities {
+  .tech-dark-charcoal {
+    background-color: #222831;
+    color: #eeeeee;
+  }
+
+  .tech-medium-gray {
+    background-color: #393e46;
+    color: #eeeeee;
+  }
+
+  .tech-cyan {
+    background-color: #00adb5;
+    color: #ffffff;
+  }
+
+  .tech-light-gray {
+    background-color: #eeeeee;
+    color: #222831;
+  }
+
+  .text-tech-dark-charcoal {
+    color: #222831;
+  }
+
+  .text-tech-medium-gray {
+    color: #393e46;
+  }
+
+  .text-tech-cyan {
+    color: #00adb5;
+  }
+
+  .text-tech-light-gray {
+    color: #eeeeee;
+  }
+
+  .border-tech-dark-charcoal {
+    border-color: #222831;
+  }
+
+  .border-tech-medium-gray {
+    border-color: #393e46;
+  }
+
+  .border-tech-cyan {
+    border-color: #00adb5;
+  }
+
+  .border-tech-light-gray {
+    border-color: #eeeeee;
+  }
+
+  .hover-tech-cyan:hover {
+    background-color: #00adb5;
+    color: #ffffff;
+  }
+
+  .hover-tech-dark-charcoal:hover {
+    background-color: #222831;
+    color: #eeeeee;
+  }
+
+  .gradient-tech {
+    background: linear-gradient(135deg, #222831 0%, #393e46 50%, #00adb5 100%);
+  }
+
+  .gradient-tech-light {
+    background: linear-gradient(135deg, #00adb5 0%, #393e46 50%, #222831 100%);
+  }
+
+  /* Fast animations */
+  .transition-fast {
+    transition: all 0.1s ease-out;
+  }
+
+  .transition-medium {
+    transition: all 0.15s ease-out;
+  }
+
+  .duration-fast {
+    transition-duration: 0.1s;
+  }
+
+  .duration-medium {
+    transition-duration: 0.15s;
+  }
+
+  /* Global animation speed override */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.1s !important;
+  }
+
+  /* Specific overrides for very slow animations */
+  .animate-float,
+  .animate-float-delayed {
+    animation-duration: 3s !important;
+  }
+}

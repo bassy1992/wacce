@@ -1,0 +1,7 @@
+from django.apps import AppConfig
+
+
+class PastQuestionsConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'past_questions'
+    verbose_name = 'WASSCE Past Questions'
