@@ -16,7 +16,6 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
-  Mail,
   Lock,
   Eye,
   EyeOff,
@@ -25,9 +24,6 @@ import {
   CheckCircle,
   AlertCircle,
   Loader2,
-  Wifi,
-  WifiOff,
-  Bug,
   User,
 } from "lucide-react";
 
@@ -43,38 +39,12 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [apiStatus, setApiStatus] = useState<'unknown' | 'connected' | 'disconnected'>('unknown');
-
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
-
-  // Test API connection on component mount
-  useEffect(() => {
-    const testConnection = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/api/", {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-        });
-        if (response.ok) {
-          setApiStatus('connected');
-        } else {
-          setApiStatus('disconnected');
-        }
-      } catch (error) {
-        setApiStatus('disconnected');
-      }
-    };
-
-    testConnection();
-  }, []);
 
   const clearMessages = () => {
     setError("");
@@ -119,29 +89,16 @@ export default function Login() {
     }
   };
 
-  const features = [
-    {
-      icon: <GraduationCap className="h-5 w-5" style={{ color: "#00ADB5" }} />,
-      text: "Access your personalized study materials",
-    },
-    {
-      icon: <CheckCircle className="h-5 w-5" style={{ color: "#00ADB5" }} />,
-      text: "Track your progress and performance",
-    },
-    {
-      icon: <Mail className="h-5 w-5" style={{ color: "#00ADB5" }} />,
-      text: "Join live online classes and sessions",
-    },
-  ];
+
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#EEEEEE" }}>
       <Navigation />
 
-      <div className="flex min-h-[calc(100vh-4rem)]">
+      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-4rem)]">
         {/* Left Side - Login Form */}
-        <div className="flex-1 flex items-center justify-center px-6 py-12">
-          <div className="w-full max-w-md">
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8 lg:py-12">
+          <div className="w-full max-w-md mx-auto">
             <Card className="border-0 shadow-xl">
               <CardHeader className="text-center space-y-4">
                 <div
@@ -165,30 +122,6 @@ export default function Login() {
               </CardHeader>
 
               <CardContent className="space-y-6">
-                {/* API Status Indicator */}
-                <div className="flex items-center justify-between p-2 rounded-lg bg-gray-50">
-                  <div className="flex items-center gap-2">
-                    {apiStatus === 'connected' && (
-                      <>
-                        <Wifi className="h-4 w-4 text-green-600" />
-                        <span className="text-sm text-green-600">Connected to server</span>
-                      </>
-                    )}
-                    {apiStatus === 'disconnected' && (
-                      <>
-                        <WifiOff className="h-4 w-4 text-red-600" />
-                        <span className="text-sm text-red-600">Server disconnected</span>
-                      </>
-                    )}
-                    {apiStatus === 'unknown' && (
-                      <>
-                        <Loader2 className="h-4 w-4 text-gray-600 animate-spin" />
-                        <span className="text-sm text-gray-600">Connecting...</span>
-                      </>
-                    )}
-                  </div>
-                  <span className="text-xs text-gray-500">localhost:8000</span>
-                </div>
 
                 {/* Success Message */}
                 {successMessage && (
@@ -208,72 +141,7 @@ export default function Login() {
                   </Alert>
                 )}
 
-                {/* Debug and Test Buttons */}
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={async () => {
-                      clearMessages();
-                      try {
-                        const response = await fetch("http://localhost:8000/api/", {
-                          method: 'GET',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          credentials: 'include',
-                        });
-                        const data = await response.json();
-                        setApiStatus('connected');
-                        setSuccessMessage(`✅ API Test: ${data.message}`);
-                        setTimeout(() => setSuccessMessage(""), 3000);
-                      } catch (error) {
-                        setApiStatus('disconnected');
-                        setError(`❌ API Test Failed: ${error}`);
-                      }
-                    }}
-                  >
-                    <Wifi className="h-3 w-3 mr-1" />
-                    Test API
-                  </Button>
 
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={async () => {
-                      clearMessages();
-                      try {
-                        const testData = {
-                          username: formData.username || "testuser123",
-                          password: formData.password || "password123",
-                        };
-
-                        console.log("Testing login with:", testData);
-
-                        const response = await fetch("http://localhost:8000/api/auth/debug-signup/", {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          credentials: 'include',
-                          body: JSON.stringify(testData),
-                        });
-                        const data = await response.json();
-                        console.log("Debug response:", data);
-                        setSuccessMessage(`🐛 Debug successful! Check console for details.`);
-                        setTimeout(() => setSuccessMessage(""), 5000);
-                      } catch (error) {
-                        console.error("Debug error:", error);
-                        setError(`🐛 Debug Test Failed: ${error}`);
-                      }
-                    }}
-                  >
-                    <Bug className="h-3 w-3 mr-1" />
-                    Debug Login
-                  </Button>
-                </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
@@ -360,7 +228,7 @@ export default function Login() {
                   <Button
                     type="submit"
                     className="w-full py-3 bg-blue-600 hover:bg-blue-700"
-                    disabled={isLoading || apiStatus === 'disconnected'}
+                    disabled={isLoading}
                   >
                     {isLoading ? (
                       <>
@@ -374,41 +242,7 @@ export default function Login() {
                       </>
                     )}
                   </Button>
-                  
-                  {apiStatus === 'disconnected' && (
-                    <p className="text-sm text-red-600 text-center mt-2">
-                      ⚠️ Cannot sign in while disconnected from server
-                    </p>
-                  )}
                 </form>
-
-                {/* Form Actions */}
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => {
-                      setFormData({
-                        username: "",
-                        password: "",
-                        rememberMe: false,
-                      });
-                      clearMessages();
-                    }}
-                  >
-                    Clear Form
-                  </Button>
-                  
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="flex-1"
-                    onClick={clearMessages}
-                  >
-                    Clear Messages
-                  </Button>
-                </div>
 
                 <div className="text-center pt-4">
                   <p style={{ color: "#393E46" }}>
@@ -447,14 +281,24 @@ export default function Login() {
             </p>
 
             <div className="space-y-4">
-              {features.map((feature, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <div className="bg-white/20 rounded-full p-2">
-                    {feature.icon}
-                  </div>
-                  <span style={{ color: "#EEEEEE" }}>{feature.text}</span>
+              <div className="flex items-center gap-3">
+                <div className="bg-white/20 rounded-full p-2">
+                  <GraduationCap className="h-5 w-5" style={{ color: "#00ADB5" }} />
                 </div>
-              ))}
+                <span style={{ color: "#EEEEEE" }}>Access your personalized study materials</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="bg-white/20 rounded-full p-2">
+                  <CheckCircle className="h-5 w-5" style={{ color: "#00ADB5" }} />
+                </div>
+                <span style={{ color: "#EEEEEE" }}>Track your progress and performance</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="bg-white/20 rounded-full p-2">
+                  <User className="h-5 w-5" style={{ color: "#00ADB5" }} />
+                </div>
+                <span style={{ color: "#EEEEEE" }}>Join live online classes and sessions</span>
+              </div>
             </div>
 
             <div
@@ -466,22 +310,6 @@ export default function Login() {
                 <br />
                 Study from anywhere with our comprehensive digital platform
               </p>
-            </div>
-
-            {/* Test Credentials */}
-            <div
-              className="mt-6 p-4 rounded-lg border border-white/20"
-              style={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}
-            >
-              <p className="text-sm font-semibold text-white mb-2">🧪 Test Credentials:</p>
-              <div className="text-xs space-y-1" style={{ color: "#EEEEEE" }}>
-                <p><strong>Username:</strong> testuser123</p>
-                <p><strong>Email:</strong> test@example.com</p>
-                <p><strong>Password:</strong> password123</p>
-                <p className="text-yellow-200 mt-2">
-                  💡 You can use either username or email to login
-                </p>
-              </div>
             </div>
           </div>
         </div>

@@ -29,7 +29,6 @@ import {
   Phone,
   Mail,
   User,
-  CreditCard,
   Info,
   Lock,
   Eye,
@@ -64,10 +63,6 @@ export default function Registration() {
     password: "",
     confirmPassword: "",
     program: "",
-    mode: "",
-    paymentOption: "",
-    mobileMoneyNumber: "",
-    mobileMoneyName: "",
   });
 
   const programs = {
@@ -155,44 +150,29 @@ export default function Registration() {
       return;
     }
 
-    // MTN Mobile Money validation
-    if (!formData.mobileMoneyNumber || !formData.mobileMoneyName) {
-      alert("Please fill in your MTN Mobile Money information.");
-      setIsProcessing(false);
-      return;
-    }
-
-    // Validate MTN number format
-    if (
-      !formData.mobileMoneyNumber.startsWith("024") &&
-      !formData.mobileMoneyNumber.startsWith("054") &&
-      !formData.mobileMoneyNumber.startsWith("055") &&
-      !formData.mobileMoneyNumber.startsWith("059")
-    ) {
-      alert(
-        "Please enter a valid MTN Mobile Money number (024, 054, 055, or 059).",
-      );
+    // Program selection validation
+    if (!selectedProgram) {
+      alert("Please select a program to continue.");
       setIsProcessing(false);
       return;
     }
 
     try {
-      // Simulate MTN Mobile Money processing
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      // Simulate registration processing
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Here you would normally:
       // 1. Create user account
-      // 2. Initiate MTN Mobile Money payment request
-      // 3. Send SMS prompt to user's mobile number
-      // 4. Process mobile money payment
-      // 5. Send confirmation email
+      // 2. Send confirmation email
+      // 3. Set up student profile
+      // 4. Grant access to selected program
 
       // Navigate to confirmation page with program ID
       const programId = formData.program || "general-science";
       navigate(`/confirmation/${programId}`);
     } catch (error) {
       alert(
-        "MTN Mobile Money payment failed. Please check your mobile money balance and try again.",
+        "Registration failed. Please check your information and try again.",
       );
       setIsProcessing(false);
     }
@@ -212,28 +192,28 @@ export default function Registration() {
       >
         <div className="absolute inset-0">
           <img
-            src="https://images.pexels.com/photos/4144294/pexels-photo-4144294.jpeg"
+            src="/images/Aburi-Girls-Ghana-Grows-411-scaled.jpg"
             alt="Student learning online in modern workspace"
             className="w-full h-full object-cover opacity-15"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#222831]/90 to-[#00ADB5]/85"></div>
         </div>
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 Register for{" "}
-                <span className="text-[#00ADB5]">Virtual High Academy</span>
+                <span className="text-[#00ADB5]">FREE Government Program</span>
               </h1>
               <p
                 className="text-xl mb-8 leading-relaxed"
                 style={{ color: "#EEEEEE" }}
               >
-                Take the first step towards WASSCE success. Complete your
-                registration and start your academic journey with us.
+                Join the Ghana Education Service FREE WASSCE preparation program. 
+                Quality education for all Ghanaian students - no cost, no barriers.
               </p>
-              <div className="flex gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 transform hover:scale-105 transition-all duration-100">
                   <div className="text-2xl font-bold text-[#00ADB5]">500+</div>
                   <div className="text-sm">Students Enrolled</div>
@@ -325,7 +305,7 @@ export default function Registration() {
 
       {/* Registration Benefits */}
       <section className="py-12" style={{ backgroundColor: "white" }}>
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
             <h2
               className="text-3xl font-bold text-center mb-8"
@@ -333,7 +313,7 @@ export default function Registration() {
             >
               What You Get When You Register
             </h2>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
               <div className="flex items-center gap-3">
                 <CheckCircle className="h-6 w-6" style={{ color: "#00ADB5" }} />
                 <span style={{ color: "#393E46" }}>
@@ -376,8 +356,8 @@ export default function Registration() {
       </section>
 
       {/* Registration Form */}
-      <section className="py-16" style={{ backgroundColor: "#EEEEEE" }}>
-        <div className="container mx-auto px-6">
+      <section className="py-12 lg:py-16" style={{ backgroundColor: "#EEEEEE" }}>
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
             <Card className="border-0 shadow-lg">
               <CardHeader className="text-center">
@@ -393,7 +373,7 @@ export default function Registration() {
                 </CardDescription>
               </CardHeader>
 
-              <CardContent className="p-8">
+              <CardContent className="p-4 sm:p-6 lg:p-8">
                 <form onSubmit={handleSubmit} className="space-y-8">
                   {/* Personal Information */}
                   <div className="space-y-6">
@@ -405,7 +385,7 @@ export default function Registration() {
                       Personal Information
                     </h3>
 
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
                       <div className="space-y-2">
                         <Label htmlFor="fullName">Full Name *</Label>
                         <Input
@@ -597,37 +577,46 @@ export default function Registration() {
                     </div>
                   </div>
 
-                  {/* Checkout & Payment Information */}
-                  <div className="space-y-8">
+                  {/* Program Confirmation */}
+                  <div className="space-y-6">
                     <h3
                       className="text-xl font-semibold flex items-center gap-2"
                       style={{ color: "#222831" }}
                     >
-                      <CreditCard
+                      <CheckCircle
                         className="h-5 w-5"
                         style={{ color: "#00ADB5" }}
                       />
-                      Checkout & Payment
+                      Program Confirmation
                     </h3>
 
-                    {/* Order Summary */}
+                    {/* Free Program Notice */}
                     <div
                       className="p-6 rounded-lg border"
                       style={{
-                        backgroundColor: "#f8f9fa",
-                        borderColor: "#00ADB5",
+                        backgroundColor: "#dcfce7",
+                        borderColor: "#16a34a",
                       }}
                     >
-                      <h4
-                        className="font-semibold mb-4"
-                        style={{ color: "#222831" }}
-                      >
-                        Order Summary
-                      </h4>
+                      <div className="flex items-center gap-3 mb-4">
+                        <CheckCircle className="h-8 w-8 text-green-600" />
+                        <div>
+                          <h4
+                            className="font-bold text-lg"
+                            style={{ color: "#222831" }}
+                          >
+                            FREE Government Program
+                          </h4>
+                          <p className="text-sm text-green-700">
+                            Sponsored by Ghana Education Service
+                          </p>
+                        </div>
+                      </div>
+                      
                       <div className="space-y-3">
-                        <div className="flex justify-between">
+                        <div className="flex justify-between items-center">
                           <span style={{ color: "#393E46" }}>
-                            Program:{" "}
+                            Selected Program:{" "}
                             {formData.program
                               ? programs[
                                   formData.program as keyof typeof programs
@@ -635,195 +624,59 @@ export default function Registration() {
                               : "Not Selected"}
                           </span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between items-center">
                           <span style={{ color: "#393E46" }}>
-                            Full Payment (10% discount)
+                            Program Fee
                           </span>
                           <span
-                            className="font-semibold"
-                            style={{ color: "#222831" }}
+                            className="font-bold text-lg text-green-600"
                           >
-                            GH₵ 1,800
+                            FREE
                           </span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between items-center">
                           <span style={{ color: "#393E46" }}>
-                            Processing Fee
+                            Registration Fee
                           </span>
-                          <span style={{ color: "#393E46" }}>GH₵ 0</span>
+                          <span className="text-green-600 font-medium">FREE</span>
                         </div>
-                        <div className="border-t pt-3 flex justify-between">
+                        <div className="border-t border-green-300 pt-3 flex justify-between items-center">
                           <span
                             className="font-bold"
                             style={{ color: "#222831" }}
                           >
-                            Total
+                            Total Cost
                           </span>
                           <span
-                            className="font-bold text-lg"
-                            style={{ color: "#00ADB5" }}
+                            className="font-bold text-2xl text-green-600"
                           >
-                            GH₵ 1,800
+                            FREE
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    {/* MTN Mobile Money Payment */}
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div
-                          className="w-12 h-12 rounded-lg flex items-center justify-center"
-                          style={{ backgroundColor: "#FFD700" }}
-                        >
-                          <Phone
-                            className="h-6 w-6"
-                            style={{ color: "#000" }}
-                          />
-                        </div>
-                        <div>
-                          <h4
-                            className="font-semibold"
-                            style={{ color: "#222831" }}
-                          >
-                            MTN Mobile Money Payment
-                          </h4>
-                          <p className="text-sm" style={{ color: "#393E46" }}>
-                            Pay securely with your MTN Mobile Money account
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="grid gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="mobileMoneyName">
-                            Account Holder Name *
-                          </Label>
-                          <Input
-                            id="mobileMoneyName"
-                            placeholder="Name as registered with MTN Mobile Money"
-                            value={formData.mobileMoneyName}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                mobileMoneyName: e.target.value,
-                              })
-                            }
-                            required
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="mobileMoneyNumber">
-                            MTN Mobile Money Number *
-                          </Label>
-                          <div className="relative">
-                            <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                            <Input
-                              id="mobileMoneyNumber"
-                              placeholder="024XXXXXXX"
-                              className="pl-10"
-                              value={formData.mobileMoneyNumber}
-                              onChange={(e) => {
-                                const value = e.target.value.replace(/\D/g, "");
-                                setFormData({
-                                  ...formData,
-                                  mobileMoneyNumber: value,
-                                });
-                              }}
-                              maxLength={10}
-                              required
-                            />
-                          </div>
-                          <p className="text-xs" style={{ color: "#393E46" }}>
-                            Enter your 10-digit MTN number (024, 054, 055, or
-                            059)
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* MTN Network Validation */}
-                      {formData.mobileMoneyNumber && (
-                        <div
-                          className="p-3 rounded-lg"
-                          style={{
-                            backgroundColor:
-                              formData.mobileMoneyNumber.startsWith("024") ||
-                              formData.mobileMoneyNumber.startsWith("054") ||
-                              formData.mobileMoneyNumber.startsWith("055") ||
-                              formData.mobileMoneyNumber.startsWith("059")
-                                ? "#dcfce7"
-                                : "#fef2f2",
-                            borderColor:
-                              formData.mobileMoneyNumber.startsWith("024") ||
-                              formData.mobileMoneyNumber.startsWith("054") ||
-                              formData.mobileMoneyNumber.startsWith("055") ||
-                              formData.mobileMoneyNumber.startsWith("059")
-                                ? "#16a34a"
-                                : "#dc2626",
-                            border: "1px solid",
-                          }}
-                        >
-                          <div className="flex items-center gap-2">
-                            {formData.mobileMoneyNumber.startsWith("024") ||
-                            formData.mobileMoneyNumber.startsWith("054") ||
-                            formData.mobileMoneyNumber.startsWith("055") ||
-                            formData.mobileMoneyNumber.startsWith("059") ? (
-                              <CheckCircle className="h-4 w-4 text-green-600" />
-                            ) : (
-                              <Info className="h-4 w-4 text-red-600" />
-                            )}
-                            <span
-                              className="text-sm font-medium"
-                              style={{
-                                color:
-                                  formData.mobileMoneyNumber.startsWith(
-                                    "024",
-                                  ) ||
-                                  formData.mobileMoneyNumber.startsWith(
-                                    "054",
-                                  ) ||
-                                  formData.mobileMoneyNumber.startsWith(
-                                    "055",
-                                  ) ||
-                                  formData.mobileMoneyNumber.startsWith("059")
-                                    ? "#16a34a"
-                                    : "#dc2626",
-                              }}
-                            >
-                              {formData.mobileMoneyNumber.startsWith("024") ||
-                              formData.mobileMoneyNumber.startsWith("054") ||
-                              formData.mobileMoneyNumber.startsWith("055") ||
-                              formData.mobileMoneyNumber.startsWith("059")
-                                ? "Valid MTN Mobile Money Number"
-                                : "Please enter a valid MTN number (024, 054, 055, or 059)"}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* MTN Mobile Money Security Notice */}
+                    {/* Government Program Benefits */}
                     <div
                       className="p-4 rounded-lg"
-                      style={{ backgroundColor: "#fff7ed" }}
+                      style={{ backgroundColor: "#f0f9ff" }}
                     >
-                      <div className="flex items-center gap-2 mb-2">
-                        <Lock
-                          className="h-4 w-4"
-                          style={{ color: "#FFD700" }}
+                      <div className="flex items-center gap-2 mb-3">
+                        <GraduationCap
+                          className="h-5 w-5"
+                          style={{ color: "#00ADB5" }}
                         />
                         <span
                           className="font-medium"
                           style={{ color: "#222831" }}
                         >
-                          Secure MTN Mobile Money Payment
+                          Government Education Initiative
                         </span>
                       </div>
                       <p className="text-sm" style={{ color: "#393E46" }}>
-                        You will receive an SMS prompt on your MTN number to
-                        authorize the payment. Ensure you have sufficient Mobile
-                        Money balance (GH₵ 1,800) before completing
-                        registration.
+                        This program is fully funded by the Ghana Education Service 
+                        to provide free, quality WASSCE preparation to all Ghanaian students. 
+                        No payment required - just complete your registration to get started!
                       </p>
                     </div>
                   </div>
@@ -869,24 +722,18 @@ export default function Registration() {
                         !formData.phone ||
                         !formData.password ||
                         !formData.confirmPassword ||
-                        !selectedProgram ||
-                        !formData.mobileMoneyNumber ||
-                        !formData.mobileMoneyName ||
-                        (!formData.mobileMoneyNumber.startsWith("024") &&
-                          !formData.mobileMoneyNumber.startsWith("054") &&
-                          !formData.mobileMoneyNumber.startsWith("055") &&
-                          !formData.mobileMoneyNumber.startsWith("059"))
+                        !selectedProgram
                       }
                     >
                       {isProcessing ? (
                         <div className="flex items-center gap-2">
                           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          Processing MTN Mobile Money...
+                          Processing Registration...
                         </div>
                       ) : (
                         <div className="flex items-center gap-2">
-                          <Phone className="h-5 w-5" />
-                          Complete Registration & Pay with MTN MoMo
+                          <CheckCircle className="h-5 w-5" />
+                          Complete FREE Registration
                         </div>
                       )}
                     </Button>
@@ -895,9 +742,9 @@ export default function Registration() {
                       style={{ color: "#393E46" }}
                     >
                       By completing this registration, you agree to our Terms of
-                      Service and Privacy Policy. You'll receive an SMS prompt
-                      to authorize the MTN Mobile Money payment, and immediate
-                      access to your selected program upon successful payment.
+                      Service and Privacy Policy. You'll receive immediate
+                      access to your selected program upon successful registration.
+                      This is a FREE government program - no payment required!
                     </p>
                   </div>
                 </form>
@@ -909,7 +756,7 @@ export default function Registration() {
 
       {/* Help Section */}
       <section className="py-12" style={{ backgroundColor: "#f8f9fa" }}>
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto text-center">
             <h3
               className="text-2xl font-bold mb-4"

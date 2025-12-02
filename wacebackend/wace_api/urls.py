@@ -19,10 +19,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+from .health import health_check, api_info
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', views.api_status, name='api-status'),
+    path('api/health/', health_check, name='health-check'),
+    path('api/info/', api_info, name='api-info'),
     path('api/students/', include('students.urls')),
     path('api/courses/', include('courses.urls')),
     path('api/payments/', include('payments.urls')),

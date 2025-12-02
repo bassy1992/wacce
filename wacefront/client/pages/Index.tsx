@@ -11,6 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import Navigation from "../components/Navigation";
 import Logo from "../components/Logo";
+import ProgramCards from "../components/ProgramCards";
 import {
   GraduationCap,
   Users,
@@ -230,7 +231,7 @@ export default function Index() {
           background:
             "linear-gradient(135deg, #222831 0%, #393E46 50%, #00ADB5 100%)",
         }}
-        className="text-white py-20 relative overflow-hidden"
+        className="text-white py-12 sm:py-16 lg:py-20 relative overflow-hidden"
       >
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
@@ -243,13 +244,13 @@ export default function Index() {
           ></div>
         </div>
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-left">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="text-center lg:text-left">
               <div className="mb-8">
                 <Logo size="lg" />
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 Choose Your{" "}
                 <span style={{ color: "#00ADB5" }}>
                   SHS Programme
@@ -257,7 +258,7 @@ export default function Index() {
                 & Start Learning
               </h1>
               <p
-                className="text-xl md:text-2xl mb-8 max-w-3xl"
+                className="text-lg sm:text-xl md:text-2xl mb-8 max-w-3xl"
                 style={{ color: "#EEEEEE" }}
               >
                 Get full access to video lessons, notes, and practice tests for
@@ -272,28 +273,28 @@ export default function Index() {
                     className="h-6 w-6"
                     style={{ color: "#00ADB5" }}
                   />
-                  <span className="text-lg">120+ Video Lessons</span>
+                  <span className="text-sm sm:text-base lg:text-lg">120+ Video Lessons</span>
                 </div>
                 <div className="flex items-center gap-3 transform hover:translate-x-2 transition-transform duration-100">
                   <CheckCircle
                     className="h-6 w-6"
                     style={{ color: "#00ADB5" }}
                   />
-                  <span className="text-lg">PDF Notes & Tests</span>
+                  <span className="text-sm sm:text-base lg:text-lg">PDF Notes & Tests</span>
                 </div>
                 <div className="flex items-center gap-3 transform hover:translate-x-2 transition-transform duration-100">
                   <CheckCircle
                     className="h-6 w-6"
                     style={{ color: "#00ADB5" }}
                   />
-                  <span className="text-lg">1 Year Access</span>
+                  <span className="text-sm sm:text-base lg:text-lg">1 Year Access</span>
                 </div>
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link to="/registration">
                   <Button
-                    className="px-8 py-4 text-lg font-semibold transform hover:scale-105 transition-all duration-100 shadow-lg hover:shadow-xl"
+                    className="px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold transform hover:scale-105 transition-all duration-100 shadow-lg hover:shadow-xl w-full sm:w-auto"
                     style={{ backgroundColor: "#00ADB5", color: "#FFFFFF" }}
                   >
                     Start Learning Today
@@ -303,7 +304,7 @@ export default function Index() {
                 <Link to="/about">
                   <Button
                     variant="outline"
-                    className="px-8 py-4 text-lg font-semibold border-white text-white hover:bg-white hover:text-gray-900 transform hover:scale-105 transition-all duration-100"
+                    className="px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold border-white text-white hover:bg-white hover:text-gray-900 transform hover:scale-105 transition-all duration-100 w-full sm:w-auto"
                   >
                     Learn More
                   </Button>
@@ -316,7 +317,7 @@ export default function Index() {
                 {/* Main Hero Image */}
                 <div className="relative mb-6">
                   <img
-                    src="https://images.pexels.com/photos/4778621/pexels-photo-4778621.jpeg"
+                    src="/images/ad1.jpg"
                     alt="Students studying together in a bright, modern learning environment"
                     className="rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-150"
                     style={{
@@ -347,7 +348,7 @@ export default function Index() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="relative group">
                     <img
-                      src="https://images.pexels.com/photos/8197544/pexels-photo-8197544.jpeg"
+                      src="/images/Aburi-Girls-Ghana-Grows-411-scaled.jpg"
                       alt="Teacher and students celebrating academic success"
                       className="rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-100 transform group-hover:scale-105"
                       style={{
@@ -364,7 +365,7 @@ export default function Index() {
 
                   <div className="relative group">
                     <img
-                      src="https://images.pexels.com/photos/30575960/pexels-photo-30575960.jpeg"
+                      src="/images/Wesly-girls.jpg"
                       alt="Ghana graduates celebrating academic achievement"
                       className="rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-100 transform group-hover:scale-105"
                       style={{
@@ -434,16 +435,58 @@ export default function Index() {
           .delay-300 {
             animation-delay: 0.3s;
           }
+
+          /* Hide scrollbar for mobile cards */
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+
+          /* Smooth scroll behavior */
+          .scroll-smooth {
+            scroll-behavior: smooth;
+          }
+
+          /* Line clamp utility */
+          .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+
+          /* Snap scroll for mobile cards */
+          .snap-x {
+            scroll-snap-type: x mandatory;
+          }
+          
+          .snap-start {
+            scroll-snap-align: start;
+          }
+
+          /* Enhanced hover effects */
+          .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .hover-lift:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+          }
         `}</style>
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 relative" style={{ backgroundColor: "white" }}>
-        <div className="container mx-auto px-6">
+      <section className="py-12 sm:py-16 lg:py-20 relative" style={{ backgroundColor: "white" }}>
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
             <div>
               <h2
-                className="text-4xl font-bold mb-4"
+                className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4"
                 style={{ color: "#222831" }}
               >
                 Why Choose ExcelWASSCE?
@@ -456,7 +499,7 @@ export default function Index() {
               {/* Feature Image */}
               <div className="relative">
                 <img
-                  src="https://images.pexels.com/photos/5428265/pexels-photo-5428265.jpeg"
+                  src="/images/Sekondi-College-626x424.jpeg"
                   alt="Teacher engaging with student using educational tools"
                   className="rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-150"
                   style={{ height: "300px", width: "100%", objectFit: "cover" }}
@@ -475,17 +518,17 @@ export default function Index() {
 
             <div className="space-y-6">
               {/* Statistics with Images */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="relative bg-gradient-to-br from-[#00ADB5] to-[#222831] rounded-xl p-6 text-white transform hover:scale-105 transition-all duration-100">
-                  <div className="text-3xl font-bold">98%</div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="relative bg-gradient-to-br from-[#00ADB5] to-[#222831] rounded-xl p-4 sm:p-6 text-white transform hover:scale-105 transition-all duration-100">
+                  <div className="text-2xl sm:text-3xl font-bold">98%</div>
                   <div className="text-sm opacity-90">Pass Rate</div>
                   <div className="absolute top-2 right-2">
                     <Award className="h-6 w-6 opacity-70" />
                   </div>
                 </div>
 
-                <div className="relative bg-gradient-to-br from-[#393E46] to-[#222831] rounded-xl p-6 text-white transform hover:scale-105 transition-all duration-100">
-                  <div className="text-3xl font-bold">15+</div>
+                <div className="relative bg-gradient-to-br from-[#393E46] to-[#222831] rounded-xl p-4 sm:p-6 text-white transform hover:scale-105 transition-all duration-100">
+                  <div className="text-2xl sm:text-3xl font-bold">15+</div>
                   <div className="text-sm opacity-90">Years Experience</div>
                   <div className="absolute top-2 right-2">
                     <Clock className="h-6 w-6 opacity-70" />
@@ -496,7 +539,7 @@ export default function Index() {
               {/* Online Learning Image */}
               <div className="relative">
                 <img
-                  src="https://images.pexels.com/photos/6894013/pexels-photo-6894013.jpeg"
+                  src="/images/Aburi-Girls-Ghana-Grows-411-scaled.jpg"
                   alt="Student learning online in comfortable home environment"
                   className="rounded-xl shadow-lg transform hover:scale-105 transition-all duration-100"
                   style={{ height: "200px", width: "100%", objectFit: "cover" }}
@@ -510,7 +553,7 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {whyChooseUs.map((feature, index) => (
               <Card
                 key={index}
@@ -556,11 +599,11 @@ export default function Index() {
       </section>
 
       {/* Programs Offered */}
-      <section className="py-20" style={{ backgroundColor: "#393E46" }}>
-        <div className="container mx-auto px-6">
+      <section className="py-12 sm:py-16 lg:py-20" style={{ backgroundColor: "#393E46" }}>
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-16">
             <h2
-              className="text-4xl font-bold mb-4"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4"
               style={{ color: "#EEEEEE" }}
             >
               Choose Your SHS Programme
@@ -574,149 +617,32 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {programs.map((program, index) => (
-              <Card
-                key={index}
-                className="group hover:shadow-2xl transition-all duration-150 border-0 shadow-lg transform hover:-translate-y-3 hover:scale-105 overflow-hidden"
-                style={{
-                  backgroundColor: "white",
-                  border: "2px solid #00ADB5",
-                }}
-              >
-                {program.image && (
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={program.image}
-                      alt={`${program.title} program`}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-150"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-100"></div>
-                    <div className="absolute top-4 right-4 bg-white/90 rounded-full p-2 transform scale-0 group-hover:scale-100 transition-transform duration-100">
-                      <span className="text-2xl">{program.icon}</span>
-                    </div>
-                  </div>
-                )}
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-2">
-                    {!program.image && (
-                      <span className="text-3xl">{program.icon}</span>
-                    )}
-                    <CardTitle
-                      className="text-xl group-hover:text-[#00ADB5] transition-colors duration-100"
-                      style={{ color: "#222831" }}
-                    >
-                      {program.title}
-                    </CardTitle>
-                  </div>
-                  <CardDescription style={{ color: "#393E46" }}>
-                    {program.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div
-                      className="flex items-center justify-between text-sm mb-3"
-                      style={{ color: "#393E46" }}
-                    >
-                      <span>{program.totalLessons} Lessons</span>
-                      <span>{program.duration}</span>
-                      <Badge
-                        style={{ backgroundColor: "#00ADB5", color: "#FFFFFF" }}
-                        className="text-xs"
-                      >
-                        {program.price}
-                      </Badge>
-                    </div>
-
-                    <h4 className="font-semibold" style={{ color: "#222831" }}>
-                      Subjects Included:
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {program.subjects.map((subject, idx) => (
-                        <Badge
-                          key={idx}
-                          variant="secondary"
-                          style={{
-                            backgroundColor: "#393E46",
-                            color: "#EEEEEE",
-                          }}
-                          className="text-xs"
-                        >
-                          {subject}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    <div className="mt-3">
-                      <h5
-                        className="font-medium mb-2"
-                        style={{ color: "#222831" }}
-                      >
-                        What's Included:
-                      </h5>
-                      <div className="space-y-1">
-                        {program.features.map((feature, idx) => (
-                          <div
-                            key={idx}
-                            className="flex items-center gap-2 text-sm"
-                            style={{ color: "#393E46" }}
-                          >
-                            <CheckCircle
-                              className="h-3 w-3"
-                              style={{ color: "#00ADB5" }}
-                            />
-                            {feature}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <Link to="/registration" className="block pt-4">
-                      <Button
-                        className="w-full py-3"
-                        style={{ backgroundColor: "#00ADB5", color: "#FFFFFF" }}
-                        onMouseEnter={(e) =>
-                          (e.target.style.backgroundColor = "#222831")
-                        }
-                        onMouseLeave={(e) =>
-                          (e.target.style.backgroundColor = "#00ADB5")
-                        }
-                      >
-                        <CreditCard className="h-4 w-4 mr-2" />
-                        Buy Now - {program.price}
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <ProgramCards programs={programs} />
         </div>
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 relative" style={{ backgroundColor: "white" }}>
+      <section className="py-12 sm:py-16 lg:py-20 relative" style={{ backgroundColor: "white" }}>
         {/* Background Image */}
         <div className="absolute inset-0 opacity-5">
           <img
-            src="https://images.pexels.com/photos/6334577/pexels-photo-6334577.jpeg"
+            src="/images/Wesly-girls.jpg"
             alt="Students studying in library"
             className="w-full h-full object-cover"
           />
         </div>
 
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center mb-16">
             <div className="flex justify-center mb-6">
               <img
-                src="https://images.pexels.com/photos/207732/pexels-photo-207732.jpeg"
+                src="/images/ad1.jpg"
                 alt="Educational books representing knowledge"
                 className="w-20 h-20 rounded-full object-cover shadow-lg"
               />
             </div>
             <h2
-              className="text-4xl font-bold mb-4"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4"
               style={{ color: "#222831" }}
             >
               Success Stories
@@ -729,7 +655,7 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {testimonials.map((testimonial, index) => (
               <Card
                 key={index}
@@ -772,7 +698,7 @@ export default function Index() {
 
       {/* Final CTA */}
       <section
-        className="py-20 relative text-white overflow-hidden"
+        className="py-12 sm:py-16 lg:py-20 relative text-white overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #00ADB5 0%, #222831 100%)",
         }}
@@ -780,16 +706,16 @@ export default function Index() {
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <img
-            src="https://images.pexels.com/photos/8197544/pexels-photo-8197544.jpeg"
+            src="/images/Sekondi-College-626x424.jpeg"
             alt="Educational success background"
             className="w-full h-full object-cover"
           />
         </div>
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="text-center lg:text-left">
-              <h2 className="text-4xl font-bold mb-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">
                 Ready to Begin Your Success Journey?
               </h2>
               <p
@@ -803,7 +729,7 @@ export default function Index() {
                 <Link to="/registration">
                   <Button
                     size="lg"
-                    className="px-8 py-4 text-lg transform hover:scale-105 transition-all duration-100"
+                    className="px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg transform hover:scale-105 transition-all duration-100 w-full sm:w-auto"
                     style={{ backgroundColor: "#EEEEEE", color: "#222831" }}
                     onMouseEnter={(e) =>
                       (e.target.style.backgroundColor = "#393E46")
@@ -876,7 +802,7 @@ export default function Index() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
             <div>
               <div className="mb-4">
                 <Logo size="md" />

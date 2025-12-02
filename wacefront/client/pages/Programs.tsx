@@ -323,7 +323,7 @@ export default function Programs() {
       >
         <div className="absolute inset-0">
           <img
-            src="https://images.pexels.com/photos/4144294/pexels-photo-4144294.jpeg"
+            src="/images/Sekondi-College-626x424.jpeg"
             alt="Student learning online in modern workspace"
             className="w-full h-full object-cover opacity-20"
           />

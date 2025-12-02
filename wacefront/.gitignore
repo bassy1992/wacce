@@ -7,15 +7,30 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production builds
+dist/
+dist-ssr/
+build/
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 *.local
+
+# Vercel
+.vercel
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
@@ -23,5 +38,16 @@ dist-ssr
 *.sln
 *.sw?
 
+# OS generated files
+Thumbs.db
+.DS_Store
+
+# Config
 .config/
+
+# Keep .env for development
 !.env
+!.env.production
+
+.vercel
+.env*.local

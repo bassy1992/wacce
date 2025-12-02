@@ -35,11 +35,7 @@ import {
   GraduationCap,
   Calendar,
   School,
-  BookOpen,
   Loader2,
-  Wifi,
-  WifiOff,
-  Bug,
 } from "lucide-react";
 
 
@@ -69,7 +65,7 @@ export default function SignUp() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
-  const [apiStatus, setApiStatus] = useState<'unknown' | 'connected' | 'disconnected'>('unknown');
+  const [isLoadingProgrammes, setIsLoadingProgrammes] = useState(true);
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -82,44 +78,14 @@ export default function SignUp() {
   useEffect(() => {
     const fetchProgrammes = async () => {
       try {
-        console.log("Fetching programmes from:", "http://localhost:8000/api/courses/programmes/");
-        setApiStatus('unknown');
+        setIsLoadingProgrammes(true);
         const data = await coursesAPI.getProgrammes();
-        console.log("Programmes fetched successfully:", data);
         setProgrammes(data.programmes);
-        setApiStatus('connected');
-        setSuccessMessage(`Successfully loaded ${data.programmes.length} programmes`);
-        setTimeout(() => setSuccessMessage(""), 3000);
       } catch (error) {
         console.error("Failed to fetch programmes:", error);
-        setApiStatus('disconnected');
-        setGeneralError("Failed to connect to server. Please check if the backend is running.");
-
-        // Fallback: try direct fetch
-        try {
-          const response = await fetch("http://localhost:8000/api/courses/programmes/", {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-          });
-          if (response.ok) {
-            const fallbackData = await response.json();
-            console.log("Fallback fetch successful:", fallbackData);
-            setProgrammes(fallbackData.programmes);
-            setApiStatus('connected');
-            setGeneralError("");
-            setSuccessMessage(`Successfully loaded ${fallbackData.programmes.length} programmes (fallback)`);
-            setTimeout(() => setSuccessMessage(""), 3000);
-          } else {
-            console.error("Fallback fetch failed:", response.status, response.statusText);
-            setGeneralError(`Server error: ${response.status} ${response.statusText}`);
-          }
-        } catch (fallbackError) {
-          console.error("Fallback fetch error:", fallbackError);
-          setGeneralError("Cannot connect to server. Please ensure the backend is running on port 8000.");
-        }
+        setGeneralError("Unable to load programmes. Please try again later.");
+      } finally {
+        setIsLoadingProgrammes(false);
       }
     };
 
@@ -287,12 +253,12 @@ export default function SignUp() {
     <div className="min-h-screen" style={{ backgroundColor: "#EEEEEE" }}>
       <Navigation />
 
-      <div className="flex min-h-[calc(100vh-4rem)]">
+      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-4rem)]">
         {/* Left Side - Benefits */}
         <div
           className="hidden lg:flex flex-1 items-center justify-center px-12"
           style={{
-            background: "linear-gradient(135deg, #222831 0%, #00ADB5 100)",
+            background: "linear-gradient(135deg, #222831 0%, #00ADB5 100%)",
           }}
         >
           <div className="max-w-md text-white">
@@ -326,8 +292,8 @@ export default function SignUp() {
         </div>
 
         {/* Right Side - Sign Up Form */}
-        <div className="flex-1 flex items-center justify-center px-6 py-12">
-          <div className="w-full max-w-md">
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8 lg:py-12">
+          <div className="w-full max-w-md mx-auto">
             <Card className="border-0 shadow-xl">
               <CardHeader className="text-center space-y-4">
                 <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
@@ -342,30 +308,6 @@ export default function SignUp() {
               </CardHeader>
 
               <CardContent className="space-y-6">
-                {/* API Status Indicator */}
-                <div className="flex items-center justify-between p-2 rounded-lg bg-gray-50">
-                  <div className="flex items-center gap-2">
-                    {apiStatus === 'connected' && (
-                      <>
-                        <Wifi className="h-4 w-4 text-green-600" />
-                        <span className="text-sm text-green-600">Connected to server</span>
-                      </>
-                    )}
-                    {apiStatus === 'disconnected' && (
-                      <>
-                        <WifiOff className="h-4 w-4 text-red-600" />
-                        <span className="text-sm text-red-600">Server disconnected</span>
-                      </>
-                    )}
-                    {apiStatus === 'unknown' && (
-                      <>
-                        <Loader2 className="h-4 w-4 text-gray-600 animate-spin" />
-                        <span className="text-sm text-gray-600">Connecting...</span>
-                      </>
-                    )}
-                  </div>
-                  <span className="text-xs text-gray-500">localhost:8000</span>
-                </div>
 
                 {/* Success Message */}
                 {successMessage && (
@@ -385,113 +327,7 @@ export default function SignUp() {
                   </Alert>
                 )}
 
-                {/* Debug and Test Buttons */}
-                <div className="grid grid-cols-3 gap-2 mb-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={async () => {
-                      setGeneralError("");
-                      setSuccessMessage("");
-                      try {
-                        const response = await fetch("http://localhost:8000/api/", {
-                          method: 'GET',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          credentials: 'include',
-                        });
-                        const data = await response.json();
-                        setApiStatus('connected');
-                        setSuccessMessage(`✅ API Test: ${data.message}`);
-                        setTimeout(() => setSuccessMessage(""), 3000);
-                      } catch (error) {
-                        setApiStatus('disconnected');
-                        setGeneralError(`❌ API Test Failed: ${error}`);
-                      }
-                    }}
-                  >
-                    <Wifi className="h-3 w-3 mr-1" />
-                    Test API
-                  </Button>
 
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={async () => {
-                      setGeneralError("");
-                      setSuccessMessage("");
-                      try {
-                        const response = await fetch("http://localhost:8000/api/courses/programmes/", {
-                          method: 'GET',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          credentials: 'include',
-                        });
-                        const data = await response.json();
-                        setProgrammes(data.programmes);
-                        setApiStatus('connected');
-                        setSuccessMessage(`✅ Loaded ${data.programmes.length} programmes successfully`);
-                        setTimeout(() => setSuccessMessage(""), 3000);
-                      } catch (error) {
-                        setApiStatus('disconnected');
-                        setGeneralError(`❌ Failed to load programmes: ${error}`);
-                      }
-                    }}
-                  >
-                    <GraduationCap className="h-3 w-3 mr-1" />
-                    Load Programmes
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={async () => {
-                      setGeneralError("");
-                      setSuccessMessage("");
-                      try {
-                        const testData = {
-                          username: formData.username || "testuser",
-                          email: formData.email || "test@example.com",
-                          password: formData.password || "password123",
-                          first_name: formData.firstName || "Test",
-                          last_name: formData.lastName || "User",
-                          phone_number: formData.phone || "+233123456789",
-                          date_of_birth: formData.dateOfBirth || "2000-01-01",
-                          programme_id: parseInt(formData.programmeId) || 1,
-                          previous_school: formData.previousSchool || "Test School",
-                          wassce_year: parseInt(formData.wassceYear) || 2020,
-                          index_number: formData.indexNumber || "TEST123",
-                        };
-
-                        console.log("Sending test data:", testData);
-
-                        const response = await fetch("http://localhost:8000/api/auth/debug-signup/", {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          credentials: 'include',
-                          body: JSON.stringify(testData),
-                        });
-                        const data = await response.json();
-                        console.log("Debug response:", data);
-                        setSuccessMessage(`🐛 Debug successful! Found ${data.data_keys?.length || 0} fields. Check console for details.`);
-                        setTimeout(() => setSuccessMessage(""), 5000);
-                      } catch (error) {
-                        console.error("Debug error:", error);
-                        setGeneralError(`🐛 Debug Test Failed: ${error}`);
-                      }
-                    }}
-                  >
-                    <Bug className="h-3 w-3 mr-1" />
-                    Debug Data
-                  </Button>
-                </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* Username */}
@@ -628,9 +464,16 @@ export default function SignUp() {
                       onValueChange={(value) =>
                         setFormData({ ...formData, programmeId: value })
                       }
+                      disabled={isLoadingProgrammes}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select your programme" />
+                        <SelectValue 
+                          placeholder={
+                            isLoadingProgrammes 
+                              ? "Loading programmes..." 
+                              : "Select your programme"
+                          } 
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         {programmes.map((programme) => (
@@ -817,7 +660,7 @@ export default function SignUp() {
                   <Button
                     type="submit"
                     className="w-full bg-green-600 hover:bg-green-700 py-3"
-                    disabled={isLoading || apiStatus === 'disconnected'}
+                    disabled={isLoading}
                   >
                     {isLoading ? (
                       <>
@@ -831,51 +674,7 @@ export default function SignUp() {
                       </>
                     )}
                   </Button>
-
-                  {apiStatus === 'disconnected' && (
-                    <p className="text-sm text-red-600 text-center mt-2">
-                      ⚠️ Cannot submit while disconnected from server
-                    </p>
-                  )}
                 </form>
-
-                {/* Form Actions */}
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => {
-                      setFormData({
-                        username: "",
-                        firstName: "",
-                        lastName: "",
-                        email: "",
-                        phone: "",
-                        password: "",
-                        confirmPassword: "",
-                        dateOfBirth: "",
-                        programmeId: "",
-                        previousSchool: "",
-                        wassceYear: "",
-                        indexNumber: "",
-                        agreeTerms: false,
-                      });
-                      clearMessages();
-                    }}
-                  >
-                    Clear Form
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="flex-1"
-                    onClick={clearMessages}
-                  >
-                    Clear Messages
-                  </Button>
-                </div>
 
                 <div className="text-center pt-4">
                   <p className="text-gray-600">

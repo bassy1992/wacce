@@ -115,15 +115,15 @@ export default function About() {
       >
         <div className="absolute inset-0">
           <img
-            src="https://images.pexels.com/photos/1205651/pexels-photo-1205651.jpeg"
+            src="/images/Wesly-girls.jpg"
             alt="Graduates celebrating success"
             className="w-full h-full object-cover opacity-20"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#222831]/90 to-[#00ADB5]/80"></div>
         </div>
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
               <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fadeInUp">
                 About{" "}
@@ -158,7 +158,7 @@ export default function About() {
             <div className="hidden lg:block">
               <div className="relative">
                 <img
-                  src="https://images.pexels.com/photos/745365/pexels-photo-745365.jpeg"
+                  src="/images/Aburi-Girls-Ghana-Grows-411-scaled.jpg"
                   alt="Educational blackboard with clock symbolizing learning time"
                   className="rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-500 animate-fadeInRight"
                   style={{
@@ -262,7 +262,7 @@ export default function About() {
       {/* Mission & Vision */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
             <Card className="border-0 shadow-lg hover:shadow-2xl transform hover:-translate-y-3 transition-all duration-500 group">
               <CardHeader className="text-center pb-4">
                 <div className="flex justify-center mb-4">

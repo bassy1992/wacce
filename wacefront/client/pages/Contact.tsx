@@ -140,7 +140,7 @@ export default function Contact() {
       >
         <div className="absolute inset-0">
           <img
-            src="https://images.pexels.com/photos/7972367/pexels-photo-7972367.jpeg"
+            src="/images/ad1.jpg"
             alt="Student preparing for exams with focused study environment"
             className="w-full h-full object-cover opacity-20"
           />

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-import { User, LogOut, Settings, BookOpen, Loader2, GraduationCap, Users, MessageCircle } from "lucide-react";
+import { User, LogOut, Settings, BookOpen, Loader2, GraduationCap, Users, MessageCircle, Menu, X } from "lucide-react";
 import Logo from "./Logo";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -10,6 +10,7 @@ export default function Navigation() {
   const navigate = useNavigate();
   const { user, isAuthenticated, isLoading, logout } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -39,6 +40,22 @@ export default function Navigation() {
             <Logo size="sm" />
           </Link>
 
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </Button>
+          </div>
+
           <div className="hidden md:flex items-center space-x-8">
             {/* Common Navigation Links */}
             <Link
@@ -48,9 +65,9 @@ export default function Navigation() {
                 color: isActive("/") ? "#3B82F6" : "#1E293B",
                 fontWeight: isActive("/") ? "600" : "500",
               }}
-              onMouseEnter={(e) => (e.target.style.color = "#3B82F6")}
+              onMouseEnter={(e) => (e.target.style.color = "#DC2626")}
               onMouseLeave={(e) =>
-                (e.target.style.color = isActive("/") ? "#3B82F6" : "#1E293B")
+                (e.target.style.color = isActive("/") ? "#DC2626" : "#1E293B")
               }
             >
               Home
@@ -90,22 +107,22 @@ export default function Navigation() {
                 >
                   Programs
                 </Link>
-                <Link
-                  to="/past-questions"
-                  className="transition-colors"
+                <button
+                  onClick={() => navigate('/login')}
+                  className="transition-colors cursor-pointer"
                   style={{
-                    color: isActive("/past-questions") ? "#3B82F6" : "#1E293B",
-                    fontWeight: isActive("/past-questions") ? "500" : "normal",
+                    color: "#1E293B",
+                    fontWeight: "500",
+                    background: "none",
+                    border: "none",
+                    padding: 0,
                   }}
                   onMouseEnter={(e) => (e.target.style.color = "#3B82F6")}
-                  onMouseLeave={(e) =>
-                    (e.target.style.color = isActive("/past-questions")
-                      ? "#3B82F6"
-                      : "#1E293B")
-                  }
+                  onMouseLeave={(e) => (e.target.style.color = "#1E293B")}
+                  title="Sign in to access Past Questions"
                 >
                   WASSCE Past Questions
-                </Link>
+                </button>
                 <Link
                   to="/contact"
                   className="transition-colors"
@@ -316,6 +333,154 @@ export default function Navigation() {
             )}
           </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-200 bg-white">
+            <div className="px-6 py-4 space-y-4">
+              {/* Mobile Navigation Links */}
+              <Link
+                to="/"
+                className="block py-2 text-base font-medium transition-colors"
+                style={{
+                  color: isActive("/") ? "#3B82F6" : "#1E293B",
+                }}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Home
+              </Link>
+
+              {!isAuthenticated && (
+                <>
+                  <Link
+                    to="/about"
+                    className="block py-2 text-base font-medium transition-colors"
+                    style={{
+                      color: isActive("/about") ? "#3B82F6" : "#1E293B",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    About
+                  </Link>
+                  <Link
+                    to="/programs"
+                    className="block py-2 text-base font-medium transition-colors"
+                    style={{
+                      color: isActive("/programs") ? "#3B82F6" : "#1E293B",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Programs
+                  </Link>
+                  <button
+                    onClick={() => {
+                      navigate('/login');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="block py-2 text-base font-medium transition-colors text-left w-full"
+                    style={{ color: "#1E293B" }}
+                  >
+                    WASSCE Past Questions
+                  </button>
+                  <Link
+                    to="/contact"
+                    className="block py-2 text-base font-medium transition-colors"
+                    style={{
+                      color: isActive("/contact") ? "#3B82F6" : "#1E293B",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Contact
+                  </Link>
+                </>
+              )}
+
+              {isAuthenticated && (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="block py-2 text-base font-medium transition-colors"
+                    style={{
+                      color: isActive("/dashboard") ? "#3B82F6" : "#1E293B",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/classes"
+                    className="block py-2 text-base font-medium transition-colors"
+                    style={{
+                      color: isActive("/classes") ? "#3B82F6" : "#1E293B",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    My Classes
+                  </Link>
+                  <Link
+                    to="/past-questions"
+                    className="block py-2 text-base font-medium transition-colors"
+                    style={{
+                      color: isActive("/past-questions") ? "#3B82F6" : "#1E293B",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Past Questions
+                  </Link>
+                </>
+              )}
+
+              {/* Mobile Authentication Actions */}
+              <div className="pt-4 border-t border-gray-200">
+                {!isLoading && (
+                  <>
+                    {isAuthenticated ? (
+                      <div className="space-y-3">
+                        <div className="text-sm text-gray-600">
+                          {user?.first_name} {user?.last_name}
+                        </div>
+                        <Button
+                          onClick={() => {
+                            handleLogout();
+                            setIsMobileMenuOpen(false);
+                          }}
+                          variant="outline"
+                          className="w-full"
+                          disabled={isLoggingOut}
+                        >
+                          {isLoggingOut ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Signing Out...
+                            </>
+                          ) : (
+                            <>
+                              <LogOut className="mr-2 h-4 w-4" />
+                              Sign Out
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                          <Button variant="outline" className="w-full">
+                            Sign In
+                          </Button>
+                        </Link>
+                        <Link to="/signup" onClick={() => setIsMobileMenuOpen(false)}>
+                          <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                            Get Started
+                          </Button>
+                        </Link>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );

@@ -27,6 +27,7 @@ import NotFound from "./pages/NotFound";
 import PastQuestions from "./pages/PastQuestions";
 import PastQuestionPractice from "./pages/PastQuestionPractice";
 import PastQuestionResults from "./pages/PastQuestionResults";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -49,14 +50,14 @@ const App = () => (
             <Route path="/payment/:programmeId" element={<Payment />} />
             <Route path="/checkout/:programmeId" element={<Checkout />} />
             <Route path="/confirmation/:programmeId" element={<Confirmation />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/classes" element={<Classes />} />
-            <Route path="/subject/:subjectName" element={<Subject />} />
-            <Route path="/course/:subjectName/:courseId" element={<Course />} />
-            <Route path="/topic/:subjectName/:topicId" element={<Course />} />
-            <Route path="/past-questions" element={<PastQuestions />} />
-            <Route path="/past-questions/practice/:paperId" element={<PastQuestionPractice />} />
-            <Route path="/past-questions/results/:paperId" element={<PastQuestionResults />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/classes" element={<ProtectedRoute><Classes /></ProtectedRoute>} />
+            <Route path="/subject/:subjectName" element={<ProtectedRoute><Subject /></ProtectedRoute>} />
+            <Route path="/course/:subjectName/:courseId" element={<ProtectedRoute><Course /></ProtectedRoute>} />
+            <Route path="/topic/:subjectName/:topicId" element={<ProtectedRoute><Course /></ProtectedRoute>} />
+            <Route path="/past-questions" element={<ProtectedRoute><PastQuestions /></ProtectedRoute>} />
+            <Route path="/past-questions/practice/:paperId" element={<ProtectedRoute><PastQuestionPractice /></ProtectedRoute>} />
+            <Route path="/past-questions/results/:paperId" element={<ProtectedRoute><PastQuestionResults /></ProtectedRoute>} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
