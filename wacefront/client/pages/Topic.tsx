@@ -125,40 +125,40 @@ export default function Topic() {
       
       {/* Clean Header */}
       <div className="bg-gray-900 text-white">
-        <div className="container mx-auto px-6 py-6">
+        <div className="container mx-auto px-4 md:px-6 py-4 md:py-6">
           <Link 
             to={`/subject/${subjectName}`} 
-            className="inline-flex items-center text-gray-300 hover:text-white mb-4 transition-colors text-sm"
+            className="inline-flex items-center text-gray-300 hover:text-white mb-3 md:mb-4 transition-colors text-xs md:text-sm"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="h-3 w-3 md:h-4 md:w-4 mr-2" />
             Back to {subjectData?.name}
           </Link>
           
-          <h1 className="text-3xl font-bold mb-2">{topicData.title}</h1>
-          <p className="text-gray-300 text-lg mb-4">{topicData.description}</p>
+          <h1 className="text-xl md:text-3xl font-bold mb-2">{topicData.title}</h1>
+          <p className="text-gray-300 text-sm md:text-lg mb-3 md:mb-4">{topicData.description}</p>
           
-          <div className="flex items-center gap-6 text-sm">
+          <div className="flex flex-wrap items-center gap-3 md:gap-6 text-xs md:text-sm">
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
+              <Clock className="h-3 w-3 md:h-4 md:w-4" />
               <span>{topicData.estimated_duration_hours} hours</span>
             </div>
             <div className="flex items-center gap-2">
-              <BookOpen className="h-4 w-4" />
+              <BookOpen className="h-3 w-3 md:h-4 md:w-4" />
               <span>{topicData.lessons_count} lessons</span>
             </div>
             <div className="flex items-center gap-2">
-              <Award className="h-4 w-4" />
+              <Award className="h-3 w-3 md:h-4 md:w-4" />
               <span>{progress}% Complete</span>
             </div>
           </div>
         </div>
       </div>
       
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-4 md:px-6 py-4 md:py-8">
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-4 md:gap-6">
           {/* Main Content - Video Player */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-3 md:space-y-4">
             {/* Video Player */}
             <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
               <div className="relative bg-black aspect-video">
@@ -196,13 +196,13 @@ export default function Topic() {
               </div>
                 
               {currentLesson && (
-                <div className="p-6 border-t border-gray-200">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                <div className="p-4 md:p-6 border-t border-gray-200">
+                  <h2 className="text-lg md:text-2xl font-bold text-gray-900 mb-2 md:mb-3">
                     {currentLesson.title}
                   </h2>
-                  <div className="flex items-center gap-4 mb-4 text-sm text-gray-600">
+                  <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-3 md:mb-4 text-xs md:text-sm text-gray-600">
                     <div className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
+                      <Clock className="h-3 w-3 md:h-4 md:w-4" />
                       <span>{currentLesson.video_duration_minutes || 15} min</span>
                     </div>
                     <span className="text-gray-400">•</span>
@@ -215,17 +215,17 @@ export default function Topic() {
                     )}
                   </div>
                   
-                  <p className="text-gray-700 mb-6 leading-relaxed">
+                  <p className="text-sm md:text-base text-gray-700 mb-4 md:mb-6 leading-relaxed">
                     {currentLesson.content || 'Watch the video to learn about this topic. Take notes and practice the concepts covered.'}
                   </p>
 
-                  <div className="flex gap-3">
-                    <Button className="bg-gray-900 hover:bg-gray-800 text-white px-6">
-                      <CheckCircle className="h-4 w-4 mr-2" />
+                  <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
+                    <Button className="bg-gray-900 hover:bg-gray-800 text-white px-4 md:px-6 text-sm">
+                      <CheckCircle className="h-3 w-3 md:h-4 md:w-4 mr-2" />
                       Mark as Complete
                     </Button>
-                    <Button variant="outline" className="border-gray-300">
-                      <Download className="h-4 w-4 mr-2" />
+                    <Button variant="outline" className="border-gray-300 text-sm">
+                      <Download className="h-3 w-3 md:h-4 md:w-4 mr-2" />
                       Resources
                     </Button>
                   </div>
@@ -234,26 +234,26 @@ export default function Topic() {
 
             {/* About Topic */}
             {!currentLesson && (
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">About This Topic</h3>
-                <p className="text-gray-700 mb-6 leading-relaxed">{topicData.description}</p>
+              <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm">
+                <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4">About This Topic</h3>
+                <p className="text-sm md:text-base text-gray-700 mb-4 md:mb-6 leading-relaxed">{topicData.description}</p>
                 
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-                  <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <Award className="h-5 w-5 text-gray-700" />
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 md:p-6">
+                  <h4 className="font-semibold text-gray-900 mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">
+                    <Award className="h-4 w-4 md:h-5 md:w-5 text-gray-700" />
                     What you'll learn
                   </h4>
-                  <ul className="space-y-3">
-                    <li className="flex items-start text-gray-700">
-                      <CheckCircle className="h-5 w-5 mr-3 mt-0.5 flex-shrink-0 text-green-600" />
+                  <ul className="space-y-2 md:space-y-3">
+                    <li className="flex items-start text-gray-700 text-sm md:text-base">
+                      <CheckCircle className="h-4 w-4 md:h-5 md:w-5 mr-2 md:mr-3 mt-0.5 flex-shrink-0 text-green-600" />
                       <span>Comprehensive understanding of {topicData.title.toLowerCase()}</span>
                     </li>
-                    <li className="flex items-start text-gray-700">
-                      <CheckCircle className="h-5 w-5 mr-3 mt-0.5 flex-shrink-0 text-green-600" />
+                    <li className="flex items-start text-gray-700 text-sm md:text-base">
+                      <CheckCircle className="h-4 w-4 md:h-5 md:w-5 mr-2 md:mr-3 mt-0.5 flex-shrink-0 text-green-600" />
                       <span>Practical examples and real-world applications</span>
                     </li>
-                    <li className="flex items-start text-gray-700">
-                      <CheckCircle className="h-5 w-5 mr-3 mt-0.5 flex-shrink-0 text-green-600" />
+                    <li className="flex items-start text-gray-700 text-sm md:text-base">
+                      <CheckCircle className="h-4 w-4 md:h-5 md:w-5 mr-2 md:mr-3 mt-0.5 flex-shrink-0 text-green-600" />
                       <span>Practice exercises and assessments</span>
                     </li>
                   </ul>
@@ -263,15 +263,15 @@ export default function Topic() {
           </div>
 
           {/* Sidebar - Lessons List */}
-          <div className="space-y-4">
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm sticky top-6">
-              <div className="p-4 border-b border-gray-200">
-                <h3 className="font-bold text-gray-900 text-lg">Course Content</h3>
-                <p className="text-sm text-gray-600 mt-1">
+          <div className="space-y-3 md:space-y-4">
+            <div className="bg-white border border-gray-200 rounded-lg shadow-sm lg:sticky lg:top-6">
+              <div className="p-3 md:p-4 border-b border-gray-200">
+                <h3 className="font-bold text-gray-900 text-base md:text-lg">Course Content</h3>
+                <p className="text-xs md:text-sm text-gray-600 mt-1">
                   {topicData.lessons_count} lessons • {topicData.estimated_duration_hours} hours
                 </p>
               </div>
-              <div className="max-h-[600px] overflow-y-auto">
+              <div className="max-h-[400px] md:max-h-[600px] overflow-y-auto">
                 {topicData.lessons && topicData.lessons.length > 0 ? (
                   topicData.lessons.map((lesson, index) => {
                     const isCompleted = index < completedLessons;
@@ -281,27 +281,27 @@ export default function Topic() {
                       <button
                         key={lesson.id}
                         onClick={() => setCurrentLesson(lesson)}
-                        className={`w-full text-left p-4 transition-colors border-b border-gray-100 last:border-0 ${
+                        className={`w-full text-left p-3 md:p-4 transition-colors border-b border-gray-100 last:border-0 ${
                           isCurrent 
                             ? 'bg-blue-50' 
                             : 'hover:bg-gray-50'
                         }`}
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 md:gap-3">
                           <div className={`flex-shrink-0 ${
                             isCompleted ? 'text-green-600' : 
                             isCurrent ? 'text-blue-600' : 'text-gray-400'
                           }`}>
                             {isCompleted ? (
-                              <CheckCircle className="h-5 w-5" />
+                              <CheckCircle className="h-4 w-4 md:h-5 md:w-5" />
                             ) : lesson.lesson_type === 'video' ? (
-                              <Play className="h-5 w-5" />
+                              <Play className="h-4 w-4 md:h-5 md:w-5" />
                             ) : (
-                              <FileText className="h-5 w-5" />
+                              <FileText className="h-4 w-4 md:h-5 md:w-5" />
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className={`font-medium text-sm mb-1 ${
+                            <h4 className={`font-medium text-xs md:text-sm mb-1 ${
                               isCurrent ? 'text-blue-900' : 'text-gray-900'
                             }`}>
                               {index + 1}. {lesson.title}
@@ -329,22 +329,22 @@ export default function Topic() {
             </div>
 
             {/* Progress Card */}
-            <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-              <h3 className="font-bold text-gray-900 mb-3">Your Progress</h3>
-              <div className="mb-4">
-                <div className="flex justify-between text-sm mb-2">
+            <div className="bg-white border border-gray-200 rounded-lg p-3 md:p-4 shadow-sm">
+              <h3 className="font-bold text-gray-900 mb-2 md:mb-3 text-sm md:text-base">Your Progress</h3>
+              <div className="mb-3 md:mb-4">
+                <div className="flex justify-between text-xs md:text-sm mb-2">
                   <span className="text-gray-600">{completedLessons} of {topicData.lessons_count} complete</span>
                   <span className="font-medium text-gray-900">{progress}%</span>
                 </div>
                 <Progress value={progress} className="h-2" />
               </div>
               <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start text-sm border-gray-300 hover:bg-gray-50">
-                  <Download className="h-4 w-4 mr-2" />
+                <Button variant="outline" className="w-full justify-start text-xs md:text-sm border-gray-300 hover:bg-gray-50">
+                  <Download className="h-3 w-3 md:h-4 md:w-4 mr-2" />
                   Download Notes
                 </Button>
-                <Button variant="outline" className="w-full justify-start text-sm border-gray-300 hover:bg-gray-50">
-                  <Award className="h-4 w-4 mr-2" />
+                <Button variant="outline" className="w-full justify-start text-xs md:text-sm border-gray-300 hover:bg-gray-50">
+                  <Award className="h-3 w-3 md:h-4 md:w-4 mr-2" />
                   Take Quiz
                 </Button>
               </div>
