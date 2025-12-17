@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-71mcph60zzqlj%zr)xqmw0k&ix^jpyar92qbuso*)#ez!&@@)!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0').split(',') + ['.railway.app', '.vercel.app']
 
 
 # Application definition
@@ -69,6 +70,15 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
+
+# Add production origins from environment
+if not DEBUG:
+    frontend_url = os.getenv('FRONTEND_URL', 'https://wacefront.vercel.app')
+    backend_domain = os.getenv('RAILWAY_PUBLIC_DOMAIN', '')
+    
+    CSRF_TRUSTED_ORIGINS.append(frontend_url)
+    if backend_domain:
+        CSRF_TRUSTED_ORIGINS.append(f'https://{backend_domain}')
 
 ROOT_URLCONF = 'wace_api.urls'
 
@@ -156,8 +166,13 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8081",
 ]
 
-# For development, allow all origins (remove in production)
-CORS_ALLOW_ALL_ORIGINS = DEBUG
+# Add production origins from environment
+if not DEBUG:
+    allowed_origins_env = os.getenv('ALLOWED_ORIGINS', 'https://wacefront.vercel.app')
+    CORS_ALLOWED_ORIGINS.extend(allowed_origins_env.split(','))
+else:
+    # For development, allow all origins
+    CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
