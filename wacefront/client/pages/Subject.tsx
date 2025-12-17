@@ -111,121 +111,114 @@ export default function Subject() {
   const progress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Navigation />
       
-      <div className="container mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <Link to="/dashboard" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
+      {/* Clean Header */}
+      <div className="bg-gray-900 text-white">
+        <div className="container mx-auto px-6 py-6">
+          <Link to="/dashboard" className="inline-flex items-center text-gray-300 hover:text-white mb-4 transition-colors text-sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
           </Link>
           
           <div className="flex items-start justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">{subjectData.name}</h1>
-              <p className="text-lg text-gray-600 mb-4">{subjectData.description}</p>
-              <div className="flex items-center gap-4">
-                <Badge 
-                  variant="secondary"
-                  className={
-                    progress >= 80 ? "bg-green-100 text-green-800" :
-                    progress >= 60 ? "bg-blue-100 text-blue-800" :
-                    progress >= 40 ? "bg-yellow-100 text-yellow-800" :
-                    "bg-red-100 text-red-800"
-                  }
-                >
-                  {progress >= 80 ? "Excellent" : progress >= 60 ? "Good" : progress >= 40 ? "On Track" : "Needs Attention"}
-                </Badge>
-                <Badge variant="outline" className="text-lg px-3 py-1">
-                  {subjectData.subject_type === 'core' ? 'Core Subject' : 'Elective Subject'}
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-3">
+                <h1 className="text-3xl font-bold">{subjectData.name}</h1>
+                <Badge className={`${
+                  subjectData.subject_type === 'core' 
+                    ? 'bg-blue-600 text-white' 
+                    : 'bg-purple-600 text-white'
+                } border-0`}>
+                  {subjectData.subject_type === 'core' ? 'Core' : 'Elective'}
                 </Badge>
               </div>
+              <p className="text-gray-300 text-lg mb-4 max-w-3xl">{subjectData.description}</p>
+              
+              <div className="flex items-center gap-6 text-sm">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4" />
+                  <span>{subjectData.total_topics} topics</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  <span>{totalLessons} lessons</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Award className="h-4 w-4" />
+                  <span>{progress}% complete</span>
+                </div>
+              </div>
             </div>
-            
-            <div className="text-right">
-              <div className="text-3xl font-bold text-blue-600 mb-1">{progress}%</div>
-              <div className="text-sm text-gray-600">Complete</div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="container mx-auto px-6 py-8">
+
+        {/* Stats Overview */}
+        <div className="grid md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600 mb-1">Total Lessons</p>
+                <p className="text-2xl font-bold text-gray-900">{totalLessons}</p>
+              </div>
+              <BookOpen className="h-8 w-8 text-gray-400" />
+            </div>
+          </div>
+
+          <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600 mb-1">Completed</p>
+                <p className="text-2xl font-bold text-gray-900">{completedLessons}</p>
+              </div>
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+          </div>
+
+          <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600 mb-1">Topics</p>
+                <p className="text-2xl font-bold text-gray-900">{subjectData.total_topics}</p>
+              </div>
+              <Target className="h-8 w-8 text-gray-400" />
+            </div>
+          </div>
+
+          <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600 mb-1">Progress</p>
+                <p className="text-2xl font-bold text-gray-900">{progress}%</p>
+              </div>
+              <Award className="h-8 w-8 text-gray-400" />
             </div>
           </div>
         </div>
 
-        {/* Stats Overview */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
-          <Card className="border-0 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Total Lessons</p>
-                  <p className="text-2xl font-bold text-blue-600">{totalLessons}</p>
-                </div>
-                <BookOpen className="h-8 w-8 text-blue-600" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Completed</p>
-                  <p className="text-2xl font-bold text-green-600">{completedLessons}</p>
-                </div>
-                <CheckCircle className="h-8 w-8 text-green-600" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Total Topics</p>
-                  <p className="text-2xl font-bold text-purple-600">{subjectData.total_topics}</p>
-                </div>
-                <Award className="h-8 w-8 text-purple-600" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Subject Code</p>
-                  <p className="text-2xl font-bold text-orange-600">{subjectData.code}</p>
-                </div>
-                <Users className="h-8 w-8 text-orange-600" />
-              </div>
-            </CardContent>
-          </Card>
+        {/* Progress Bar */}
+        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-lg font-semibold text-gray-900">Your Progress</h3>
+            <span className="text-sm text-gray-600">{completedLessons} of {totalLessons} lessons</span>
+          </div>
+          <Progress value={progress} className="h-2" />
         </div>
 
-        {/* Progress Bar */}
-        <Card className="border-0 shadow-lg mb-8">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Overall Progress</h3>
-              <span className="text-sm text-gray-600">{completedLessons} of {totalLessons} lessons completed</span>
-            </div>
-            <Progress value={progress} className="h-3" />
-          </CardContent>
-        </Card>
-
         {/* Topics Section */}
-        <Card className="border-0 shadow-lg">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Target className="h-6 w-6 text-blue-600" />
-              Topics
-            </CardTitle>
-            <CardDescription>
-              Select a topic to access its lessons and video content
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-6">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Course Content</h2>
+            <p className="text-gray-600">
+              {subjectData.total_topics} topics • {totalLessons} lessons
+            </p>
+          </div>
+          <div className="p-6">
+            <div className="grid md:grid-cols-2 gap-4">
               {subjectData.topics.map((topic, index) => {
                 // Calculate mock progress for each topic
                 const topicProgress = Math.floor(Math.random() * 100);
@@ -256,92 +249,94 @@ export default function Subject() {
                   <Link
                     key={topic.id}
                     to={`/topic/${subjectData.name.toLowerCase().replace(/\s+/g, '-')}/${topic.id}`}
-                    className="block"
+                    className="block group"
                   >
-                    <Card className="border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-100 cursor-pointer">
-                      <CardContent className="p-6">
-                        <div className="flex items-start gap-3 mb-4">
-                          <span className="text-2xl">{getTopicIcon(subjectData.name, topic.title)}</span>
-                          <div className="flex-1">
-                            <h4 className="text-xl font-semibold text-gray-900 mb-2">{topic.title}</h4>
-                            <p className="text-gray-600 text-sm mb-3">{topic.description}</p>
-                            <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                              <span>{topic.lessons_count} Lessons</span>
-                              <span>{topic.estimated_duration_hours} hours</span>
+                    <div className="bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-400 hover:shadow-md transition-all cursor-pointer">
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl group-hover:bg-gray-200 transition-colors">
+                          {getTopicIcon(subjectData.name, topic.title)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-gray-700">{topic.title}</h4>
+                          <p className="text-gray-600 text-sm mb-3 line-clamp-2">{topic.description}</p>
+                          <div className="flex items-center gap-4 text-xs text-gray-500">
+                            <div className="flex items-center gap-1">
+                              <FileText className="h-3 w-3" />
+                              <span>{topic.lessons_count} lessons</span>
                             </div>
-                            <Progress value={topicProgress} className="mb-3" />
-                            <div className="flex justify-between items-center">
-                              <span className="text-sm text-gray-600">{topicProgress}% Complete</span>
-                              <Badge
-                                variant="secondary"
-                                className={
-                                  status === "Completed" ? "bg-green-100 text-green-800" :
-                                  status === "In Progress" ? "bg-blue-100 text-blue-800" :
-                                  "bg-gray-100 text-gray-800"
-                                }
-                              >
-                                {status}
-                              </Badge>
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              <span>{topic.estimated_duration_hours}h</span>
                             </div>
                           </div>
                         </div>
-                        <Button className="w-full">
-                          {status === "Not Started" ? "Start Topic" :
-                           status === "Completed" ? "Review Topic" :
-                           "Continue Topic"}
-                        </Button>
-                      </CardContent>
-                    </Card>
+                      </div>
+                      <div className="mb-3">
+                        <div className="flex justify-between text-xs mb-1.5">
+                          <span className="text-gray-600">{topicProgress}% complete</span>
+                          <span className={`font-medium ${
+                            status === "Completed" ? "text-green-600" :
+                            status === "In Progress" ? "text-blue-600" :
+                            "text-gray-500"
+                          }`}>
+                            {status}
+                          </span>
+                        </div>
+                        <Progress value={topicProgress} className="h-1.5" />
+                      </div>
+                      <Button 
+                        className="w-full bg-gray-900 hover:bg-gray-800 text-white text-sm"
+                        size="sm"
+                      >
+                        {status === "Not Started" ? "Start Learning" :
+                         status === "Completed" ? "Review" :
+                         "Continue"}
+                      </Button>
+                    </div>
                   </Link>
                 );
               })}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Quick Actions */}
-        <div className="mt-8 grid md:grid-cols-3 gap-6">
-          <Card className="border-0 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <FileText className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-gray-900 mb-2">Study Materials</h3>
-                <p className="text-sm text-gray-600 mb-4">Download notes, worksheets, and references</p>
-                <Button variant="outline" className="w-full">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download Materials
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="mt-8 grid md:grid-cols-3 gap-4">
+          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm text-center">
+            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <FileText className="h-6 w-6 text-gray-700" />
+            </div>
+            <h3 className="font-semibold text-gray-900 mb-2">Study Materials</h3>
+            <p className="text-sm text-gray-600 mb-4">Notes, worksheets, and references</p>
+            <Button variant="outline" className="w-full border-gray-300 hover:bg-gray-50">
+              <Download className="h-4 w-4 mr-2" />
+              Download
+            </Button>
+          </div>
 
-          <Card className="border-0 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <Video className="h-12 w-12 text-green-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-gray-900 mb-2">Recorded Classes</h3>
-                <p className="text-sm text-gray-600 mb-4">Access previous class recordings</p>
-                <Button variant="outline" className="w-full">
-                  <Play className="h-4 w-4 mr-2" />
-                  View Recordings
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm text-center">
+            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <Video className="h-6 w-6 text-gray-700" />
+            </div>
+            <h3 className="font-semibold text-gray-900 mb-2">Video Library</h3>
+            <p className="text-sm text-gray-600 mb-4">Recorded lessons and tutorials</p>
+            <Button variant="outline" className="w-full border-gray-300 hover:bg-gray-50">
+              <Play className="h-4 w-4 mr-2" />
+              Watch
+            </Button>
+          </div>
 
-          <Card className="border-0 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <Award className="h-12 w-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-gray-900 mb-2">Practice Tests</h3>
-                <p className="text-sm text-gray-600 mb-4">Take quizzes and mock exams</p>
-                <Button variant="outline" className="w-full">
-                  <Target className="h-4 w-4 mr-2" />
-                  Start Practice
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm text-center">
+            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <Award className="h-6 w-6 text-gray-700" />
+            </div>
+            <h3 className="font-semibold text-gray-900 mb-2">Practice Tests</h3>
+            <p className="text-sm text-gray-600 mb-4">Quizzes and mock exams</p>
+            <Button variant="outline" className="w-full border-gray-300 hover:bg-gray-50">
+              <Target className="h-4 w-4 mr-2" />
+              Practice
+            </Button>
+          </div>
         </div>
       </div>
     </div>
