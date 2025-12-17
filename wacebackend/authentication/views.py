@@ -169,13 +169,21 @@ def signin(request):
                 # Get student profile if exists
                 student_data = None
                 try:
-                    student = Student.objects.get(user=user)
+                    student = Student.objects.select_related('programme').get(user=user)
                     student_data = {
                         'id': student.id,
-                        'programme': student.programme.get_name_display(),
                         'phone_number': student.phone_number,
+                        'date_of_birth': student.date_of_birth.isoformat(),
+                        'programme': {
+                            'id': student.programme.id,
+                            'name': student.programme.name,
+                            'price': float(student.programme.price)
+                        },
                         'enrollment_date': student.enrollment_date.isoformat(),
-                        'is_active': student.is_active
+                        'is_active': student.is_active,
+                        'previous_school': student.previous_school,
+                        'wassce_year': student.wassce_year,
+                        'index_number': student.index_number
                     }
                 except Student.DoesNotExist:
                     pass
