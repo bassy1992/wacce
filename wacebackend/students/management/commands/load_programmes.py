@@ -15,43 +15,37 @@ class Command(BaseCommand):
         self.stdout.write("\n📚 Creating Programmes...")
         programmes_data = [
             {
-                'name': 'science',
-                'display_name': 'Science Programme',
+                'name': 'general_science',
                 'description': 'Comprehensive science education covering Physics, Chemistry, Biology, and Mathematics',
                 'price': 500.00,
                 'duration_months': 12,
             },
             {
                 'name': 'business',
-                'display_name': 'Business Programme',
                 'description': 'Business studies including Economics, Accounting, and Business Management',
                 'price': 500.00,
                 'duration_months': 12,
             },
             {
                 'name': 'general_arts',
-                'display_name': 'General Arts Programme',
                 'description': 'Arts and humanities including Literature, History, and Government',
                 'price': 500.00,
                 'duration_months': 12,
             },
             {
                 'name': 'visual_arts',
-                'display_name': 'Visual Arts Programme',
                 'description': 'Creative arts including Graphic Design, Painting, and Sculpture',
                 'price': 500.00,
                 'duration_months': 12,
             },
             {
                 'name': 'home_economics',
-                'display_name': 'Home Economics Programme',
                 'description': 'Home Economics including Food and Nutrition, Clothing and Textiles',
                 'price': 500.00,
                 'duration_months': 12,
             },
             {
-                'name': 'agriculture',
-                'display_name': 'Agriculture Programme',
+                'name': 'agricultural_science',
                 'description': 'Agricultural science and practices',
                 'price': 500.00,
                 'duration_months': 12,
@@ -66,9 +60,9 @@ class Command(BaseCommand):
             )
             if created:
                 prog_created += 1
-                self.stdout.write(self.style.SUCCESS(f"✅ Created: {programme.display_name}"))
+                self.stdout.write(self.style.SUCCESS(f"✅ Created: {programme.get_name_display()}"))
             else:
-                self.stdout.write(f"⏭️  Already exists: {programme.display_name}")
+                self.stdout.write(f"⏭️  Already exists: {programme.get_name_display()}")
         
         # Create core subjects
         self.stdout.write("\n📖 Creating Core Subjects...")
