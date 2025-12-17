@@ -129,7 +129,9 @@ def subject_detail(request, subject_id):
                         'lesson_type': lesson.lesson_type,
                         'order': lesson.order,
                         'is_free': lesson.is_free,
-                        'video_duration_minutes': lesson.video_duration_minutes
+                        'video_duration_minutes': lesson.video_duration_minutes,
+                        'video_url': lesson.video_url,
+                        'content': lesson.content
                     }
                     for lesson in topic.lessons.all()
                 ]
