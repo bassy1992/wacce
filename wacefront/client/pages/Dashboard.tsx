@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import { useAuth } from "../contexts/AuthContext";
-import { coursesAPI } from "../../shared/api";
+import { studentsAPI, DashboardSubject } from "../../shared/api";
 import {
   Card,
   CardContent,
@@ -38,15 +38,15 @@ export default function Dashboard() {
     program: "Loading...",
     enrollmentDate: "Loading...",
     overallProgress: 0,
-    subjects: [],
+    subjects: [] as any[],
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Load user's programme and subjects
+  // Load student dashboard data
   useEffect(() => {
-    const loadStudentData = async () => {
-      console.log("Dashboard - Full user object:", JSON.stringify(user, null, 2));
+    const loadDashboardData = async () => {
+      console.log("Dashboard - Loading dashboard data");
       
       if (!user) {
         console.log("Dashboard - No user found");
@@ -54,85 +54,69 @@ export default function Dashboard() {
         setIsLoading(false);
         return;
       }
-      
-      if (!user.student) {
-        console.log("Dashboard - No student profile found");
-        console.log("Dashboard - User object keys:", Object.keys(user));
-        setError("No student profile found. Please complete your registration or contact support.");
-        setIsLoading(false);
-        return;
-      }
-      
-      console.log("Dashboard - Student object:", JSON.stringify(user.student, null, 2));
-      
-      if (!user.student.programme) {
-        console.log("Dashboard - No programme found in student");
-        setError("No programme assigned. Please contact support to complete your enrollment.");
-        setIsLoading(false);
-        return;
-      }
-      
-      if (!user.student.programme.id) {
-        console.log("Dashboard - Programme exists but no ID:", user.student.programme);
-        setError("Programme data incomplete. Please contact support.");
-        setIsLoading(false);
-        return;
-      }
 
       try {
         setIsLoading(true);
-        console.log("Dashboard - Fetching programme details for ID:", user.student.programme.id);
+        console.log("Dashboard - Fetching dashboard data");
         
-        // Get programme details with subjects
-        const programmeData = await coursesAPI.getProgrammeDetail(user.student.programme.id);
-        console.log("Dashboard - Programme data received:", programmeData);
+        // Get dashboard data with core and elective subjects
+        const dashboardData = await studentsAPI.getDashboard();
+        console.log("Dashboard - Dashboard data received:", dashboardData);
         
-        // Calculate mock progress for subjects (in real app, this would come from backend)
-        const subjectsWithProgress = [
-          ...programmeData.subjects.core.map((subject: any) => ({
+        // Map subjects with type and status
+        const subjectsWithStatus = [
+          ...dashboardData.subjects.core.map((subject: DashboardSubject) => ({
             ...subject,
-            progress: Math.floor(Math.random() * 40) + 60, // 60-100% for core subjects
-            grade: ["A", "A-", "B+", "B"][Math.floor(Math.random() * 4)],
-            status: ["Excellent", "Good", "On Track"][Math.floor(Math.random() * 3)],
+            progress: subject.progress.progress_percentage,
+            grade: subject.progress.current_grade || "N/A",
+            status: subject.progress.progress_percentage >= 80 ? "Excellent" 
+                  : subject.progress.progress_percentage >= 60 ? "Good"
+                  : subject.progress.progress_percentage >= 40 ? "On Track"
+                  : "Needs Focus",
             type: "Core"
           })),
-          ...programmeData.subjects.elective.map((subject: any) => ({
+          ...dashboardData.subjects.elective.map((subject: DashboardSubject) => ({
             ...subject,
-            progress: Math.floor(Math.random() * 50) + 40, // 40-90% for electives
-            grade: ["A-", "B+", "B", "C+"][Math.floor(Math.random() * 4)],
-            status: ["Good", "On Track", "Needs Focus"][Math.floor(Math.random() * 3)],
+            progress: subject.progress.progress_percentage,
+            grade: subject.progress.current_grade || "N/A",
+            status: subject.progress.progress_percentage >= 80 ? "Excellent" 
+                  : subject.progress.progress_percentage >= 60 ? "Good"
+                  : subject.progress.progress_percentage >= 40 ? "On Track"
+                  : "Needs Focus",
             type: "Elective"
           }))
         ];
 
-        console.log("Dashboard - Subjects with progress:", subjectsWithProgress.length);
+        console.log("Dashboard - Subjects with status:", subjectsWithStatus.length);
 
         // Calculate overall progress
-        const totalProgress = subjectsWithProgress.reduce((sum, subject) => sum + subject.progress, 0);
-        const overallProgress = Math.round(totalProgress / subjectsWithProgress.length);
+        const totalProgress = subjectsWithStatus.reduce((sum, subject) => sum + subject.progress, 0);
+        const overallProgress = subjectsWithStatus.length > 0 
+          ? Math.round(totalProgress / subjectsWithStatus.length) 
+          : 0;
 
         setStudentData({
-          name: `${user.first_name} ${user.last_name}`,
-          program: programmeData.display_name,
-          enrollmentDate: new Date(user.student.enrollment_date).toLocaleDateString('en-US', { 
+          name: dashboardData.student.name,
+          program: dashboardData.programme.display_name,
+          enrollmentDate: new Date(dashboardData.student.enrollment_date).toLocaleDateString('en-US', { 
             year: 'numeric', 
             month: 'long' 
           }),
           overallProgress,
-          subjects: subjectsWithProgress,
+          subjects: subjectsWithStatus,
         });
 
         setError("");
       } catch (err) {
-        console.error("Dashboard - Failed to load student data:", err);
-        setError(`Failed to load programme data: ${err instanceof Error ? err.message : 'Unknown error'}`);
+        console.error("Dashboard - Failed to load dashboard data:", err);
+        setError(`Failed to load dashboard data: ${err instanceof Error ? err.message : 'Unknown error'}`);
       } finally {
         setIsLoading(false);
       }
     };
 
     if (user) {
-      loadStudentData();
+      loadDashboardData();
     }
   }, [user]);
 

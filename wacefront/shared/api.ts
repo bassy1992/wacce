@@ -21,6 +21,7 @@ export const API_ENDPOINTS = {
   },
   STUDENTS: {
     PROFILE: `${API_BASE_URL}/students/profile/`,
+    DASHBOARD: `${API_BASE_URL}/students/dashboard/`,
   },
 };
 
@@ -98,6 +99,51 @@ export interface StudentProfile {
   previous_school: string;
   wassce_year: number;
   index_number: string;
+}
+
+export interface SubjectProgress {
+  current_grade: string;
+  target_grade: string;
+  progress_percentage: number;
+  lessons_completed: number;
+  total_lessons: number;
+}
+
+export interface DashboardSubject {
+  id: number;
+  name: string;
+  code: string;
+  description: string;
+  topics_count: number;
+  is_required: boolean;
+  progress: SubjectProgress;
+}
+
+export interface DashboardData {
+  student: {
+    id: number;
+    name: string;
+    email: string;
+    phone_number: string;
+    index_number: string;
+    enrollment_date: string;
+  };
+  programme: {
+    id: number;
+    name: string;
+    display_name: string;
+    description: string;
+    duration_months: number;
+  };
+  subjects: {
+    core: DashboardSubject[];
+    elective: DashboardSubject[];
+  };
+  summary: {
+    total_subjects: number;
+    core_subjects_count: number;
+    elective_subjects_count: number;
+  };
 }
 
 export interface SignupRequest {
@@ -211,4 +257,12 @@ export const coursesAPI = {
 
   getSubjectDetail: (id: number): Promise<SubjectDetail> =>
     apiRequest(API_ENDPOINTS.COURSES.SUBJECT_DETAIL(id)),
+};
+
+export const studentsAPI = {
+  getProfile: (): Promise<StudentProfile> =>
+    apiRequest(API_ENDPOINTS.STUDENTS.PROFILE),
+
+  getDashboard: (): Promise<DashboardData> =>
+    apiRequest(API_ENDPOINTS.STUDENTS.DASHBOARD),
 };
