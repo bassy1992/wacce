@@ -1,6 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login
 from .models import Student, Programme, StudentProgress
@@ -139,3 +139,37 @@ def student_dashboard(request):
     except Student.DoesNotExist:
         return Response({'error': 'Student profile not found'}, 
                        status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def populate_subjects_api(request):
+    """
+    API endpoint to populate subjects - only accessible by admin users
+    """
+    from courses.models import Subject, ProgrammeSubject
+    from django.core.management import call_command
+    from io import StringIO
+    
+    try:
+        # Capture the output
+        out = StringIO()
+        call_command('populate_subjects', stdout=out)
+        output = out.getvalue()
+        
+        return Response({
+            'success': True,
+            'message': 'Subjects populated successfully',
+            'output': output,
+            'summary': {
+                'total_subjects': Subject.objects.count(),
+                'core_subjects': Subject.objects.filter(subject_type='core').count(),
+                'elective_subjects': Subject.objects.filter(subject_type='elective').count(),
+                'programme_subject_links': ProgrammeSubject.objects.count(),
+            }
+        })
+    except Exception as e:
+        return Response({
+            'success': False,
+            'error': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
