@@ -33,8 +33,6 @@ import {
   CheckCircle,
   AlertCircle,
   GraduationCap,
-  Calendar,
-  School,
   Loader2,
 } from "lucide-react";
 
@@ -51,11 +49,7 @@ export default function SignUp() {
     phone: "",
     password: "",
     confirmPassword: "",
-    dateOfBirth: "",
     programmeId: "",
-    previousSchool: "",
-    wassceYear: "",
-    indexNumber: "",
     agreeTerms: false,
   });
   const [programmes, setProgrammes] = useState<Programme[]>([]);
@@ -125,33 +119,10 @@ export default function SignUp() {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
-    if (!formData.dateOfBirth) {
-      newErrors.dateOfBirth = "Date of birth is required";
-    }
-
     if (!formData.programmeId) {
       newErrors.programmeId = "Please select a programme";
     } else if (isNaN(parseInt(formData.programmeId))) {
       newErrors.programmeId = "Invalid programme selection";
-    }
-
-    if (!formData.previousSchool.trim()) {
-      newErrors.previousSchool = "Previous school is required";
-    }
-
-    if (!formData.wassceYear) {
-      newErrors.wassceYear = "WASSCE year is required";
-    } else if (isNaN(parseInt(formData.wassceYear))) {
-      newErrors.wassceYear = "WASSCE year must be a valid number";
-    } else {
-      const year = parseInt(formData.wassceYear);
-      if (year < 2000 || year > 2030) {
-        newErrors.wassceYear = "WASSCE year must be between 2000 and 2030";
-      }
-    }
-
-    if (!formData.indexNumber.trim()) {
-      newErrors.indexNumber = "Index number is required";
     }
 
     if (!formData.agreeTerms) {
@@ -187,11 +158,11 @@ export default function SignUp() {
         first_name: formData.firstName,
         last_name: formData.lastName,
         phone_number: formData.phone,
-        date_of_birth: formData.dateOfBirth,
+        date_of_birth: "2000-01-01", // Default value
         programme_id: parseInt(formData.programmeId),
-        previous_school: formData.previousSchool,
-        wassce_year: parseInt(formData.wassceYear),
-        index_number: formData.indexNumber,
+        previous_school: "N/A", // Default value
+        wassce_year: new Date().getFullYear(), // Current year
+        index_number: "N/A", // Default value
       };
 
       console.log("Sending signup data:", signupData);
@@ -435,27 +406,6 @@ export default function SignUp() {
                     )}
                   </div>
 
-                  {/* Date of Birth */}
-                  <div className="space-y-2">
-                    <Label htmlFor="dateOfBirth">Date of Birth</Label>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="dateOfBirth"
-                        type="date"
-                        className="pl-10"
-                        value={formData.dateOfBirth}
-                        onChange={(e) =>
-                          setFormData({ ...formData, dateOfBirth: e.target.value })
-                        }
-                        required
-                      />
-                    </div>
-                    {errors.dateOfBirth && (
-                      <p className="text-sm text-red-600">{errors.dateOfBirth}</p>
-                    )}
-                  </div>
-
                   {/* Programme Selection */}
                   <div className="space-y-2">
                     <Label htmlFor="programme">Programme</Label>
@@ -486,65 +436,6 @@ export default function SignUp() {
                     {errors.programmeId && (
                       <p className="text-sm text-red-600">{errors.programmeId}</p>
                     )}
-                  </div>
-
-                  {/* Previous School */}
-                  <div className="space-y-2">
-                    <Label htmlFor="previousSchool">Previous School</Label>
-                    <div className="relative">
-                      <School className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="previousSchool"
-                        placeholder="Your previous school name"
-                        className="pl-10"
-                        value={formData.previousSchool}
-                        onChange={(e) =>
-                          setFormData({ ...formData, previousSchool: e.target.value })
-                        }
-                        required
-                      />
-                    </div>
-                    {errors.previousSchool && (
-                      <p className="text-sm text-red-600">{errors.previousSchool}</p>
-                    )}
-                  </div>
-
-                  {/* WASSCE Year and Index Number */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="wassceYear">WASSCE Year</Label>
-                      <Input
-                        id="wassceYear"
-                        type="number"
-                        placeholder="2024"
-                        min="2000"
-                        max="2030"
-                        value={formData.wassceYear}
-                        onChange={(e) =>
-                          setFormData({ ...formData, wassceYear: e.target.value })
-                        }
-                        required
-                      />
-                      {errors.wassceYear && (
-                        <p className="text-sm text-red-600">{errors.wassceYear}</p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="indexNumber">Index Number</Label>
-                      <Input
-                        id="indexNumber"
-                        placeholder="Your index number"
-                        value={formData.indexNumber}
-                        onChange={(e) =>
-                          setFormData({ ...formData, indexNumber: e.target.value })
-                        }
-                        required
-                      />
-                      {errors.indexNumber && (
-                        <p className="text-sm text-red-600">{errors.indexNumber}</p>
-                      )}
-                    </div>
                   </div>
 
                   {/* Password Fields */}
