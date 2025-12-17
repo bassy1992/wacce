@@ -517,31 +517,33 @@ export default function Programs() {
       </section>
 
       {/* Programs Tabs */}
-      <section className="py-16" style={{ backgroundColor: "#393E46" }}>
-        <div className="container mx-auto px-6">
-          <Tabs defaultValue="general-science" className="max-w-7xl mx-auto">
-            <TabsList
-              className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-8 p-2"
-              style={{ backgroundColor: "#222831", borderColor: "#00ADB5" }}
-            >
-              {programs.map((program) => (
-                <TabsTrigger
-                  key={program.id}
-                  value={program.id}
-                  className="text-xs sm:text-sm py-2 px-2 sm:px-4 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2"
-                  style={{ color: "#EEEEEE", backgroundColor: "transparent" }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.backgroundColor = "#00ADB5")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.target.style.backgroundColor = "transparent")
-                  }
-                >
-                  <span className="text-lg sm:text-base">{program.icon}</span>
-                  <span className="text-xs sm:text-sm">{program.title}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
+      <section className="py-8 md:py-16" style={{ backgroundColor: "#393E46" }}>
+        <div className="container mx-auto px-4 md:px-6">
+          <Tabs defaultValue="general-science" className="w-full">
+            <div className="overflow-x-auto pb-4 mb-6">
+              <TabsList
+                className="inline-flex w-full min-w-max md:grid md:grid-cols-3 lg:grid-cols-6 gap-2 p-2"
+                style={{ backgroundColor: "#222831", borderColor: "#00ADB5" }}
+              >
+                {programs.map((program) => (
+                  <TabsTrigger
+                    key={program.id}
+                    value={program.id}
+                    className="flex-shrink-0 min-w-[120px] md:min-w-0 text-sm py-3 px-4 flex flex-col items-center justify-center gap-1 whitespace-nowrap"
+                    style={{ color: "#EEEEEE", backgroundColor: "transparent" }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.backgroundColor = "#00ADB5")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.backgroundColor = "transparent")
+                    }
+                  >
+                    <span className="text-2xl">{program.icon}</span>
+                    <span className="text-xs">{program.title}</span>
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
 
             {programs.map((program) => (
               <TabsContent key={program.id} value={program.id}>
@@ -553,19 +555,19 @@ export default function Programs() {
                   }}
                 >
                   <CardHeader
-                    className="text-center rounded-t-lg"
+                    className="text-center rounded-t-lg p-4 md:p-6"
                     style={{
                       background:
                         "linear-gradient(135deg, #222831 0%, #00ADB5 100%)",
                       color: "white",
                     }}
                   >
-                    <div className="text-6xl mb-4">{program.icon}</div>
-                    <CardTitle className="text-3xl mb-2">
+                    <div className="text-4xl md:text-6xl mb-3 md:mb-4">{program.icon}</div>
+                    <CardTitle className="text-2xl md:text-3xl mb-2">
                       {program.title}
                     </CardTitle>
                     <CardDescription
-                      className="text-lg"
+                      className="text-sm md:text-lg px-2"
                       style={{ color: "#EEEEEE" }}
                     >
                       {program.description}
@@ -578,11 +580,11 @@ export default function Programs() {
                       <div className="space-y-6">
                         <div>
                           <h4
-                            className="text-xl font-semibold mb-3 flex items-center gap-2"
+                            className="text-lg md:text-xl font-semibold mb-3 flex items-center gap-2"
                             style={{ color: "#222831" }}
                           >
                             <BookOpen
-                              className="h-5 w-5"
+                              className="h-4 w-4 md:h-5 md:w-5"
                               style={{ color: "#00ADB5" }}
                             />
                             Core Subjects
@@ -591,13 +593,13 @@ export default function Programs() {
                             {program.subjects.core.map((subject, idx) => (
                               <div
                                 key={idx}
-                                className="flex items-center gap-2"
+                                className="flex items-start gap-2"
                               >
                                 <CheckCircle
-                                  className="h-4 w-4"
+                                  className="h-4 w-4 flex-shrink-0 mt-0.5"
                                   style={{ color: "#00ADB5" }}
                                 />
-                                <span style={{ color: "#393E46" }}>
+                                <span className="text-sm md:text-base" style={{ color: "#393E46" }}>
                                   {subject}
                                 </span>
                               </div>
@@ -635,11 +637,11 @@ export default function Programs() {
 
                         <div>
                           <h4
-                            className="text-xl font-semibold mb-3 flex items-center gap-2"
+                            className="text-lg md:text-xl font-semibold mb-3 flex items-center gap-2"
                             style={{ color: "#222831" }}
                           >
                             <Calendar
-                              className="h-5 w-5"
+                              className="h-4 w-4 md:h-5 md:w-5"
                               style={{ color: "#00ADB5" }}
                             />
                             Schedule Options
@@ -648,13 +650,13 @@ export default function Programs() {
                             {program.schedule.map((time, idx) => (
                               <div
                                 key={idx}
-                                className="flex items-center gap-2"
+                                className="flex items-start gap-2"
                               >
                                 <Clock
-                                  className="h-4 w-4"
+                                  className="h-4 w-4 flex-shrink-0 mt-0.5"
                                   style={{ color: "#00ADB5" }}
                                 />
-                                <span style={{ color: "#393E46" }}>{time}</span>
+                                <span className="text-sm md:text-base" style={{ color: "#393E46" }}>{time}</span>
                               </div>
                             ))}
                           </div>
@@ -722,29 +724,29 @@ export default function Programs() {
 
                         <div className="pt-4">
                           <div
-                            className="rounded-lg p-4 mb-4"
+                            className="rounded-lg p-3 md:p-4 mb-4"
                             style={{ backgroundColor: "#393E46" }}
                           >
                             <div className="flex items-center gap-2 mb-2">
                               <Clock
-                                className="h-5 w-5"
+                                className="h-4 w-4 md:h-5 md:w-5"
                                 style={{ color: "#00ADB5" }}
                               />
                               <span
-                                className="font-semibold"
+                                className="font-semibold text-sm md:text-base"
                                 style={{ color: "#EEEEEE" }}
                               >
                                 Duration:
                               </span>
                             </div>
-                            <p style={{ color: "#EEEEEE" }}>
+                            <p className="text-sm md:text-base" style={{ color: "#EEEEEE" }}>
                               {program.duration}
                             </p>
                           </div>
 
                           <Link to="/registration">
                             <Button
-                              className="w-full py-3 text-lg"
+                              className="w-full py-3 md:py-4 text-base md:text-lg"
                               style={{
                                 backgroundColor: "#00ADB5",
                                 color: "#FFFFFF",
