@@ -120,69 +120,81 @@ export default function Topic() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: "#F8FAFC" }}>
       <Navigation />
       
-      <div className="container mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="mb-8">
+      {/* Hero Section with Gradient Background */}
+      <div className="relative overflow-hidden" style={{
+        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      }}>
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-40 h-40 bg-white rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="container mx-auto px-6 py-8 relative z-10">
           <Link 
             to={`/subject/${subjectName}`} 
-            className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4"
+            className="inline-flex items-center text-white hover:text-gray-200 mb-6 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to {subjectData?.name}
           </Link>
           
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">{topicData.title}</h1>
-              <p className="text-lg text-gray-600 mb-4">{topicData.description}</p>
-              <div className="flex items-center gap-4">
-                <Badge variant="secondary" className="text-sm">
-                  <Clock className="h-3 w-3 mr-1" />
-                  {topicData.estimated_duration_hours} hours
-                </Badge>
-                <Badge variant="secondary" className="text-sm">
-                  <BookOpen className="h-3 w-3 mr-1" />
-                  {topicData.lessons_count} lessons
-                </Badge>
-                <Badge 
-                  variant="secondary"
-                  className={
-                    progress >= 80 ? "bg-green-100 text-green-800" :
-                    progress >= 50 ? "bg-blue-100 text-blue-800" :
-                    progress > 0 ? "bg-yellow-100 text-yellow-800" :
-                    "bg-gray-100 text-gray-800"
-                  }
-                >
-                  {progress}% Complete
-                </Badge>
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">{topicData.title}</h1>
+            <p className="text-xl text-white/90 mb-6">{topicData.description}</p>
+            
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white">
+                <Clock className="h-4 w-4" />
+                <span className="font-medium">{topicData.estimated_duration_hours} hours</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white">
+                <BookOpen className="h-4 w-4" />
+                <span className="font-medium">{topicData.lessons_count} lessons</span>
+              </div>
+              <div className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium ${
+                progress >= 80 ? "bg-green-500 text-white" :
+                progress >= 50 ? "bg-blue-500 text-white" :
+                progress > 0 ? "bg-yellow-500 text-white" :
+                "bg-white/20 backdrop-blur-sm text-white"
+              }`}>
+                <Award className="h-4 w-4" />
+                <span>{progress}% Complete</span>
               </div>
             </div>
           </div>
-
-          {/* Progress Bar */}
-          <Card className="border-0 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Your Progress</h3>
-                <span className="text-sm text-gray-600">
-                  {completedLessons} of {topicData.lessons_count} lessons completed
-                </span>
-              </div>
-              <Progress value={progress} className="h-3" />
-            </CardContent>
-          </Card>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        {/* Progress Bar */}
+        <div className="container mx-auto px-6 pb-8 relative z-10">
+          <div className="max-w-4xl bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-semibold text-white">Your Progress</h3>
+              <span className="text-sm text-white/80">
+                {completedLessons} of {topicData.lessons_count} lessons completed
+              </span>
+            </div>
+            <div className="relative h-3 bg-white/20 rounded-full overflow-hidden">
+              <div 
+                className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-400 to-green-500 rounded-full transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="container mx-auto px-6 py-8 -mt-8 relative z-20">
+
+        <div className="grid lg:grid-cols-3 gap-6">
           {/* Main Content - Video Player */}
           <div className="lg:col-span-2 space-y-6">
             {/* Video Player */}
-            <Card className="border-0 shadow-lg">
+            <Card className="border-0 shadow-2xl rounded-2xl overflow-hidden">
               <CardContent className="p-0">
-                <div className="relative bg-gray-900 aspect-video rounded-t-lg overflow-hidden">
+                <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 aspect-video overflow-hidden">
                   {currentLesson ? (
                     currentLesson.lesson_type === 'video' && currentLesson.video_url ? (
                       <iframe
@@ -213,37 +225,41 @@ export default function Topic() {
                 </div>
                 
                 {currentLesson && (
-                  <div className="p-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  <div className="p-8 bg-gradient-to-br from-white to-gray-50">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-3">
                       {currentLesson.title}
                     </h2>
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                      <span className="flex items-center">
-                        <Clock className="h-4 w-4 mr-1" />
-                        {currentLesson.video_duration_minutes || 15} minutes
-                      </span>
-                      <Badge variant="outline">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-full">
+                        <Clock className="h-4 w-4 text-blue-600" />
+                        <span className="text-sm font-medium text-blue-900">
+                          {currentLesson.video_duration_minutes || 15} minutes
+                        </span>
+                      </div>
+                      <Badge className="bg-purple-100 text-purple-800 border-0">
                         {currentLesson.lesson_type}
                       </Badge>
                       {currentLesson.is_free && (
-                        <Badge className="bg-green-100 text-green-800">Free</Badge>
+                        <Badge className="bg-green-100 text-green-800 border-0">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          Free
+                        </Badge>
                       )}
                     </div>
                     
-                    <div className="prose max-w-none">
-                      <p className="text-gray-700">
-                        {currentLesson.content || 'Watch the video to learn about this topic.'}
+                    <div className="prose max-w-none mb-6">
+                      <p className="text-gray-700 text-lg leading-relaxed">
+                        {currentLesson.content || 'Watch the video to learn about this topic. Take notes and practice the concepts covered.'}
                       </p>
                     </div>
 
-                    <div className="flex gap-4 mt-6">
-                      <Button className="flex-1">
-                        <CheckCircle className="h-4 w-4 mr-2" />
+                    <div className="flex gap-3">
+                      <Button className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl transition-all duration-200 py-6 text-lg">
+                        <CheckCircle className="h-5 w-5 mr-2" />
                         Mark as Complete
                       </Button>
-                      <Button variant="outline">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download Notes
+                      <Button variant="outline" className="border-2 hover:bg-gray-50 py-6 px-6">
+                        <Download className="h-5 w-5" />
                       </Button>
                     </div>
                   </div>
@@ -253,26 +269,29 @@ export default function Topic() {
 
             {/* Lesson Description */}
             {!currentLesson && (
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <CardTitle>About This Topic</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700 mb-4">{topicData.description}</p>
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <h4 className="font-semibold text-blue-900 mb-2">What you'll learn:</h4>
-                    <ul className="space-y-2 text-blue-800">
+              <Card className="border-0 shadow-2xl rounded-2xl overflow-hidden">
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6">
+                  <CardTitle className="text-white text-2xl">About This Topic</CardTitle>
+                </div>
+                <CardContent className="p-8">
+                  <p className="text-gray-700 text-lg mb-6 leading-relaxed">{topicData.description}</p>
+                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200 rounded-2xl p-6">
+                    <h4 className="font-bold text-blue-900 mb-4 text-xl flex items-center gap-2">
+                      <Award className="h-6 w-6" />
+                      What you'll learn:
+                    </h4>
+                    <ul className="space-y-3 text-blue-900">
                       <li className="flex items-start">
-                        <CheckCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
-                        <span>Comprehensive understanding of {topicData.title.toLowerCase()}</span>
+                        <CheckCircle className="h-6 w-6 mr-3 mt-0.5 flex-shrink-0 text-green-600" />
+                        <span className="text-lg">Comprehensive understanding of {topicData.title.toLowerCase()}</span>
                       </li>
                       <li className="flex items-start">
-                        <CheckCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
-                        <span>Practical examples and real-world applications</span>
+                        <CheckCircle className="h-6 w-6 mr-3 mt-0.5 flex-shrink-0 text-green-600" />
+                        <span className="text-lg">Practical examples and real-world applications</span>
                       </li>
                       <li className="flex items-start">
-                        <CheckCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
-                        <span>Practice exercises and assessments</span>
+                        <CheckCircle className="h-6 w-6 mr-3 mt-0.5 flex-shrink-0 text-green-600" />
+                        <span className="text-lg">Practice exercises and assessments</span>
                       </li>
                     </ul>
                   </div>
@@ -283,18 +302,18 @@ export default function Topic() {
 
           {/* Sidebar - Lessons List */}
           <div className="space-y-6">
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 text-blue-600" />
-                  Lessons
+            <Card className="border-0 shadow-2xl rounded-2xl overflow-hidden sticky top-6">
+              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6">
+                <CardTitle className="flex items-center gap-2 text-white text-xl">
+                  <BookOpen className="h-6 w-6" />
+                  Course Content
                 </CardTitle>
-                <CardDescription>
-                  {topicData.lessons_count} lessons in this topic
+                <CardDescription className="text-white/80 mt-2">
+                  {topicData.lessons_count} lessons • {topicData.estimated_duration_hours} hours
                 </CardDescription>
-              </CardHeader>
+              </div>
               <CardContent className="p-0">
-                <div className="divide-y">
+                <div className="max-h-[600px] overflow-y-auto">
                   {topicData.lessons && topicData.lessons.length > 0 ? (
                     topicData.lessons.map((lesson, index) => {
                       const isCompleted = index < completedLessons;
@@ -304,33 +323,45 @@ export default function Topic() {
                         <button
                           key={lesson.id}
                           onClick={() => setCurrentLesson(lesson)}
-                          className={`w-full text-left p-4 hover:bg-gray-50 transition-colors ${
-                            isCurrent ? 'bg-blue-50 border-l-4 border-blue-600' : ''
+                          className={`w-full text-left p-5 transition-all duration-200 border-l-4 ${
+                            isCurrent 
+                              ? 'bg-gradient-to-r from-blue-50 to-purple-50 border-blue-600 shadow-inner' 
+                              : isCompleted
+                                ? 'hover:bg-green-50 border-transparent hover:border-green-400'
+                                : 'hover:bg-gray-50 border-transparent hover:border-gray-300'
                           }`}
                         >
-                          <div className="flex items-start gap-3">
-                            <div className={`flex-shrink-0 mt-1 ${
-                              isCompleted ? 'text-green-600' : 
-                              isCurrent ? 'text-blue-600' : 'text-gray-400'
+                          <div className="flex items-start gap-4">
+                            <div className={`flex-shrink-0 mt-1 p-2 rounded-full ${
+                              isCompleted ? 'bg-green-100 text-green-600' : 
+                              isCurrent ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'
                             }`}>
                               {isCompleted ? (
                                 <CheckCircle className="h-5 w-5" />
                               ) : lesson.lesson_type === 'video' ? (
-                                <Video className="h-5 w-5" />
+                                <Play className="h-5 w-5" />
                               ) : (
                                 <FileText className="h-5 w-5" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className={`font-medium mb-1 ${
-                                isCurrent ? 'text-blue-900' : 'text-gray-900'
-                              }`}>
-                                {index + 1}. {lesson.title}
-                              </h4>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className={`text-xs font-bold px-2 py-0.5 rounded ${
+                                  isCurrent ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+                                }`}>
+                                  {index + 1}
+                                </span>
+                                <h4 className={`font-semibold ${
+                                  isCurrent ? 'text-blue-900' : 'text-gray-900'
+                                }`}>
+                                  {lesson.title}
+                                </h4>
+                              </div>
                               <div className="flex items-center gap-2 text-xs text-gray-500">
+                                <Clock className="h-3 w-3" />
                                 <span>{lesson.video_duration_minutes || 15} min</span>
                                 {lesson.is_free && (
-                                  <Badge variant="outline" className="text-xs">Free</Badge>
+                                  <Badge className="text-xs bg-green-100 text-green-700 border-0">Free</Badge>
                                 )}
                               </div>
                             </div>
@@ -339,10 +370,12 @@ export default function Topic() {
                       );
                     })
                   ) : (
-                    <div className="p-8 text-center text-gray-500">
-                      <BookOpen className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                      <p>No lessons available yet</p>
-                      <p className="text-sm mt-1">Lessons are being prepared</p>
+                    <div className="p-12 text-center text-gray-500">
+                      <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                        <BookOpen className="h-10 w-10 text-gray-400" />
+                      </div>
+                      <p className="font-semibold text-gray-700 mb-1">No lessons available yet</p>
+                      <p className="text-sm">Lessons are being prepared</p>
                     </div>
                   )}
                 </div>
@@ -350,22 +383,22 @@ export default function Topic() {
             </Card>
 
             {/* Quick Actions */}
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-lg">Resources</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button variant="outline" className="w-full justify-start">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download Study Notes
+            <Card className="border-0 shadow-2xl rounded-2xl overflow-hidden">
+              <div className="bg-gradient-to-r from-orange-500 to-pink-500 p-6">
+                <CardTitle className="text-white text-xl">Resources</CardTitle>
+              </div>
+              <CardContent className="p-6 space-y-3">
+                <Button variant="outline" className="w-full justify-start border-2 hover:bg-blue-50 hover:border-blue-400 transition-all duration-200 py-6 text-base">
+                  <Download className="h-5 w-5 mr-3 text-blue-600" />
+                  <span className="font-medium">Download Study Notes</span>
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Award className="h-4 w-4 mr-2" />
-                  Take Quiz
+                <Button variant="outline" className="w-full justify-start border-2 hover:bg-purple-50 hover:border-purple-400 transition-all duration-200 py-6 text-base">
+                  <Award className="h-5 w-5 mr-3 text-purple-600" />
+                  <span className="font-medium">Take Quiz</span>
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <FileText className="h-4 w-4 mr-2" />
-                  Practice Exercises
+                <Button variant="outline" className="w-full justify-start border-2 hover:bg-green-50 hover:border-green-400 transition-all duration-200 py-6 text-base">
+                  <FileText className="h-5 w-5 mr-3 text-green-600" />
+                  <span className="font-medium">Practice Exercises</span>
                 </Button>
               </CardContent>
             </Card>
