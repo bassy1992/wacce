@@ -164,12 +164,15 @@ export default function Topic() {
               <div className="relative bg-black aspect-video">
                   {currentLesson ? (
                     currentLesson.lesson_type === 'video' && currentLesson.video_url ? (
-                      <iframe
+                      <video
                         src={currentLesson.video_url}
                         className="w-full h-full"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
+                        controls
+                        controlsList="nodownload"
+                        preload="metadata"
+                      >
+                        Your browser does not support the video tag.
+                      </video>
                     ) : (
                       <div className="flex items-center justify-center h-full">
                         <div className="text-center text-white">
