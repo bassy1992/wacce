@@ -516,68 +516,50 @@ export default function Programs() {
         </div>
       </section>
 
-      {/* Programs Tabs */}
+      {/* Programs Grid */}
       <section className="py-8 md:py-16" style={{ backgroundColor: "#393E46" }}>
         <div className="container mx-auto px-4 md:px-6">
-          <Tabs defaultValue="general-science" className="w-full">
-            <div className="overflow-x-auto pb-4 mb-6">
-              <TabsList
-                className="inline-flex w-full min-w-max md:grid md:grid-cols-3 lg:grid-cols-6 gap-2 p-2"
-                style={{ backgroundColor: "#222831", borderColor: "#00ADB5" }}
-              >
-                {programs.map((program) => (
-                  <TabsTrigger
-                    key={program.id}
-                    value={program.id}
-                    className="flex-shrink-0 min-w-[120px] md:min-w-0 text-sm py-3 px-4 flex flex-col items-center justify-center gap-1 whitespace-nowrap"
-                    style={{ color: "#EEEEEE", backgroundColor: "transparent" }}
-                    onMouseEnter={(e) =>
-                      (e.target.style.backgroundColor = "#00ADB5")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.target.style.backgroundColor = "transparent")
-                    }
-                  >
-                    <span className="text-2xl">{program.icon}</span>
-                    <span className="text-xs">{program.title}</span>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </div>
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Choose Your Programme
+            </h2>
+            <p className="text-gray-300 text-base md:text-lg max-w-2xl mx-auto">
+              Select the programme that matches your career goals
+            </p>
+          </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {programs.map((program) => (
-              <TabsContent key={program.id} value={program.id}>
-                <Card
-                  className="border-0 shadow-lg"
+              <Card
+                key={program.id}
+                className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+                style={{
+                  backgroundColor: "white",
+                  border: "2px solid #00ADB5",
+                }}
+              >
+                <CardHeader
+                  className="text-center p-6"
                   style={{
-                    backgroundColor: "white",
-                    border: "2px solid #00ADB5",
+                    background:
+                      "linear-gradient(135deg, #222831 0%, #00ADB5 100%)",
+                    color: "white",
                   }}
                 >
-                  <CardHeader
-                    className="text-center rounded-t-lg p-4 md:p-6"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #222831 0%, #00ADB5 100%)",
-                      color: "white",
-                    }}
+                  <div className="text-5xl mb-3">{program.icon}</div>
+                  <CardTitle className="text-2xl mb-2">
+                    {program.title}
+                  </CardTitle>
+                  <CardDescription
+                    className="text-sm"
+                    style={{ color: "#EEEEEE" }}
                   >
-                    <div className="text-4xl md:text-6xl mb-3 md:mb-4">{program.icon}</div>
-                    <CardTitle className="text-2xl md:text-3xl mb-2">
-                      {program.title}
-                    </CardTitle>
-                    <CardDescription
-                      className="text-sm md:text-lg px-2"
-                      style={{ color: "#EEEEEE" }}
-                    >
-                      {program.description}
-                    </CardDescription>
-                  </CardHeader>
+                    {program.description}
+                  </CardDescription>
+                </CardHeader>
 
-                  <CardContent className="p-4 sm:p-6 md:p-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                      {/* Left Column */}
-                      <div className="space-y-6">
+                <CardContent className="p-6">
+                  <div className="space-y-6">
                         <div>
                           <h4
                             className="text-lg md:text-xl font-semibold mb-3 flex items-center gap-2"
