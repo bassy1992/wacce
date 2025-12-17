@@ -107,6 +107,7 @@ export default function Dashboard() {
         });
 
         setError("");
+        setIsLoading(false);
       } catch (err: any) {
         console.error("Dashboard - Failed to load dashboard data:", err);
         
