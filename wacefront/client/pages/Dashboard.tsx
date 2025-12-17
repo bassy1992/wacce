@@ -46,8 +46,22 @@ export default function Dashboard() {
   // Load user's programme and subjects
   useEffect(() => {
     const loadStudentData = async () => {
-      if (!user?.student?.programme?.id) {
-        setError("No programme information found");
+      console.log("Dashboard - User data:", user);
+      
+      if (!user) {
+        setError("User not loaded");
+        setIsLoading(false);
+        return;
+      }
+      
+      if (!user.student) {
+        setError("No student profile found. Please contact support.");
+        setIsLoading(false);
+        return;
+      }
+      
+      if (!user.student.programme?.id) {
+        setError("No programme information found. Please contact support.");
         setIsLoading(false);
         return;
       }
