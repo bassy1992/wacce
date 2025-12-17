@@ -242,9 +242,9 @@ export default function Navigation() {
                             : user?.username || 'User'
                           }
                         </span>
-                        {user?.student && (
+                        {user?.student?.programme && (
                           <span className="text-xs px-2 py-1 rounded-full bg-green-600 text-white">
-                            {user.student.programme?.name || 'Student'}
+                            {user.student.programme.name}
                           </span>
                         )}
                       </Button>
@@ -265,9 +265,9 @@ export default function Navigation() {
                           <p className="text-xs" style={{ color: "#3B82F6" }}>
                             {user?.email}
                           </p>
-                          {user?.student && (
+                          {user?.student?.programme && (
                             <p className="text-xs mt-1" style={{ color: "#1E293B" }}>
-                              Programme: {user.student.programme?.name}
+                              Programme: {user.student.programme.name}
                             </p>
                           )}
                         </div>
