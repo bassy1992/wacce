@@ -70,6 +70,7 @@ ALLOWED_HOSTS = [host for host in ALLOWED_HOSTS if host and host != '']
 # CORS settings for production
 CORS_ALLOWED_ORIGINS = [
     "https://wacefront.vercel.app",  # Your Vercel frontend
+    "https://wacefront-i2zg55jcu-bassys-projects-fca17413.vercel.app",  # Vercel deployment URL
     "http://localhost:3000",  # Local development
     "http://localhost:5173",  # Vite dev server
     "http://127.0.0.1:5173",
@@ -106,6 +107,17 @@ CORS_ALLOW_ALL_ORIGINS = False
 # Enable credentials for CORS
 CORS_ALLOW_CREDENTIALS = True
 
+# Session cookie settings for cross-domain authentication
+SESSION_COOKIE_SAMESITE = 'None'  # Required for cross-domain cookies
+SESSION_COOKIE_SECURE = True  # Required when SameSite=None
+SESSION_COOKIE_HTTPONLY = True  # Security best practice
+SESSION_COOKIE_DOMAIN = None  # Don't restrict to specific domain
+
+# CSRF cookie settings for cross-domain
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False  # Must be False for JavaScript access
+
 # Static files with WhiteNoise
 if 'whitenoise.middleware.WhiteNoiseMiddleware' not in MIDDLEWARE:
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
@@ -129,8 +141,7 @@ if not DEBUG:
     # Only enable these if using HTTPS
     if config('USE_HTTPS', default=True, cast=bool):
         SECURE_SSL_REDIRECT = True
-        SESSION_COOKIE_SECURE = True
-        CSRF_COOKIE_SECURE = True
+        # SESSION_COOKIE_SECURE and CSRF_COOKIE_SECURE are set above for cross-domain
 
 # Logging configuration
 LOGGING = {
