@@ -20,6 +20,7 @@ import Dashboard from "./pages/Dashboard";
 import Classes from "./pages/Classes";
 import Subject from "./pages/Subject";
 import Course from "./pages/Course";
+import Topic from "./pages/Topic";
 import Payment from "./pages/Payment";
 import Checkout from "./pages/Checkout";
 import Confirmation from "./pages/Confirmation";
@@ -54,7 +55,7 @@ const App = () => (
             <Route path="/classes" element={<ProtectedRoute><Classes /></ProtectedRoute>} />
             <Route path="/subject/:subjectName" element={<ProtectedRoute><Subject /></ProtectedRoute>} />
             <Route path="/course/:subjectName/:courseId" element={<ProtectedRoute><Course /></ProtectedRoute>} />
-            <Route path="/topic/:subjectName/:topicId" element={<ProtectedRoute><Course /></ProtectedRoute>} />
+            <Route path="/topic/:subjectName/:topicId" element={<ProtectedRoute><Topic /></ProtectedRoute>} />
             <Route path="/past-questions" element={<ProtectedRoute><PastQuestions /></ProtectedRoute>} />
             <Route path="/past-questions/practice/:paperId" element={<ProtectedRoute><PastQuestionPractice /></ProtectedRoute>} />
             <Route path="/past-questions/results/:paperId" element={<ProtectedRoute><PastQuestionResults /></ProtectedRoute>} />
