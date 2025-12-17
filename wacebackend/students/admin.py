@@ -17,6 +17,10 @@ class ProgrammeAdmin(admin.ModelAdmin):
     search_fields = ['name']
     inlines = [ProgrammeSubjectInline]
     
+    def get_name_display(self, obj):
+        return obj.get_name_display()
+    get_name_display.short_description = 'Programme Name'
+    
     def get_subjects_count(self, obj):
         return obj.programme_subjects.count()
     get_subjects_count.short_description = 'Number of Subjects'
