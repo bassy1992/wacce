@@ -9,15 +9,6 @@
       }
     }
   ],
-  "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -48,8 +39,8 @@
   ],
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://wacce-production.up.railway.app/api/$1"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
