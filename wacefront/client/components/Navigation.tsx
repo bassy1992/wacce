@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-import { User, LogOut, Settings, BookOpen, Loader2, GraduationCap, Users, MessageCircle, Menu, X } from "lucide-react";
+import { User, LogOut, Settings, BookOpen, Loader2, MessageCircle, Menu, X } from "lucide-react";
 import Logo from "./Logo";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -163,23 +163,6 @@ export default function Navigation() {
                   Dashboard
                 </Link>
                 <Link
-                  to="/classes"
-                  className="transition-colors flex items-center gap-1"
-                  style={{
-                    color: isActive("/classes") ? "#3B82F6" : "#1E293B",
-                    fontWeight: isActive("/classes") ? "500" : "normal",
-                  }}
-                  onMouseEnter={(e) => (e.target.style.color = "#3B82F6")}
-                  onMouseLeave={(e) =>
-                    (e.target.style.color = isActive("/classes")
-                      ? "#3B82F6"
-                      : "#1E293B")
-                  }
-                >
-                  <GraduationCap className="h-4 w-4" />
-                  My Classes
-                </Link>
-                <Link
                   to="/past-questions"
                   className="transition-colors"
                   style={{
@@ -194,23 +177,6 @@ export default function Navigation() {
                   }
                 >
                   Past Questions
-                </Link>
-                <Link
-                  to="/progress"
-                  className="transition-colors flex items-center gap-1"
-                  style={{
-                    color: isActive("/progress") ? "#3B82F6" : "#1E293B",
-                    fontWeight: isActive("/progress") ? "500" : "normal",
-                  }}
-                  onMouseEnter={(e) => (e.target.style.color = "#3B82F6")}
-                  onMouseLeave={(e) =>
-                    (e.target.style.color = isActive("/progress")
-                      ? "#3B82F6"
-                      : "#1E293B")
-                  }
-                >
-                  <Users className="h-4 w-4" />
-                  Progress
                 </Link>
               </>
             )}
@@ -406,16 +372,6 @@ export default function Navigation() {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Dashboard
-                  </Link>
-                  <Link
-                    to="/classes"
-                    className="block py-2 text-base font-medium transition-colors"
-                    style={{
-                      color: isActive("/classes") ? "#3B82F6" : "#1E293B",
-                    }}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    My Classes
                   </Link>
                   <Link
                     to="/past-questions"

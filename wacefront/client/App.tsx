@@ -17,7 +17,6 @@ import FAQ from "./pages/FAQ";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
-import Classes from "./pages/Classes";
 import Subject from "./pages/Subject";
 import Course from "./pages/Course";
 import Topic from "./pages/Topic";
@@ -52,7 +51,6 @@ const App = () => (
             <Route path="/checkout/:programmeId" element={<Checkout />} />
             <Route path="/confirmation/:programmeId" element={<Confirmation />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/classes" element={<ProtectedRoute><Classes /></ProtectedRoute>} />
             <Route path="/subject/:subjectName" element={<ProtectedRoute><Subject /></ProtectedRoute>} />
             <Route path="/course/:subjectName/:courseId" element={<ProtectedRoute><Course /></ProtectedRoute>} />
             <Route path="/topic/:subjectName/:topicId" element={<ProtectedRoute><Topic /></ProtectedRoute>} />
