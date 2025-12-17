@@ -62,26 +62,33 @@ export default function Dashboard() {
         // Get dashboard data with core and elective subjects
         const dashboardData = await studentsAPI.getDashboard();
         console.log("Dashboard - Dashboard data received:", dashboardData);
+        console.log("Dashboard - Core subjects:", dashboardData.subjects?.core?.length || 0);
+        console.log("Dashboard - Elective subjects:", dashboardData.subjects?.elective?.length || 0);
+        
+        // Validate data structure
+        if (!dashboardData.subjects || !dashboardData.subjects.core || !dashboardData.subjects.elective) {
+          throw new Error("Invalid dashboard data structure - missing subjects");
+        }
         
         // Map subjects with type and status
         const subjectsWithStatus = [
-          ...dashboardData.subjects.core.map((subject: DashboardSubject) => ({
+          ...(dashboardData.subjects.core || []).map((subject: DashboardSubject) => ({
             ...subject,
-            progress: subject.progress.progress_percentage,
-            grade: subject.progress.current_grade || "N/A",
-            status: subject.progress.progress_percentage >= 80 ? "Excellent" 
-                  : subject.progress.progress_percentage >= 60 ? "Good"
-                  : subject.progress.progress_percentage >= 40 ? "On Track"
+            progress: subject.progress?.progress_percentage || 0,
+            grade: subject.progress?.current_grade || "N/A",
+            status: (subject.progress?.progress_percentage || 0) >= 80 ? "Excellent" 
+                  : (subject.progress?.progress_percentage || 0) >= 60 ? "Good"
+                  : (subject.progress?.progress_percentage || 0) >= 40 ? "On Track"
                   : "Needs Focus",
             type: "Core"
           })),
-          ...dashboardData.subjects.elective.map((subject: DashboardSubject) => ({
+          ...(dashboardData.subjects.elective || []).map((subject: DashboardSubject) => ({
             ...subject,
-            progress: subject.progress.progress_percentage,
-            grade: subject.progress.current_grade || "N/A",
-            status: subject.progress.progress_percentage >= 80 ? "Excellent" 
-                  : subject.progress.progress_percentage >= 60 ? "Good"
-                  : subject.progress.progress_percentage >= 40 ? "On Track"
+            progress: subject.progress?.progress_percentage || 0,
+            grade: subject.progress?.current_grade || "N/A",
+            status: (subject.progress?.progress_percentage || 0) >= 80 ? "Excellent" 
+                  : (subject.progress?.progress_percentage || 0) >= 60 ? "Good"
+                  : (subject.progress?.progress_percentage || 0) >= 40 ? "On Track"
                   : "Needs Focus",
             type: "Elective"
           }))
@@ -110,6 +117,13 @@ export default function Dashboard() {
         setIsLoading(false);
       } catch (err: any) {
         console.error("Dashboard - Failed to load dashboard data:", err);
+        console.error("Dashboard - Error details:", {
+          message: err.message,
+          error: err.error,
+          status: err.status,
+          type: typeof err,
+          keys: Object.keys(err || {})
+        });
         
         // Retry logic for mobile network issues
         if (retryCount < 2 && (err.message?.includes('fetch') || err.message?.includes('network') || !err.status)) {
@@ -118,7 +132,7 @@ export default function Dashboard() {
           return;
         }
         
-        const errorMessage = err.error || err.message || 'Unknown error';
+        const errorMessage = err.error || err.message || JSON.stringify(err) || 'Unknown error';
         setError(`Failed to load dashboard data: ${errorMessage}`);
         setIsLoading(false);
       }
