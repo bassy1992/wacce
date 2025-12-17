@@ -419,6 +419,9 @@ export default function Dashboard() {
                   <p className="text-2xl font-bold text-green-600 group-hover:scale-110 transition-transform duration-100">
                     {studentData.subjects.length}
                   </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {studentData.subjects.filter(s => s.type === 'Core').length} Core • {studentData.subjects.filter(s => s.type === 'Elective').length} Elective
+                  </p>
                 </div>
                 <div className="p-3 rounded-full bg-green-50 group-hover:bg-green-100 transition-colors duration-100">
                   <BookOpen className="h-8 w-8 text-green-600 group-hover:animate-bounce" />
@@ -467,77 +470,136 @@ export default function Dashboard() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Your Subjects */}
+            {/* Core Subjects */}
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BookOpen className="h-5 w-5 text-blue-600" />
-                  Your Subjects
+                  Core Subjects
                 </CardTitle>
                 <p className="text-gray-600">
-                  Click on any subject to access courses and lessons
+                  Required subjects for all students
                 </p>
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-4">
-                  {studentData.subjects.map((subject, index) => (
-                    <Link
-                      key={index}
-                      to={`/subject/${subject.name.toLowerCase().replace(/\s+/g, "-")}`}
-                      className="block"
-                    >
-                      <Card className="border border-gray-200 hover:border-[#00ADB5] hover:shadow-xl transition-all duration-150 cursor-pointer transform hover:-translate-y-2 hover:scale-105 group">
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center gap-2">
-                              <h4 className="font-semibold text-gray-900 text-lg group-hover:text-[#00ADB5] transition-colors duration-100">
-                                <span className="inline-block group-hover:animate-bounce">
-                                  {subject.type === "Core" ? "📚" : "🎯"}
-                                </span>{" "}
-                                {subject.name}
-                              </h4>
+                  {studentData.subjects
+                    .filter((subject) => subject.type === "Core")
+                    .map((subject, index) => (
+                      <Link
+                        key={index}
+                        to={`/subject/${subject.name.toLowerCase().replace(/\s+/g, "-")}`}
+                        className="block"
+                      >
+                        <Card className="border border-blue-200 hover:border-blue-500 hover:shadow-xl transition-all duration-150 cursor-pointer transform hover:-translate-y-2 hover:scale-105 group">
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-semibold text-gray-900 text-lg group-hover:text-blue-600 transition-colors duration-100">
+                                  <span className="inline-block group-hover:animate-bounce">
+                                    📚
+                                  </span>{" "}
+                                  {subject.name}
+                                </h4>
+                              </div>
                               <Badge
-                                variant="outline"
-                                className={`text-xs ${
-                                  subject.type === "Core" 
-                                    ? "border-blue-300 text-blue-700 bg-blue-50" 
-                                    : "border-purple-300 text-purple-700 bg-purple-50"
+                                variant="secondary"
+                                className={`transition-all duration-100 group-hover:scale-110 ${
+                                  subject.status === "Excellent"
+                                    ? "bg-green-100 text-green-800 group-hover:bg-green-200"
+                                    : subject.status === "Good"
+                                      ? "bg-blue-100 text-blue-800 group-hover:bg-blue-200"
+                                      : subject.status === "On Track"
+                                        ? "bg-yellow-100 text-yellow-800 group-hover:bg-yellow-200"
+                                        : "bg-red-100 text-red-800 group-hover:bg-red-200"
                                 }`}
                               >
-                                {subject.type}
+                                {subject.status}
                               </Badge>
                             </div>
-                            <Badge
-                              variant="secondary"
-                              className={`transition-all duration-100 group-hover:scale-110 ${
-                                subject.status === "Excellent"
-                                  ? "bg-green-100 text-green-800 group-hover:bg-green-200"
-                                  : subject.status === "Good"
-                                    ? "bg-blue-100 text-blue-800 group-hover:bg-blue-200"
-                                    : subject.status === "On Track"
-                                      ? "bg-yellow-100 text-yellow-800 group-hover:bg-yellow-200"
-                                      : "bg-red-100 text-red-800 group-hover:bg-red-200"
-                              }`}
-                            >
-                              {subject.status}
-                            </Badge>
-                          </div>
-                          <Progress
-                            value={subject.progress}
-                            className="mb-2 transition-all duration-150 group-hover:scale-x-105"
-                          />
-                          <div className="flex justify-between text-sm text-gray-600">
-                            <span className="group-hover:text-gray-800 transition-colors">
-                              {subject.progress}% Complete
-                            </span>
-                            <span className="text-[#00ADB5] font-medium group-hover:translate-x-1 transition-transform duration-100">
-                              View Topics →
-                            </span>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  ))}
+                            <Progress
+                              value={subject.progress}
+                              className="mb-2 transition-all duration-150 group-hover:scale-x-105"
+                            />
+                            <div className="flex justify-between text-sm text-gray-600">
+                              <span className="group-hover:text-gray-800 transition-colors">
+                                {subject.progress}% Complete
+                              </span>
+                              <span className="text-blue-600 font-medium group-hover:translate-x-1 transition-transform duration-100">
+                                View Topics →
+                              </span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Elective Subjects */}
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-purple-600" />
+                  Elective Subjects
+                </CardTitle>
+                <p className="text-gray-600">
+                  Programme-specific subjects for {studentData.program}
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {studentData.subjects
+                    .filter((subject) => subject.type === "Elective")
+                    .map((subject, index) => (
+                      <Link
+                        key={index}
+                        to={`/subject/${subject.name.toLowerCase().replace(/\s+/g, "-")}`}
+                        className="block"
+                      >
+                        <Card className="border border-purple-200 hover:border-purple-500 hover:shadow-xl transition-all duration-150 cursor-pointer transform hover:-translate-y-2 hover:scale-105 group">
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-semibold text-gray-900 text-lg group-hover:text-purple-600 transition-colors duration-100">
+                                  <span className="inline-block group-hover:animate-bounce">
+                                    🎯
+                                  </span>{" "}
+                                  {subject.name}
+                                </h4>
+                              </div>
+                              <Badge
+                                variant="secondary"
+                                className={`transition-all duration-100 group-hover:scale-110 ${
+                                  subject.status === "Excellent"
+                                    ? "bg-green-100 text-green-800 group-hover:bg-green-200"
+                                    : subject.status === "Good"
+                                      ? "bg-blue-100 text-blue-800 group-hover:bg-blue-200"
+                                      : subject.status === "On Track"
+                                        ? "bg-yellow-100 text-yellow-800 group-hover:bg-yellow-200"
+                                        : "bg-red-100 text-red-800 group-hover:bg-red-200"
+                                }`}
+                              >
+                                {subject.status}
+                              </Badge>
+                            </div>
+                            <Progress
+                              value={subject.progress}
+                              className="mb-2 transition-all duration-150 group-hover:scale-x-105"
+                            />
+                            <div className="flex justify-between text-sm text-gray-600">
+                              <span className="group-hover:text-gray-800 transition-colors">
+                                {subject.progress}% Complete
+                              </span>
+                              <span className="text-purple-600 font-medium group-hover:translate-x-1 transition-transform duration-100">
+                                View Topics →
+                              </span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    ))}
                 </div>
               </CardContent>
             </Card>
