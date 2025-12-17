@@ -189,6 +189,16 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
+# Session and Cookie settings for cross-origin (Safari iOS compatibility)
+SESSION_COOKIE_SAMESITE = 'None' if not DEBUG else 'Lax'
+SESSION_COOKIE_SECURE = not DEBUG  # True in production
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_AGE = 1209600  # 2 weeks
+
+CSRF_COOKIE_SAMESITE = 'None' if not DEBUG else 'Lax'
+CSRF_COOKIE_SECURE = not DEBUG  # True in production
+CSRF_COOKIE_HTTPONLY = False  # Must be False for JavaScript access
+
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
