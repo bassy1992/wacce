@@ -34,6 +34,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await authAPI.getProfile();
+      console.log('AuthContext - Profile response:', response);
+      console.log('AuthContext - User data:', response.user);
+      console.log('AuthContext - Student data:', response.user?.student);
+      console.log('AuthContext - Programme data:', response.user?.student?.programme);
       setUser(response.user);
     } catch (error) {
       console.log('Not authenticated:', error);
@@ -46,6 +50,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (username: string, password: string) => {
     try {
       const response = await authAPI.signin({ username, password });
+      console.log('AuthContext - Login response:', response);
+      console.log('AuthContext - Login user:', response.user);
       setUser(response.user);
     } catch (error) {
       throw error; // Re-throw to let the login component handle the error
