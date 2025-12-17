@@ -187,35 +187,55 @@ export const apiRequest = async <T>(
   url: string,
   options: RequestInit = {}
 ): Promise<T> => {
-  const response = await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-    credentials: 'include', // Include cookies for session auth
-    ...options,
-  });
+  // Add timeout for mobile networks (30 seconds)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-  let data;
   try {
-    data = await response.json();
-  } catch (error) {
-    // Handle cases where response is not JSON (like HTML error pages)
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      credentials: 'include', // Include cookies for session auth
+      signal: controller.signal,
+      ...options,
+    });
+
+    clearTimeout(timeoutId);
+
+    let data;
+    try {
+      data = await response.json();
+    } catch (error) {
+      // Handle cases where response is not JSON (like HTML error pages)
+      if (!response.ok) {
+        throw { 
+          status: response.status, 
+          error: `HTTP ${response.status}: ${response.statusText}`,
+          message: 'Server returned non-JSON response'
+        };
+      }
+      data = {};
+    }
+
     if (!response.ok) {
+      throw { status: response.status, ...data };
+    }
+
+    return data;
+  } catch (error: any) {
+    clearTimeout(timeoutId);
+    
+    if (error.name === 'AbortError') {
       throw { 
-        status: response.status, 
-        error: `HTTP ${response.status}: ${response.statusText}`,
-        message: 'Server returned non-JSON response'
+        error: 'Request timeout - please check your internet connection',
+        message: 'The request took too long to complete'
       };
     }
-    data = {};
+    
+    throw error;
   }
-
-  if (!response.ok) {
-    throw { status: response.status, ...data };
-  }
-
-  return data;
 };
 
 export const authAPI = {

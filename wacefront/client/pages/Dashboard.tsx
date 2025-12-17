@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import { useAuth } from "../contexts/AuthContext";
-import { studentsAPI, DashboardSubject } from "../../shared/api";
+import { studentsAPI, DashboardSubject, API_ENDPOINTS } from "../../shared/api";
 import {
   Card,
   CardContent,
@@ -45,8 +45,8 @@ export default function Dashboard() {
 
   // Load student dashboard data
   useEffect(() => {
-    const loadDashboardData = async () => {
-      console.log("Dashboard - Loading dashboard data");
+    const loadDashboardData = async (retryCount = 0) => {
+      console.log("Dashboard - Loading dashboard data, attempt:", retryCount + 1);
       
       if (!user) {
         console.log("Dashboard - No user found");
@@ -57,7 +57,7 @@ export default function Dashboard() {
 
       try {
         setIsLoading(true);
-        console.log("Dashboard - Fetching dashboard data");
+        console.log("Dashboard - Fetching dashboard data from:", API_ENDPOINTS.STUDENTS.DASHBOARD);
         
         // Get dashboard data with core and elective subjects
         const dashboardData = await studentsAPI.getDashboard();
@@ -107,10 +107,18 @@ export default function Dashboard() {
         });
 
         setError("");
-      } catch (err) {
+      } catch (err: any) {
         console.error("Dashboard - Failed to load dashboard data:", err);
-        setError(`Failed to load dashboard data: ${err instanceof Error ? err.message : 'Unknown error'}`);
-      } finally {
+        
+        // Retry logic for mobile network issues
+        if (retryCount < 2 && (err.message?.includes('fetch') || err.message?.includes('network') || !err.status)) {
+          console.log("Dashboard - Retrying in 2 seconds...");
+          setTimeout(() => loadDashboardData(retryCount + 1), 2000);
+          return;
+        }
+        
+        const errorMessage = err.error || err.message || 'Unknown error';
+        setError(`Failed to load dashboard data: ${errorMessage}`);
         setIsLoading(false);
       }
     };
@@ -268,88 +276,34 @@ export default function Dashboard() {
 
   return (
     <div
-      className="min-h-screen relative overflow-hidden"
+      className="min-h-screen"
       style={{ backgroundColor: "#EEEEEE" }}
     >
-      {/* Floating Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-20 h-20 bg-[#00ADB5]/10 rounded-full animate-float"></div>
-        <div className="absolute top-40 right-20 w-16 h-16 bg-purple-500/10 rounded-full animate-float-delayed"></div>
-        <div className="absolute bottom-40 left-1/4 w-12 h-12 bg-green-500/10 rounded-full animate-float"></div>
-        <div className="absolute bottom-20 right-1/3 w-24 h-24 bg-orange-500/10 rounded-full animate-float-delayed"></div>
-        <div className="absolute top-1/3 left-1/2 w-8 h-8 bg-blue-500/10 rounded-full animate-float"></div>
-      </div>
-
       <Navigation />
 
-      <style>{`
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          33% {
-            transform: translateY(-20px) rotate(120deg);
-          }
-          66% {
-            transform: translateY(10px) rotate(240deg);
-          }
-        }
-
-        @keyframes float-delayed {
-          0%,
-          100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          33% {
-            transform: translateY(15px) rotate(-120deg);
-          }
-          66% {
-            transform: translateY(-10px) rotate(-240deg);
-          }
-        }
-
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-
-        .animate-float-delayed {
-          animation: float-delayed 4s ease-in-out infinite;
-          animation-delay: 1s;
-        }
-      `}</style>
-
-      {/* Hero Banner */}
-      <div className="relative mb-8 overflow-hidden">
-        <div
-          className="h-64 bg-cover bg-center relative"
-          style={{
-            backgroundImage: `linear-gradient(rgba(34, 40, 49, 0.8), rgba(34, 40, 49, 0.8)), url('https://images.pexels.com/photos/7713237/pexels-photo-7713237.jpeg')`,
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#222831]/90 to-[#00ADB5]/90"></div>
-          <div className="container mx-auto px-6 py-16 relative z-10">
+      {/* Hero Banner - Simplified for mobile performance */}
+      <div className="relative mb-6 md:mb-8">
+        <div className="bg-gradient-to-r from-[#222831] to-[#00ADB5] relative">
+          <div className="container mx-auto px-4 md:px-6 py-8 md:py-16">
             <div className="max-w-2xl">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white animate-fadeInUp">
+              <h1 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4 text-white">
                 Welcome back, {studentData.name}! 🎓
               </h1>
-              <p className="text-xl text-gray-200 mb-6 animate-fadeInUp delay-100">
+              <p className="text-base md:text-xl text-gray-200 mb-4 md:mb-6">
                 Continue your {studentData.program} journey. You're{" "}
                 {studentData.overallProgress}% through your program!
               </p>
-              <p className="text-sm text-gray-300 mb-4">
+              <p className="text-xs md:text-sm text-gray-300 mb-4">
                 Enrolled: {studentData.enrollmentDate} • {studentData.subjects.length} Subjects
               </p>
-              <div className="flex gap-4 animate-fadeInUp delay-200">
-                <Button className="bg-[#00ADB5] hover:bg-[#00ADB5]/90 px-6 py-3 transform hover:scale-105 transition-all duration-100">
-                  <Play className="mr-2 h-5 w-5" />
+              <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                <Button className="bg-[#00ADB5] hover:bg-[#00ADB5]/90 px-4 md:px-6 py-2 md:py-3">
+                  <Play className="mr-2 h-4 w-4 md:h-5 md:w-5" />
                   Continue Learning
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-gray-900 px-6 py-3"
+                  className="border-white text-white hover:bg-white hover:text-gray-900 px-4 md:px-6 py-2 md:py-3"
                 >
                   View Schedule
                 </Button>
@@ -359,31 +313,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-8">
-        <style>{`
-          @keyframes fadeInUp {
-            from {
-              opacity: 0;
-              transform: translateY(30px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-
-          .animate-fadeInUp {
-            animation: fadeInUp 0.3s ease-out forwards;
-          }
-
-          .delay-100 {
-            animation-delay: 0.1s;
-          }
-
-          .delay-200 {
-            animation-delay: 0.2s;
-          }
-        `}</style>
+      <div className="container mx-auto px-4 md:px-6 py-4 md:py-8">
 
         {/* Stats Overview */}
         <div className="grid md:grid-cols-4 gap-6 mb-8">
