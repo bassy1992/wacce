@@ -521,14 +521,14 @@ export default function Programs() {
         <div className="container mx-auto px-6">
           <Tabs defaultValue="general-science" className="max-w-7xl mx-auto">
             <TabsList
-              className="grid w-full grid-cols-2 lg:grid-cols-6 mb-8"
+              className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-8 p-2"
               style={{ backgroundColor: "#222831", borderColor: "#00ADB5" }}
             >
               {programs.map((program) => (
                 <TabsTrigger
                   key={program.id}
                   value={program.id}
-                  className="text-xs lg:text-sm"
+                  className="text-xs sm:text-sm py-2 px-2 sm:px-4 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2"
                   style={{ color: "#EEEEEE", backgroundColor: "transparent" }}
                   onMouseEnter={(e) =>
                     (e.target.style.backgroundColor = "#00ADB5")
@@ -537,8 +537,8 @@ export default function Programs() {
                     (e.target.style.backgroundColor = "transparent")
                   }
                 >
-                  <span className="mr-2">{program.icon}</span>
-                  <span className="hidden sm:inline">{program.title}</span>
+                  <span className="text-lg sm:text-base">{program.icon}</span>
+                  <span className="text-xs sm:text-sm">{program.title}</span>
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -572,8 +572,8 @@ export default function Programs() {
                     </CardDescription>
                   </CardHeader>
 
-                  <CardContent className="p-8">
-                    <div className="grid md:grid-cols-2 gap-8">
+                  <CardContent className="p-4 sm:p-6 md:p-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                       {/* Left Column */}
                       <div className="space-y-6">
                         <div>
@@ -607,7 +607,7 @@ export default function Programs() {
 
                         <div>
                           <h4
-                            className="text-xl font-semibold mb-3 flex items-center gap-2"
+                            className="text-lg sm:text-xl font-semibold mb-3 flex items-center gap-2"
                             style={{ color: "#222831" }}
                           >
                             <Target
@@ -621,6 +621,7 @@ export default function Programs() {
                               <Badge
                                 key={idx}
                                 variant="secondary"
+                                className="text-xs sm:text-sm"
                                 style={{
                                   backgroundColor: "#393E46",
                                   color: "#EEEEEE",
@@ -664,7 +665,7 @@ export default function Programs() {
                       <div className="space-y-6">
                         <div>
                           <h4
-                            className="text-xl font-semibold mb-3 flex items-center gap-2"
+                            className="text-lg sm:text-xl font-semibold mb-3 flex items-center gap-2"
                             style={{ color: "#222831" }}
                           >
                             <GraduationCap
@@ -673,12 +674,12 @@ export default function Programs() {
                             />
                             Career Pathways
                           </h4>
-                          <div className="grid grid-cols-2 gap-2">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             {program.careerPaths.map((career, idx) => (
                               <Badge
                                 key={idx}
                                 variant="outline"
-                                className="justify-center"
+                                className="justify-center text-xs sm:text-sm py-1"
                                 style={{
                                   borderColor: "#393E46",
                                   color: "#393E46",
