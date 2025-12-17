@@ -49,7 +49,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://your-backend-domain.com/api/$1"
+      "destination": "https://wacce-production.up.railway.app/api/$1"
     }
   ]
 }
