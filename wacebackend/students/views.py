@@ -204,3 +204,34 @@ def populate_topics_api(request):
             'success': False,
             'error': str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def populate_lessons_api(request):
+    """
+    API endpoint to populate lessons - only accessible by admin users
+    """
+    from courses.models import Lesson
+    from django.core.management import call_command
+    from io import StringIO
+    
+    try:
+        # Capture the output
+        out = StringIO()
+        call_command('populate_lessons', stdout=out)
+        output = out.getvalue()
+        
+        return Response({
+            'success': True,
+            'message': 'Lessons populated successfully',
+            'output': output,
+            'summary': {
+                'total_lessons': Lesson.objects.count(),
+            }
+        })
+    except Exception as e:
+        return Response({
+            'success': False,
+            'error': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
