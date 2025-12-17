@@ -8,4 +8,5 @@ urlpatterns = [
     path('progress/', views.student_progress, name='student-progress'),
     path('dashboard/', views.student_dashboard, name='student-dashboard'),
     path('populate-subjects/', views.populate_subjects_api, name='populate-subjects'),
+    path('populate-topics/', views.populate_topics_api, name='populate-topics'),
 ]
