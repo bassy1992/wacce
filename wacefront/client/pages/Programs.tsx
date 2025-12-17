@@ -315,7 +315,7 @@ export default function Programs() {
 
       {/* Hero Section */}
       <section
-        className="relative py-20 text-white overflow-hidden"
+        className="relative py-12 md:py-20 text-white overflow-hidden"
         style={{
           background:
             "linear-gradient(135deg, #222831 0%, #393E46 50%, #00ADB5 100%)",
@@ -330,27 +330,28 @@ export default function Programs() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#222831]/90 to-[#00ADB5]/80"></div>
         </div>
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
             <div>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6">
                 Our Academic{" "}
                 <span className="text-[#00ADB5]">Programs</span>
               </h1>
               <p
-                className="text-xl mb-8"
+                className="text-base md:text-lg lg:text-xl mb-6 md:mb-8"
                 style={{ color: "#EEEEEE" }}
               >
                 Choose from our comprehensive range of online WASSCE-aligned
                 programs designed to help you excel from anywhere
               </p>
-              <div className="flex gap-4">
+              <div className="flex gap-3 md:gap-4">
                 <Button
-                  className="px-8 py-4 text-lg transform hover:scale-105 transition-all duration-150"
+                  className="px-4 py-3 md:px-8 md:py-4 text-base md:text-lg transform hover:scale-105 transition-all duration-150"
                   style={{ backgroundColor: "#00ADB5" }}
                 >
-                  <BookOpen className="mr-2 h-5 w-5" />
-                  Explore Programs
+                  <BookOpen className="mr-2 h-4 w-4 md:h-5 md:w-5" />
+                  <span className="hidden sm:inline">Explore Programs</span>
+                  <span className="sm:hidden">Explore</span>
                 </Button>
               </div>
             </div>
@@ -463,18 +464,18 @@ export default function Programs() {
       </section>
 
       {/* Program Features */}
-      <section className="py-16" style={{ backgroundColor: "white" }}>
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
+      <section className="py-12 md:py-16" style={{ backgroundColor: "white" }}>
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-8 md:mb-12">
             <h2
-              className="text-4xl font-bold mb-4"
+              className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4"
               style={{ color: "#222831" }}
             >
               What Makes Our Programs Special
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {features.map((feature, index) => (
               <Card
                 key={index}
@@ -516,241 +517,103 @@ export default function Programs() {
         </div>
       </section>
 
-      {/* Programs Grid */}
-      <section className="py-8 md:py-16" style={{ backgroundColor: "#393E46" }}>
+      {/* Programs Section */}
+      <section className="py-12 md:py-16" style={{ backgroundColor: "#EEEEEE" }}>
         <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Choose Your Programme
+          <div className="text-center mb-6 md:mb-8 lg:mb-10 px-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4" style={{ color: "#222831" }}>
+              Our Programmes
             </h2>
-            <p className="text-gray-300 text-base md:text-lg max-w-2xl mx-auto">
-              Select the programme that matches your career goals
+            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
+              Choose the programme that aligns with your career goals
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="space-y-4 md:space-y-6 lg:space-y-8">
             {programs.map((program) => (
               <Card
                 key={program.id}
-                className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
-                style={{
-                  backgroundColor: "white",
-                  border: "2px solid #00ADB5",
-                }}
+                className="border-0 shadow-lg hover:shadow-xl transition-shadow overflow-hidden"
+                style={{ backgroundColor: "white" }}
               >
-                <CardHeader
-                  className="text-center p-6"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #222831 0%, #00ADB5 100%)",
-                    color: "white",
-                  }}
-                >
-                  <div className="text-5xl mb-3">{program.icon}</div>
-                  <CardTitle className="text-2xl mb-2">
-                    {program.title}
-                  </CardTitle>
-                  <CardDescription
-                    className="text-sm"
-                    style={{ color: "#EEEEEE" }}
+                <div className="flex flex-col md:grid md:grid-cols-[260px_1fr] lg:grid-cols-[300px_1fr]">
+                  {/* Left: Program Header */}
+                  <div
+                    className="p-5 md:p-6 lg:p-8 flex flex-col items-center justify-center text-center"
+                    style={{
+                      background: "linear-gradient(135deg, #222831 0%, #00ADB5 100%)",
+                      color: "white",
+                    }}
                   >
-                    {program.description}
-                  </CardDescription>
-                </CardHeader>
+                    <div className="text-4xl md:text-5xl lg:text-6xl mb-2 md:mb-3 lg:mb-4">{program.icon}</div>
+                    <h3 className="text-lg md:text-xl lg:text-2xl font-bold mb-2">{program.title}</h3>
+                    <p className="text-xs md:text-sm text-gray-200 mb-3 md:mb-4 line-clamp-2 md:line-clamp-3">{program.description}</p>
+                    <Link to="/signup" className="w-full">
+                      <Button
+                        className="w-full text-sm md:text-base"
+                        style={{ backgroundColor: "white", color: "#00ADB5" }}
+                      >
+                        Enroll Now
+                      </Button>
+                    </Link>
+                  </div>
 
-                <CardContent className="p-6">
-                  <div className="space-y-6">
-                        <div>
-                          <h4
-                            className="text-lg md:text-xl font-semibold mb-3 flex items-center gap-2"
-                            style={{ color: "#222831" }}
-                          >
-                            <BookOpen
-                              className="h-4 w-4 md:h-5 md:w-5"
-                              style={{ color: "#00ADB5" }}
-                            />
-                            Core Subjects
-                          </h4>
-                          <div className="space-y-2">
-                            {program.subjects.core.map((subject, idx) => (
-                              <div
-                                key={idx}
-                                className="flex items-start gap-2"
-                              >
-                                <CheckCircle
-                                  className="h-4 w-4 flex-shrink-0 mt-0.5"
-                                  style={{ color: "#00ADB5" }}
-                                />
-                                <span className="text-sm md:text-base" style={{ color: "#393E46" }}>
-                                  {subject}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+                  {/* Right: Program Details */}
+                  <div className="p-4 md:p-5 lg:p-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 lg:gap-6">
+                      <div>
+                        <h4 className="font-semibold mb-1.5 md:mb-2 flex items-center gap-1.5 md:gap-2 text-xs md:text-sm" style={{ color: "#222831" }}>
+                          <BookOpen className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" style={{ color: "#00ADB5" }} />
+                          Core Subjects
+                        </h4>
+                        <ul className="text-xs md:text-sm text-gray-600 space-y-0.5 md:space-y-1">
+                          {program.subjects.core.map((subject, idx) => (
+                            <li key={idx} className="leading-tight">• {subject}</li>
+                          ))}
+                        </ul>
+                      </div>
 
-                        <div>
-                          <h4
-                            className="text-lg sm:text-xl font-semibold mb-3 flex items-center gap-2"
-                            style={{ color: "#222831" }}
-                          >
-                            <Target
-                              className="h-5 w-5"
-                              style={{ color: "#00ADB5" }}
-                            />
-                            Elective Subjects
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {program.subjects.electives.map((elective, idx) => (
-                              <Badge
-                                key={idx}
-                                variant="secondary"
-                                className="text-xs sm:text-sm"
-                                style={{
-                                  backgroundColor: "#393E46",
-                                  color: "#EEEEEE",
-                                }}
-                              >
-                                {elective}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div>
-                          <h4
-                            className="text-lg md:text-xl font-semibold mb-3 flex items-center gap-2"
-                            style={{ color: "#222831" }}
-                          >
-                            <Calendar
-                              className="h-4 w-4 md:h-5 md:w-5"
-                              style={{ color: "#00ADB5" }}
-                            />
-                            Schedule Options
-                          </h4>
-                          <div className="space-y-2">
-                            {program.schedule.map((time, idx) => (
-                              <div
-                                key={idx}
-                                className="flex items-start gap-2"
-                              >
-                                <Clock
-                                  className="h-4 w-4 flex-shrink-0 mt-0.5"
-                                  style={{ color: "#00ADB5" }}
-                                />
-                                <span className="text-sm md:text-base" style={{ color: "#393E46" }}>{time}</span>
-                              </div>
-                            ))}
-                          </div>
+                      <div>
+                        <h4 className="font-semibold mb-1.5 md:mb-2 flex items-center gap-1.5 md:gap-2 text-xs md:text-sm" style={{ color: "#222831" }}>
+                          <Target className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" style={{ color: "#00ADB5" }} />
+                          Electives
+                        </h4>
+                        <div className="flex flex-wrap gap-1">
+                          {program.subjects.electives.map((elective, idx) => (
+                            <Badge key={idx} variant="secondary" className="text-[10px] md:text-xs px-1.5 py-0.5">
+                              {elective}
+                            </Badge>
+                          ))}
                         </div>
                       </div>
 
-                      {/* Right Column */}
-                      <div className="space-y-6">
-                        <div>
-                          <h4
-                            className="text-lg sm:text-xl font-semibold mb-3 flex items-center gap-2"
-                            style={{ color: "#222831" }}
-                          >
-                            <GraduationCap
-                              className="h-5 w-5"
-                              style={{ color: "#00ADB5" }}
-                            />
-                            Career Pathways
-                          </h4>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            {program.careerPaths.map((career, idx) => (
-                              <Badge
-                                key={idx}
-                                variant="outline"
-                                className="justify-center text-xs sm:text-sm py-1"
-                                style={{
-                                  borderColor: "#393E46",
-                                  color: "#393E46",
-                                }}
-                              >
-                                {career}
-                              </Badge>
-                            ))}
-                          </div>
+                      <div>
+                        <h4 className="font-semibold mb-1.5 md:mb-2 flex items-center gap-1.5 md:gap-2 text-xs md:text-sm" style={{ color: "#222831" }}>
+                          <GraduationCap className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" style={{ color: "#00ADB5" }} />
+                          Career Paths
+                        </h4>
+                        <div className="flex flex-wrap gap-1">
+                          {program.careerPaths.slice(0, 4).map((career, idx) => (
+                            <Badge key={idx} variant="outline" className="text-[10px] md:text-xs px-1.5 py-0.5">
+                              {career}
+                            </Badge>
+                          ))}
                         </div>
+                      </div>
 
-                        <div>
-                          <h4
-                            className="text-xl font-semibold mb-3 flex items-center gap-2"
-                            style={{ color: "#222831" }}
-                          >
-                            <Award
-                              className="h-5 w-5"
-                              style={{ color: "#00ADB5" }}
-                            />
-                            Program Highlights
-                          </h4>
-                          <div className="space-y-2">
-                            {program.highlights.map((highlight, idx) => (
-                              <div
-                                key={idx}
-                                className="flex items-center gap-2"
-                              >
-                                <CheckCircle
-                                  className="h-4 w-4"
-                                  style={{ color: "#00ADB5" }}
-                                />
-                                <span style={{ color: "#393E46" }}>
-                                  {highlight}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="pt-4">
-                          <div
-                            className="rounded-lg p-3 md:p-4 mb-4"
-                            style={{ backgroundColor: "#393E46" }}
-                          >
-                            <div className="flex items-center gap-2 mb-2">
-                              <Clock
-                                className="h-4 w-4 md:h-5 md:w-5"
-                                style={{ color: "#00ADB5" }}
-                              />
-                              <span
-                                className="font-semibold text-sm md:text-base"
-                                style={{ color: "#EEEEEE" }}
-                              >
-                                Duration:
-                              </span>
-                            </div>
-                            <p className="text-sm md:text-base" style={{ color: "#EEEEEE" }}>
-                              {program.duration}
-                            </p>
-                          </div>
-
-                          <Link to="/registration">
-                            <Button
-                              className="w-full py-3 md:py-4 text-base md:text-lg"
-                              style={{
-                                backgroundColor: "#00ADB5",
-                                color: "#FFFFFF",
-                              }}
-                              onMouseEnter={(e) =>
-                                (e.target.style.backgroundColor = "#222831")
-                              }
-                              onMouseLeave={(e) =>
-                                (e.target.style.backgroundColor = "#00ADB5")
-                              }
-                            >
-                              Enroll in {program.title}
-                            </Button>
-                          </Link>
-                        </div>
+                      <div>
+                        <h4 className="font-semibold mb-1.5 md:mb-2 flex items-center gap-1.5 md:gap-2 text-xs md:text-sm" style={{ color: "#222831" }}>
+                          <Clock className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" style={{ color: "#00ADB5" }} />
+                          Duration
+                        </h4>
+                        <p className="text-xs md:text-sm text-gray-600">{program.duration}</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
+                  </div>
+                </div>
+              </Card>
             ))}
-          </Tabs>
+          </div>
         </div>
       </section>
 

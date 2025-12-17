@@ -46,31 +46,46 @@ export default function Dashboard() {
   // Load user's programme and subjects
   useEffect(() => {
     const loadStudentData = async () => {
-      console.log("Dashboard - User data:", user);
+      console.log("Dashboard - Full user object:", JSON.stringify(user, null, 2));
       
       if (!user) {
+        console.log("Dashboard - No user found");
         setError("User not loaded");
         setIsLoading(false);
         return;
       }
       
       if (!user.student) {
-        setError("No student profile found. Please contact support.");
+        console.log("Dashboard - No student profile found");
+        console.log("Dashboard - User object keys:", Object.keys(user));
+        setError("No student profile found. Please complete your registration or contact support.");
         setIsLoading(false);
         return;
       }
       
-      if (!user.student.programme?.id) {
-        setError("No programme information found. Please contact support.");
+      console.log("Dashboard - Student object:", JSON.stringify(user.student, null, 2));
+      
+      if (!user.student.programme) {
+        console.log("Dashboard - No programme found in student");
+        setError("No programme assigned. Please contact support to complete your enrollment.");
+        setIsLoading(false);
+        return;
+      }
+      
+      if (!user.student.programme.id) {
+        console.log("Dashboard - Programme exists but no ID:", user.student.programme);
+        setError("Programme data incomplete. Please contact support.");
         setIsLoading(false);
         return;
       }
 
       try {
         setIsLoading(true);
+        console.log("Dashboard - Fetching programme details for ID:", user.student.programme.id);
         
         // Get programme details with subjects
         const programmeData = await coursesAPI.getProgrammeDetail(user.student.programme.id);
+        console.log("Dashboard - Programme data received:", programmeData);
         
         // Calculate mock progress for subjects (in real app, this would come from backend)
         const subjectsWithProgress = [
@@ -90,6 +105,8 @@ export default function Dashboard() {
           }))
         ];
 
+        console.log("Dashboard - Subjects with progress:", subjectsWithProgress.length);
+
         // Calculate overall progress
         const totalProgress = subjectsWithProgress.reduce((sum, subject) => sum + subject.progress, 0);
         const overallProgress = Math.round(totalProgress / subjectsWithProgress.length);
@@ -107,8 +124,8 @@ export default function Dashboard() {
 
         setError("");
       } catch (err) {
-        console.error("Failed to load student data:", err);
-        setError("Failed to load programme data");
+        console.error("Dashboard - Failed to load student data:", err);
+        setError(`Failed to load programme data: ${err instanceof Error ? err.message : 'Unknown error'}`);
       } finally {
         setIsLoading(false);
       }
@@ -205,15 +222,61 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen" style={{ backgroundColor: "#EEEEEE" }}>
         <Navigation />
-        <div className="container mx-auto px-6 py-8">
-          <div className="text-center">
-            <AlertCircle className="h-12 w-12 text-red-600 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Error Loading Dashboard</h2>
-            <p className="text-gray-600 mb-4">{error}</p>
-            <Button onClick={() => window.location.reload()}>
-              Try Again
-            </Button>
-          </div>
+        <div className="container mx-auto px-4 md:px-6 py-8">
+          <Card className="max-w-2xl mx-auto border-0 shadow-lg">
+            <CardContent className="pt-8 pb-8 text-center">
+              <AlertCircle className="h-16 w-16 text-red-600 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">Error Loading Dashboard</h2>
+              <p className="text-gray-700 mb-6 text-lg">{error}</p>
+              
+              <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
+                <h3 className="font-semibold text-gray-900 mb-2">Troubleshooting Steps:</h3>
+                <ul className="text-sm text-gray-600 space-y-2">
+                  <li>• Check the browser console (F12) for detailed error messages</li>
+                  <li>• Verify you completed the signup process fully</li>
+                  <li>• Try logging out and logging back in</li>
+                  <li>• Contact support if the issue persists</li>
+                </ul>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button 
+                  onClick={() => window.location.reload()}
+                  className="bg-[#00ADB5] hover:bg-[#00ADB5]/90"
+                >
+                  Try Again
+                </Button>
+                <Link to="/contact">
+                  <Button variant="outline">
+                    Contact Support
+                  </Button>
+                </Link>
+              </div>
+
+              {user && (
+                <div className="mt-6 p-4 bg-blue-50 rounded-lg text-left">
+                  <h4 className="font-semibold text-sm text-gray-900 mb-2">Debug Information:</h4>
+                  <div className="text-xs text-gray-600 space-y-1 font-mono">
+                    <p>User ID: {user.id}</p>
+                    <p>Username: {user.username}</p>
+                    <p>Has Student Profile: {user.student ? 'Yes' : 'No'}</p>
+                    {user.student && (
+                      <>
+                        <p>Student ID: {user.student.id}</p>
+                        <p>Has Programme: {user.student.programme ? 'Yes' : 'No'}</p>
+                        {user.student.programme && (
+                          <>
+                            <p>Programme ID: {user.student.programme.id}</p>
+                            <p>Programme Name: {user.student.programme.name}</p>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
