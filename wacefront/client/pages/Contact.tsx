@@ -747,6 +747,7 @@ export default function Contact() {
               style={{ backgroundColor: "#EEEEEE", color: "#222831" }}
               onMouseEnter={(e) => (e.target.style.backgroundColor = "#393E46")}
               onMouseLeave={(e) => (e.target.style.backgroundColor = "#EEEEEE")}
+              onClick={() => window.open('https://wa.me/233240381084?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20GradeUp%20Online', '_blank')}
             >
               <MessageCircle
                 className="mr-2 h-5 w-5"

@@ -848,9 +848,9 @@ export default function Index() {
             <div>
               <h4 className="font-semibold mb-4">Contact Info</h4>
               <ul className="space-y-2 text-gray-400">
-                <li>Email: info@excelwassce.com</li>
-                <li>Phone: +233 XX XXX XXXX</li>
-                <li>WhatsApp: +233 XX XXX XXXX</li>
+                <li>Email: wyarquah@gmail.com</li>
+                <li>Phone: 0240381084</li>
+                <li>WhatsApp: 0240381084</li>
               </ul>
             </div>
           </div>
