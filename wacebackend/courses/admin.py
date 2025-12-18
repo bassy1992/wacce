@@ -35,7 +35,7 @@ class ProgrammeSubjectAdmin(admin.ModelAdmin):
 class LessonInline(admin.TabularInline):
     model = Lesson
     extra = 0
-    fields = ['title', 'lesson_type', 'order', 'is_free']
+    fields = ['title', 'lesson_type', 'video_url', 'video_duration_minutes', 'order', 'is_free']
     ordering = ['order']
 
 
@@ -55,11 +55,30 @@ class LessonResourceInline(admin.TabularInline):
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ['title', 'topic', 'lesson_type', 'order', 'is_free']
+    list_display = ['title', 'topic', 'lesson_type', 'order', 'is_free', 'has_video']
     list_filter = ['lesson_type', 'is_free', 'topic__subject__subject_type']
     search_fields = ['title', 'topic__title']
     ordering = ['topic', 'order']
     inlines = [LessonResourceInline]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('topic', 'title', 'lesson_type', 'order', 'is_free')
+        }),
+        ('Video Content', {
+            'fields': ('video_url', 'video_duration_minutes'),
+            'description': 'Add video URL for video lessons'
+        }),
+        ('Text Content', {
+            'fields': ('content',),
+            'description': 'Add text content for reading materials'
+        }),
+    )
+    
+    def has_video(self, obj):
+        return bool(obj.video_url)
+    has_video.boolean = True
+    has_video.short_description = 'Has Video'
 
 
 @admin.register(LessonResource)
