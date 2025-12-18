@@ -93,6 +93,35 @@ def student_past_questions(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def populate_past_questions_api(request):
+    """
+    API endpoint to populate past questions - requires admin
+    """
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'Admin access required'}, status=403)
+    
+    from django.core.management import call_command
+    from io import StringIO
+    
+    try:
+        out = StringIO()
+        call_command('populate_past_questions', stdout=out)
+        output = out.getvalue()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Past questions populated successfully',
+            'output': output
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=500)
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def paper_detail(request, paper_id):
