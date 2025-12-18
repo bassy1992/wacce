@@ -160,7 +160,7 @@ export default function PastQuestions() {
           </Card>
         )}
 
-        {/* Stats Cards */}
+        {/* Main Content */}
         {!loading && !error && pastQuestionsData && (
           <>
             <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
@@ -169,6 +169,7 @@ export default function PastQuestions() {
               </p>
             </div>
 
+            {/* Stats Cards */}
             <div className="grid md:grid-cols-4 gap-6 mb-8">
               <Card className="border-0 shadow-lg">
                 <CardContent className="pt-6">
@@ -220,12 +221,8 @@ export default function PastQuestions() {
                 </CardContent>
               </Card>
             </div>
-          </>
-        )}
 
-        {/* Filters */}
-        {!loading && !error && pastQuestionsData && (
-          <>
+            {/* Filters */}
             <Card className="border-0 shadow-lg mb-8">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -317,7 +314,6 @@ export default function PastQuestions() {
             </div>
 
             {/* Papers View */}
-            <>
             {filteredPapers.length === 0 ? (
               <Card className="border-0 shadow-lg">
                 <CardContent className="py-12 text-center">
@@ -390,10 +386,8 @@ export default function PastQuestions() {
                 ))}
               </div>
             )}
-            </>
-          )}
 
-        {/* Info Section */}
+            {/* Info Section */}
         <Card className="border-0 shadow-lg mt-8">
           <CardHeader>
             <CardTitle>How It Works</CardTitle>
@@ -438,6 +432,8 @@ export default function PastQuestions() {
             </div>
           </CardContent>
         </Card>
+          </>
+        )}
       </div>
     </div>
   );
