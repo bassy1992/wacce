@@ -95,12 +95,16 @@ def student_past_questions(request):
 
 
 @csrf_exempt
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
 def populate_past_questions_api(request):
     """
     API endpoint to populate past questions - requires admin
     """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST method required'}, status=405)
+    
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Authentication required'}, status=401)
+    
     if not request.user.is_staff:
         return JsonResponse({'error': 'Admin access required'}, status=403)
     
