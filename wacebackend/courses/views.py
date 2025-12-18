@@ -192,16 +192,16 @@ def mark_lesson_complete(request, lesson_id):
             lesson=lesson
         )
         
-        return JsonResponse({
+        return Response({
             'success': True,
             'message': 'Lesson marked as complete' if created else 'Lesson already completed',
             'completed_at': completion.completed_at.isoformat()
         })
         
     except Lesson.DoesNotExist:
-        return JsonResponse({'error': 'Lesson not found'}, status=404)
+        return Response({'error': 'Lesson not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['DELETE'])
@@ -218,20 +218,20 @@ def unmark_lesson_complete(request, lesson_id):
         ).delete()
         
         if deleted_count > 0:
-            return JsonResponse({
+            return Response({
                 'success': True,
                 'message': 'Lesson unmarked as complete'
             })
         else:
-            return JsonResponse({
+            return Response({
                 'success': False,
                 'message': 'Lesson was not marked as complete'
             })
         
     except Lesson.DoesNotExist:
-        return JsonResponse({'error': 'Lesson not found'}, status=404)
+        return Response({'error': 'Lesson not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['GET'])
@@ -260,7 +260,7 @@ def get_topic_progress(request, topic_id):
         completed_count = len(completed_lesson_ids)
         progress_percentage = (completed_count / total_lessons * 100) if total_lessons > 0 else 0
         
-        return JsonResponse({
+        return Response({
             'topic_id': topic.id,
             'topic_title': topic.title,
             'total_lessons': total_lessons,
@@ -270,6 +270,6 @@ def get_topic_progress(request, topic_id):
         })
         
     except Topic.DoesNotExist:
-        return JsonResponse({'error': 'Topic not found'}, status=404)
+        return Response({'error': 'Topic not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
