@@ -11,4 +11,5 @@ urlpatterns = [
     path('populate-topics/', views.populate_topics_api, name='populate-topics'),
     path('populate-lessons/', views.populate_lessons_api, name='populate-lessons'),
     path('update-english-videos/', views.update_english_videos_api, name='update-english-videos'),
+    path('update-all-video-urls/', views.update_all_video_urls_api, name='update-all-video-urls'),
 ]

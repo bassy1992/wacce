@@ -262,3 +262,30 @@ def update_english_videos_api(request):
             'success': False,
             'error': str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def update_all_video_urls_api(request):
+    """
+    API endpoint to update ALL video URLs - only accessible by admin users
+    """
+    from django.core.management import call_command
+    from io import StringIO
+    
+    try:
+        # Capture the output
+        out = StringIO()
+        call_command('update_all_video_urls', stdout=out)
+        output = out.getvalue()
+        
+        return Response({
+            'success': True,
+            'message': 'All video URLs updated successfully',
+            'output': output,
+        })
+    except Exception as e:
+        return Response({
+            'success': False,
+            'error': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
