@@ -390,7 +390,8 @@ export default function PastQuestions() {
                 ))}
               </div>
             )}
-          
+            </>
+          )}
 
         {/* Info Section */}
         <Card className="border-0 shadow-lg mt-8">
