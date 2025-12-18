@@ -24,7 +24,6 @@ export default function PastQuestions() {
   const [selectedYear, setSelectedYear] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"papers">("papers");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [pastQuestionsData, setPastQuestionsData] = useState<any>(null);
