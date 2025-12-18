@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from students.models import Student
@@ -93,6 +94,7 @@ def student_past_questions(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 
+@csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def populate_past_questions_api(request):
