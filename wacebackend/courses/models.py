@@ -104,3 +104,18 @@ class LessonResource(models.Model):
     
     def __str__(self):
         return f"{self.lesson.title} - {self.title}"
+
+
+
+class LessonCompletion(models.Model):
+    """Track which lessons students have completed"""
+    student = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='lesson_completions')
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='completions')
+    completed_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ['student', 'lesson']
+        ordering = ['-completed_at']
+    
+    def __str__(self):
+        return f"{self.student.username} - {self.lesson.title}"
