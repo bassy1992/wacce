@@ -317,8 +317,7 @@ export default function PastQuestions() {
             </div>
 
             {/* Papers View */}
-            {(
-          <>
+            <>
             {filteredPapers.length === 0 ? (
               <Card className="border-0 shadow-lg">
                 <CardContent className="py-12 text-center">
@@ -391,8 +390,7 @@ export default function PastQuestions() {
                 ))}
               </div>
             )}
-          </>
-        )}
+          
 
         {/* Info Section */}
         <Card className="border-0 shadow-lg mt-8">
