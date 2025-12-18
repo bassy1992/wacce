@@ -28,14 +28,14 @@ def populate_past_questions():
     response = session.post(login_url, json=login_data)
     
     if response.status_code == 200:
-        print("✅ Login successful")
+        print("OK Login successful")
         data = response.json()
         if 'token' in data:
-            print(f"✅ Token received")
+            print("OK Token received")
             # Store token for future requests
             session.headers.update({'Authorization': f"Token {data['token']}"})
     else:
-        print(f"❌ Login failed: {response.status_code}")
+        print(f"ERROR Login failed: {response.status_code}")
         print(response.text)
         return
     
@@ -47,16 +47,16 @@ def populate_past_questions():
     
     if response.status_code == 200:
         result = response.json()
-        print("\n✅ SUCCESS!")
+        print("\nSUCCESS!")
         print("\n" + "=" * 70)
         print("OUTPUT:")
         print("=" * 70)
         print(result.get('output', ''))
         print("\n" + "=" * 70)
-        print("✅ Past questions populated successfully on Railway!")
+        print("Past questions populated successfully on Railway!")
         print("=" * 70)
     else:
-        print(f"\n❌ Failed: {response.status_code}")
+        print(f"\nERROR Failed: {response.status_code}")
         print(response.text)
 
 if __name__ == "__main__":

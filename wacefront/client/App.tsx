@@ -27,6 +27,7 @@ import NotFound from "./pages/NotFound";
 import PastQuestions from "./pages/PastQuestions";
 import PastQuestionPractice from "./pages/PastQuestionPractice";
 import PastQuestionResults from "./pages/PastQuestionResults";
+import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -57,6 +58,7 @@ const App = () => (
             <Route path="/past-questions" element={<ProtectedRoute><PastQuestions /></ProtectedRoute>} />
             <Route path="/past-questions/practice/:paperId" element={<ProtectedRoute><PastQuestionPractice /></ProtectedRoute>} />
             <Route path="/past-questions/results/:paperId" element={<ProtectedRoute><PastQuestionResults /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
