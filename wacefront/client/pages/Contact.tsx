@@ -59,19 +59,19 @@ export default function Contact() {
     {
       icon: <Phone className="h-6 w-6 text-blue-600" />,
       title: "Phone",
-      details: ["+233 24 123 4567", "+233 20 987 6543"],
+      details: ["0240381084"],
       description: "Call us during business hours",
     },
     {
       icon: <Mail className="h-6 w-6 text-blue-600" />,
       title: "Email",
-      details: ["info@excelwassce.com", "admissions@excelwassce.com"],
+      details: ["wyarquah@gmail.com"],
       description: "We respond within 24 hours",
     },
     {
       icon: <MessageCircle className="h-6 w-6 text-blue-600" />,
       title: "WhatsApp",
-      details: ["+233 24 123 4567"],
+      details: ["0240381084"],
       description: "Quick responses, 7 days a week",
     },
     {
@@ -91,26 +91,26 @@ export default function Contact() {
   const departments = [
     {
       name: "Admissions Office",
-      phone: "+233 24 123 4567",
-      email: "admissions@excelwassce.com",
+      phone: "0240381084",
+      email: "wyarquah@gmail.com",
       description: "Registration, program information, enrollment",
     },
     {
       name: "Academic Support",
-      phone: "+233 20 987 6543",
-      email: "academic@excelwassce.com",
+      phone: "0240381084",
+      email: "wyarquah@gmail.com",
       description: "Academic guidance, tutoring, study plans",
     },
     {
       name: "Student Services",
-      phone: "+233 24 456 7890",
-      email: "students@excelwassce.com",
+      phone: "0240381084",
+      email: "wyarquah@gmail.com",
       description: "Student support, counseling, general inquiries",
     },
     {
       name: "Finance Department",
-      phone: "+233 20 123 4567",
-      email: "finance@excelwassce.com",
+      phone: "0240381084",
+      email: "wyarquah@gmail.com",
       description: "Payments, refunds, financial assistance",
     },
   ];
@@ -189,15 +189,15 @@ export default function Contact() {
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 text-white">
                       <Phone className="h-5 w-5 text-[#00ADB5]" />
-                      <span>Call Us: +233 24 123 4567</span>
+                      <span>Call Us: 0240381084</span>
                     </div>
                     <div className="flex items-center gap-3 text-white">
                       <Mail className="h-5 w-5 text-[#00ADB5]" />
-                      <span>Email: info@excelwassce.com</span>
+                      <span>Email: wyarquah@gmail.com</span>
                     </div>
                     <div className="flex items-center gap-3 text-white">
                       <MessageCircle className="h-5 w-5 text-[#00ADB5]" />
-                      <span>WhatsApp Available</span>
+                      <span>WhatsApp: 0240381084</span>
                     </div>
                   </div>
                 </div>
@@ -516,8 +516,7 @@ export default function Contact() {
                   >
                     <p className="text-sm" style={{ color: "#00ADB5" }}>
                       <strong>Emergency Contact:</strong> For urgent academic
-                      matters outside office hours, WhatsApp us at +233 24 123
-                      4567
+                      matters outside office hours, WhatsApp us at 0240381084
                     </p>
                   </div>
                 </CardContent>
