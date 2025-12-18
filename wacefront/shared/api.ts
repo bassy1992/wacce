@@ -23,6 +23,10 @@ export const API_ENDPOINTS = {
     PROFILE: `${API_BASE_URL}/students/profile/`,
     DASHBOARD: `${API_BASE_URL}/students/dashboard/`,
   },
+  PAST_QUESTIONS: {
+    STUDENT_PAPERS: `${API_BASE_URL}/past-questions/student/`,
+    PAPER_DETAIL: (id: number) => `${API_BASE_URL}/past-questions/paper/${id}/`,
+  },
 };
 
 // Types
@@ -289,10 +293,62 @@ export const coursesAPI = {
     apiRequest(API_ENDPOINTS.COURSES.SUBJECT_DETAIL(id)),
 };
 
+export interface PastPaper {
+  id: number;
+  year: number;
+  paper_number: number;
+  paper_type: string;
+  title: string;
+  duration_minutes: number;
+  total_marks: number;
+  question_count: number;
+}
+
+export interface PastQuestionSubject {
+  id: number;
+  name: string;
+  code: string;
+  subject_type: string;
+  papers: PastPaper[];
+}
+
+export interface PastQuestionTopic {
+  id: number;
+  name: string;
+  description: string;
+  subject: {
+    id: number;
+    name: string;
+  };
+}
+
+export interface StudentPastQuestionsData {
+  programme: {
+    id: number;
+    name: string;
+    display_name: string;
+  };
+  subjects: PastQuestionSubject[];
+  topics: PastQuestionTopic[];
+  year_range: {
+    start: number;
+    end: number;
+  };
+  total_papers: number;
+}
+
 export const studentsAPI = {
   getProfile: (): Promise<StudentProfile> =>
     apiRequest(API_ENDPOINTS.STUDENTS.PROFILE),
 
   getDashboard: (): Promise<DashboardData> =>
     apiRequest(API_ENDPOINTS.STUDENTS.DASHBOARD),
+};
+
+export const pastQuestionsAPI = {
+  getStudentPapers: (): Promise<StudentPastQuestionsData> =>
+    apiRequest(API_ENDPOINTS.PAST_QUESTIONS.STUDENT_PAPERS),
+
+  getPaperDetail: (id: number) =>
+    apiRequest(API_ENDPOINTS.PAST_QUESTIONS.PAPER_DETAIL(id)),
 };

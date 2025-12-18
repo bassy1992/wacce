@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/courses/', include('courses.urls')),
     path('api/payments/', include('payments.urls')),
     path('api/auth/', include('authentication.urls')),
+    path('api/past-questions/', include('past_questions.urls')),
 ]
 
 # Serve media files during development
