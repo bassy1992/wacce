@@ -18,6 +18,9 @@ export const API_ENDPOINTS = {
     PROGRAMMES: `${API_BASE_URL}/courses/programmes/`,
     PROGRAMME_DETAIL: (id: number) => `${API_BASE_URL}/courses/programmes/${id}/`,
     SUBJECT_DETAIL: (id: number) => `${API_BASE_URL}/courses/subjects/${id}/`,
+    MARK_LESSON_COMPLETE: (id: number) => `${API_BASE_URL}/courses/lessons/${id}/complete/`,
+    UNMARK_LESSON_COMPLETE: (id: number) => `${API_BASE_URL}/courses/lessons/${id}/uncomplete/`,
+    TOPIC_PROGRESS: (id: number) => `${API_BASE_URL}/courses/topics/${id}/progress/`,
   },
   STUDENTS: {
     PROFILE: `${API_BASE_URL}/students/profile/`,
@@ -291,6 +294,26 @@ export const coursesAPI = {
 
   getSubjectDetail: (id: number): Promise<SubjectDetail> =>
     apiRequest(API_ENDPOINTS.COURSES.SUBJECT_DETAIL(id)),
+
+  markLessonComplete: (lessonId: number): Promise<{ success: boolean; message: string; completed_at: string }> =>
+    apiRequest(API_ENDPOINTS.COURSES.MARK_LESSON_COMPLETE(lessonId), {
+      method: 'POST',
+    }),
+
+  unmarkLessonComplete: (lessonId: number): Promise<{ success: boolean; message: string }> =>
+    apiRequest(API_ENDPOINTS.COURSES.UNMARK_LESSON_COMPLETE(lessonId), {
+      method: 'DELETE',
+    }),
+
+  getTopicProgress: (topicId: number): Promise<{
+    topic_id: number;
+    topic_title: string;
+    total_lessons: number;
+    completed_lessons: number;
+    progress_percentage: number;
+    lessons: Array<{ id: number; title: string; is_completed: boolean }>;
+  }> =>
+    apiRequest(API_ENDPOINTS.COURSES.TOPIC_PROGRESS(topicId)),
 };
 
 export interface PastPaper {

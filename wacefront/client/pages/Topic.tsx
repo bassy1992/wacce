@@ -27,6 +27,8 @@ export default function Topic() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentLesson, setCurrentLesson] = useState<any>(null);
+  const [completedLessons, setCompletedLessons] = useState<Set<number>>(new Set());
+  const [markingComplete, setMarkingComplete] = useState(false);
 
   useEffect(() => {
     const fetchTopicData = async () => {
@@ -66,6 +68,15 @@ export default function Topic() {
 
         setTopicData(topic);
         
+        // Get completion status for lessons
+        const completed = new Set<number>();
+        topic.lessons.forEach(lesson => {
+          if (lesson.is_completed) {
+            completed.add(lesson.id);
+          }
+        });
+        setCompletedLessons(completed);
+        
         // Set first lesson as current if available
         if (topic.lessons && topic.lessons.length > 0) {
           setCurrentLesson(topic.lessons[0]);
@@ -81,6 +92,33 @@ export default function Topic() {
 
     fetchTopicData();
   }, [subjectName, topicId, user]);
+
+  const handleMarkComplete = async () => {
+    if (!currentLesson || markingComplete) return;
+
+    try {
+      setMarkingComplete(true);
+      
+      if (completedLessons.has(currentLesson.id)) {
+        // Unmark as complete
+        await coursesAPI.unmarkLessonComplete(currentLesson.id);
+        setCompletedLessons(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(currentLesson.id);
+          return newSet;
+        });
+      } else {
+        // Mark as complete
+        await coursesAPI.markLessonComplete(currentLesson.id);
+        setCompletedLessons(prev => new Set(prev).add(currentLesson.id));
+      }
+    } catch (err: any) {
+      console.error('Error marking lesson:', err);
+      alert(err.error || 'Failed to update lesson status');
+    } finally {
+      setMarkingComplete(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -114,9 +152,9 @@ export default function Topic() {
     );
   }
 
-  const completedLessons = Math.floor(topicData.lessons.length * 0.3); // Mock progress
+  const completedCount = completedLessons.size;
   const progress = topicData.lessons.length > 0 
-    ? Math.round((completedLessons / topicData.lessons.length) * 100) 
+    ? Math.round((completedCount / topicData.lessons.length) * 100) 
     : 0;
 
   return (
@@ -220,9 +258,22 @@ export default function Topic() {
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
-                    <Button className="bg-gray-900 hover:bg-gray-800 text-white px-4 md:px-6 text-sm">
+                    <Button 
+                      onClick={handleMarkComplete}
+                      disabled={markingComplete}
+                      className={`px-4 md:px-6 text-sm ${
+                        completedLessons.has(currentLesson.id)
+                          ? 'bg-green-600 hover:bg-green-700'
+                          : 'bg-gray-900 hover:bg-gray-800'
+                      } text-white`}
+                    >
                       <CheckCircle className="h-3 w-3 md:h-4 md:w-4 mr-2" />
-                      Mark as Complete
+                      {markingComplete 
+                        ? 'Updating...' 
+                        : completedLessons.has(currentLesson.id)
+                          ? 'Completed ✓'
+                          : 'Mark as Complete'
+                      }
                     </Button>
                     <Button variant="outline" className="border-gray-300 text-sm">
                       <Download className="h-3 w-3 md:h-4 md:w-4 mr-2" />
@@ -274,7 +325,7 @@ export default function Topic() {
               <div className="max-h-[400px] md:max-h-[600px] overflow-y-auto">
                 {topicData.lessons && topicData.lessons.length > 0 ? (
                   topicData.lessons.map((lesson, index) => {
-                    const isCompleted = index < completedLessons;
+                    const isCompleted = completedLessons.has(lesson.id);
                     const isCurrent = currentLesson?.id === lesson.id;
                     
                     return (
@@ -333,7 +384,7 @@ export default function Topic() {
               <h3 className="font-bold text-gray-900 mb-2 md:mb-3 text-sm md:text-base">Your Progress</h3>
               <div className="mb-3 md:mb-4">
                 <div className="flex justify-between text-xs md:text-sm mb-2">
-                  <span className="text-gray-600">{completedLessons} of {topicData.lessons_count} complete</span>
+                  <span className="text-gray-600">{completedCount} of {topicData.lessons_count} complete</span>
                   <span className="font-medium text-gray-900">{progress}%</span>
                 </div>
                 <Progress value={progress} className="h-2" />
