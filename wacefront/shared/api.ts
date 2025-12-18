@@ -192,12 +192,22 @@ export const apiRequest = async <T>(
   const timeoutId = setTimeout(() => controller.abort(), 30000);
 
   try {
+    // Get auth token from localStorage (for iOS/Safari compatibility)
+    const token = localStorage.getItem('authToken');
+    
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...(options.headers as Record<string, string>),
+    };
+    
+    // Add token to headers if available
+    if (token) {
+      headers['Authorization'] = `Token ${token}`;
+    }
+    
     const response = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-      credentials: 'include', // Include cookies for session auth
+      headers,
+      credentials: 'include', // Include cookies for session auth (fallback)
       signal: controller.signal,
       ...options,
     });

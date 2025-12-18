@@ -166,6 +166,10 @@ def signin(request):
             if user.is_active:
                 login(request, user)
                 
+                # Create or get auth token for iOS/Safari compatibility
+                from rest_framework.authtoken.models import Token
+                token, created = Token.objects.get_or_create(user=user)
+                
                 # Get student profile if exists
                 student_data = None
                 try:
@@ -190,6 +194,7 @@ def signin(request):
                 
                 return JsonResponse({
                     'message': 'Login successful',
+                    'token': token.key,  # Send token for iOS/Safari
                     'user': {
                         'id': user.id,
                         'username': user.username,
