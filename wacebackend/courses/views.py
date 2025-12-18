@@ -115,13 +115,18 @@ def subject_detail(request, subject_id):
         # Get completed lesson IDs for this user if authenticated
         completed_lesson_ids = set()
         if request.user.is_authenticated:
-            from .models import LessonCompletion
-            completed_lesson_ids = set(
-                LessonCompletion.objects.filter(
-                    student=request.user,
-                    lesson__topic__subject=subject
-                ).values_list('lesson_id', flat=True)
-            )
+            try:
+                from .models import LessonCompletion
+                completed_lesson_ids = set(
+                    LessonCompletion.objects.filter(
+                        student=request.user,
+                        lesson__topic__subject=subject
+                    ).values_list('lesson_id', flat=True)
+                )
+            except Exception as e:
+                # Table might not exist yet if migration hasn't run
+                print(f"Warning: Could not fetch lesson completions: {e}")
+                pass
         
         topics_data = []
         for topic in topics:
