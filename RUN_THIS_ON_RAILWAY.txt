@@ -1,0 +1,69 @@
+========================================
+COPY AND PASTE THIS INTO RAILWAY SHELL
+========================================
+
+Step 1: Open Railway Shell
+---------------------------
+In your terminal, run:
+    railway shell
+
+Step 2: Run This Command
+-------------------------
+Once inside Railway shell, copy and paste this EXACT command:
+
+python manage.py populate_lesson_notes
+
+
+That's it! Wait for it to complete (about 30 seconds).
+
+You should see:
+- "Found 207 lessons"
+- Progress updates
+- "Updated: 207"
+- "✓ Done!"
+
+Then visit your site and the notes will be there!
+
+========================================
+
+ALTERNATIVE: If the command doesn't exist yet
+(Railway might not have deployed the latest code)
+========================================
+
+Run this instead:
+
+python manage.py shell
+
+Then paste this code:
+
+from courses.models import Lesson
+
+notes = """# Key Points
+
+## Important Concepts
+- Main ideas and principles
+- Key terminology
+- Practice strategies
+
+## Study Tips
+1. Watch the video carefully
+2. Take notes
+3. Practice regularly
+4. Review before exams
+"""
+
+count = 0
+for lesson in Lesson.objects.all():
+    if not lesson.notes:
+        lesson.notes = f"# {lesson.title}\n\n{notes}\n\n**Subject:** {lesson.topic.subject.name}\n**Topic:** {lesson.topic.title}"
+        lesson.save()
+        count += 1
+        if count % 10 == 0:
+            print(f"Updated {count} lessons...")
+
+print(f"\nDone! Updated {count} lessons total.")
+
+Then press Enter and type:
+exit()
+
+========================================
