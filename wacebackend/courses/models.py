@@ -71,6 +71,7 @@ class Lesson(models.Model):
     title = models.CharField(max_length=200)
     lesson_type = models.CharField(max_length=20, choices=LESSON_TYPES)
     content = models.TextField(blank=True)  # For reading materials
+    notes = models.TextField(blank=True)  # Lesson notes that appear alongside videos
     video_url = models.URLField(blank=True)  # For video lessons
     video_duration_minutes = models.IntegerField(null=True, blank=True)
     order = models.IntegerField(default=0)
@@ -119,3 +120,27 @@ class LessonCompletion(models.Model):
     
     def __str__(self):
         return f"{self.student.username} - {self.lesson.title}"
+
+
+class Announcement(models.Model):
+    """System-wide announcements for students"""
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('normal', 'Normal'),
+        ('high', 'High'),
+        ('urgent', 'Urgent'),
+    ]
+    
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='normal')
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    expires_at = models.DateTimeField(null=True, blank=True)  # Optional expiration date
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return self.title

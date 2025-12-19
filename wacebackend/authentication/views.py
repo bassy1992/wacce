@@ -309,3 +309,230 @@ def debug_signup(request):
         return JsonResponse({'error': f'JSON decode error: {str(e)}'}, status=400)
     except Exception as e:
         return JsonResponse({'error': f'Unexpected error: {str(e)}'}, status=500)
+
+
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+from rest_framework.response import Response as DRFResponse
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    """Change user password"""
+    
+    try:
+        data = request.data
+        
+        current_password = data.get('current_password', '')
+        new_password = data.get('new_password', '')
+        confirm_password = data.get('confirm_password', '')
+        
+        # Validation
+        if not current_password or not new_password or not confirm_password:
+            return JsonResponse({
+                'error': 'All password fields are required'
+            }, status=400)
+        
+        # Check current password
+        if not request.user.check_password(current_password):
+            return JsonResponse({
+                'error': 'Current password is incorrect'
+            }, status=400)
+        
+        # Check new password matches confirmation
+        if new_password != confirm_password:
+            return JsonResponse({
+                'error': 'New passwords do not match'
+            }, status=400)
+        
+        # Validate new password strength
+        if len(new_password) < 8:
+            return JsonResponse({
+                'error': 'Password must be at least 8 characters long'
+            }, status=400)
+        
+        if not re.search(r'[A-Za-z]', new_password) or not re.search(r'\d', new_password):
+            return JsonResponse({
+                'error': 'Password must contain both letters and numbers'
+            }, status=400)
+        
+        # Check if new password is same as current
+        if current_password == new_password:
+            return JsonResponse({
+                'error': 'New password must be different from current password'
+            }, status=400)
+        
+        # Update password
+        request.user.set_password(new_password)
+        request.user.save()
+        
+        # Update session to prevent logout
+        from django.contrib.auth import update_session_auth_hash
+        update_session_auth_hash(request, request.user)
+        
+        return JsonResponse({
+            'message': 'Password changed successfully'
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+@api_view(['GET', 'POST'])
+@authentication_classes([TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def email_notifications(request):
+    """Get or update email notification preferences"""
+    
+    try:
+        student = Student.objects.get(user=request.user)
+    except Student.DoesNotExist:
+        return JsonResponse({'error': 'Student profile not found'}, status=404)
+    
+    if request.method == "GET":
+        # Get current preferences
+        return JsonResponse({
+            'email_notifications': {
+                'course_updates': getattr(student, 'email_course_updates', True),
+                'assignment_reminders': getattr(student, 'email_assignment_reminders', True),
+                'announcements': getattr(student, 'email_announcements', True),
+                'weekly_summary': getattr(student, 'email_weekly_summary', True),
+            }
+        })
+    
+    elif request.method == "POST":
+        # Update preferences
+        try:
+            data = request.data
+            
+            # Update fields if they exist in the model
+            if hasattr(student, 'email_course_updates'):
+                student.email_course_updates = data.get('course_updates', True)
+            if hasattr(student, 'email_assignment_reminders'):
+                student.email_assignment_reminders = data.get('assignment_reminders', True)
+            if hasattr(student, 'email_announcements'):
+                student.email_announcements = data.get('announcements', True)
+            if hasattr(student, 'email_weekly_summary'):
+                student.email_weekly_summary = data.get('weekly_summary', True)
+            
+            student.save()
+            
+            return JsonResponse({
+                'message': 'Email notification preferences updated successfully'
+            })
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def delete_account(request):
+    """Delete user account permanently"""
+    
+    try:
+        data = request.data
+        
+        password = data.get('password', '')
+        confirmation = data.get('confirmation', '')
+        
+        # Validation
+        if not password:
+            return JsonResponse({
+                'error': 'Password is required to delete account'
+            }, status=400)
+        
+        if confirmation != 'DELETE':
+            return JsonResponse({
+                'error': 'Please type DELETE to confirm account deletion'
+            }, status=400)
+        
+        # Verify password
+        if not request.user.check_password(password):
+            return JsonResponse({
+                'error': 'Incorrect password'
+            }, status=400)
+        
+        # Delete user (this will cascade delete student profile)
+        user = request.user
+        logout(request)
+        user.delete()
+        
+        return JsonResponse({
+            'message': 'Account deleted successfully'
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+@api_view(['PUT'])
+@authentication_classes([TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    """Update user profile information"""
+    
+    try:
+        data = request.data
+        user = request.user
+        
+        # Update user fields
+        if 'first_name' in data:
+            user.first_name = data['first_name'].strip()
+        if 'last_name' in data:
+            user.last_name = data['last_name'].strip()
+        if 'email' in data:
+            email = data['email'].strip().lower()
+            # Check if email is already taken by another user
+            if User.objects.filter(email=email).exclude(id=user.id).exists():
+                return JsonResponse({
+                    'error': 'Email already in use by another account'
+                }, status=400)
+            try:
+                validate_email(email)
+                user.email = email
+            except ValidationError:
+                return JsonResponse({
+                    'error': 'Invalid email format'
+                }, status=400)
+        
+        user.save()
+        
+        # Update student profile if exists
+        try:
+            student = Student.objects.get(user=user)
+            if 'phone_number' in data:
+                phone_number = data['phone_number'].strip()
+                if not re.match(r'^\+?[\d\s\-\(\)]{10,15}$', phone_number):
+                    return JsonResponse({
+                        'error': 'Invalid phone number format'
+                    }, status=400)
+                student.phone_number = phone_number
+            
+            student.save()
+        except Student.DoesNotExist:
+            pass
+        
+        return JsonResponse({
+            'message': 'Profile updated successfully',
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+            }
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

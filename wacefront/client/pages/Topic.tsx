@@ -79,7 +79,11 @@ export default function Topic() {
         
         // Set first lesson as current if available
         if (topic.lessons && topic.lessons.length > 0) {
-          setCurrentLesson(topic.lessons[0]);
+          const firstLesson = topic.lessons[0];
+          console.log('First lesson:', firstLesson);
+          console.log('Has notes:', !!firstLesson.notes);
+          console.log('Notes length:', firstLesson.notes?.length || 0);
+          setCurrentLesson(firstLesson);
         }
 
       } catch (err: any) {
@@ -253,9 +257,11 @@ export default function Topic() {
                     )}
                   </div>
                   
-                  <p className="text-sm md:text-base text-gray-700 mb-4 md:mb-6 leading-relaxed">
-                    {currentLesson.content || 'Watch the video to learn about this topic. Take notes and practice the concepts covered.'}
-                  </p>
+                  {currentLesson.content && (
+                    <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
+                      {currentLesson.content}
+                    </p>
+                  )}
 
                   <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
                     <Button 
@@ -280,6 +286,27 @@ export default function Topic() {
                       Resources
                     </Button>
                   </div>
+                </div>
+              )}
+
+              {/* Lesson Notes Section */}
+              {currentLesson && (
+                <div className="p-4 md:p-6 border-t border-gray-200 bg-gray-50">
+                  <h3 className="text-base md:text-lg font-bold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
+                    <FileText className="h-4 w-4 md:h-5 md:w-5 text-blue-600" />
+                    Lesson Notes
+                  </h3>
+                  {currentLesson.notes ? (
+                    <div className="prose prose-sm md:prose max-w-none">
+                      <div className="text-sm md:text-base text-gray-700 leading-relaxed whitespace-pre-wrap">
+                        {currentLesson.notes}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-sm text-gray-500 italic">
+                      No notes available for this lesson yet. Check back soon!
+                    </div>
+                  )}
                 </div>
               )}
 

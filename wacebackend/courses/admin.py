@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Subject, ProgrammeSubject, Topic, Lesson, LessonResource
+from .models import Subject, ProgrammeSubject, Topic, Lesson, LessonResource, Announcement
 
 
 class TopicInline(admin.TabularInline):
@@ -73,6 +73,10 @@ class LessonAdmin(admin.ModelAdmin):
             'fields': ('content',),
             'description': 'Add text content for reading materials'
         }),
+        ('Lesson Notes', {
+            'fields': ('notes',),
+            'description': 'Add detailed notes that will appear alongside the video player'
+        }),
     )
     
     def has_video(self, obj):
@@ -86,3 +90,21 @@ class LessonResourceAdmin(admin.ModelAdmin):
     list_display = ['title', 'lesson', 'resource_type']
     list_filter = ['resource_type']
     search_fields = ['title', 'lesson__title']
+
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ['title', 'priority', 'is_active', 'created_at', 'expires_at']
+    list_filter = ['priority', 'is_active', 'created_at']
+    search_fields = ['title', 'message']
+    ordering = ['-created_at']
+    
+    fieldsets = (
+        ('Content', {
+            'fields': ('title', 'message', 'priority')
+        }),
+        ('Status', {
+            'fields': ('is_active', 'expires_at'),
+            'description': 'Set expiration date if announcement should auto-expire'
+        }),
+    )

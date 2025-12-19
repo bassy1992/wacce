@@ -33,6 +33,12 @@ class Student(models.Model):
     wassce_year = models.IntegerField()
     index_number = models.CharField(max_length=20, unique=True)
     
+    # Email notification preferences
+    email_course_updates = models.BooleanField(default=True)
+    email_assignment_reminders = models.BooleanField(default=True)
+    email_announcements = models.BooleanField(default=True)
+    email_weekly_summary = models.BooleanField(default=True)
+    
     def __str__(self):
         return f"{self.user.get_full_name()} - {self.programme.name}"
 

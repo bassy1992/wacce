@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.utils import timezone
 from students.models import Programme
-from .models import Subject, ProgrammeSubject, Topic, Lesson
+from .models import Subject, ProgrammeSubject, Topic, Lesson, Announcement
 
 
 def programmes_list(request):
@@ -148,6 +149,7 @@ def subject_detail(request, subject_id):
                         'video_duration_minutes': lesson.video_duration_minutes,
                         'video_url': lesson.video_url,
                         'content': lesson.content,
+                        'notes': lesson.notes,
                         'is_completed': lesson.id in completed_lesson_ids
                     }
                     for lesson in topic.lessons.all()
@@ -177,7 +179,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Lesson, LessonCompletion
+from django.db import models
+from .models import Lesson, LessonCompletion, Announcement
 
 
 @api_view(['POST'])
@@ -277,3 +280,46 @@ def get_topic_progress(request, topic_id):
         return Response({'error': 'Topic not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([])  # Allow any user (authenticated or not)
+def get_announcements(request):
+    """Get all active announcements"""
+    now = timezone.now()
+    
+    # Get active announcements that haven't expired
+    announcements = Announcement.objects.filter(
+        is_active=True
+    ).filter(
+        models.Q(expires_at__isnull=True) | models.Q(expires_at__gt=now)
+    ).order_by('-priority', '-created_at')
+    
+    announcements_data = []
+    for announcement in announcements:
+        # Calculate time ago
+        time_diff = now - announcement.created_at
+        if time_diff.days > 0:
+            time_ago = f"{time_diff.days} day{'s' if time_diff.days > 1 else ''} ago"
+        elif time_diff.seconds >= 3600:
+            hours = time_diff.seconds // 3600
+            time_ago = f"{hours} hour{'s' if hours > 1 else ''} ago"
+        elif time_diff.seconds >= 60:
+            minutes = time_diff.seconds // 60
+            time_ago = f"{minutes} minute{'s' if minutes > 1 else ''} ago"
+        else:
+            time_ago = "Just now"
+        
+        announcements_data.append({
+            'id': announcement.id,
+            'title': announcement.title,
+            'message': announcement.message,
+            'priority': announcement.priority,
+            'created_at': announcement.created_at.isoformat(),
+            'time_ago': time_ago
+        })
+    
+    return Response({
+        'announcements': announcements_data,
+        'total_count': len(announcements_data)
+    })

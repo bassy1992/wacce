@@ -12,7 +12,11 @@ export const API_ENDPOINTS = {
     SIGNIN: `${API_BASE_URL}/auth/signin/`,
     SIGNOUT: `${API_BASE_URL}/auth/signout/`,
     PROFILE: `${API_BASE_URL}/auth/profile/`,
+    UPDATE_PROFILE: `${API_BASE_URL}/auth/profile/update/`,
     CHECK_AVAILABILITY: `${API_BASE_URL}/auth/check-availability/`,
+    CHANGE_PASSWORD: `${API_BASE_URL}/auth/change-password/`,
+    EMAIL_NOTIFICATIONS: `${API_BASE_URL}/auth/email-notifications/`,
+    DELETE_ACCOUNT: `${API_BASE_URL}/auth/delete-account/`,
   },
   COURSES: {
     PROGRAMMES: `${API_BASE_URL}/courses/programmes/`,
@@ -21,6 +25,7 @@ export const API_ENDPOINTS = {
     MARK_LESSON_COMPLETE: (id: number) => `${API_BASE_URL}/courses/lessons/${id}/complete/`,
     UNMARK_LESSON_COMPLETE: (id: number) => `${API_BASE_URL}/courses/lessons/${id}/uncomplete/`,
     TOPIC_PROGRESS: (id: number) => `${API_BASE_URL}/courses/topics/${id}/progress/`,
+    ANNOUNCEMENTS: `${API_BASE_URL}/courses/announcements/`,
   },
   STUDENTS: {
     PROFILE: `${API_BASE_URL}/students/profile/`,
@@ -70,6 +75,10 @@ export interface Lesson {
   order: number;
   is_free: boolean;
   video_duration_minutes?: number;
+  video_url?: string;
+  content?: string;
+  notes?: string;
+  is_completed?: boolean;
 }
 
 export interface SubjectDetail {
@@ -276,6 +285,33 @@ export const authAPI = {
   getProfile: (): Promise<{ user: User }> =>
     apiRequest(API_ENDPOINTS.AUTH.PROFILE),
 
+  updateProfile: (data: { first_name?: string; last_name?: string; email?: string; phone_number?: string }): Promise<{ message: string; user: any }> =>
+    apiRequest(API_ENDPOINTS.AUTH.UPDATE_PROFILE, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  changePassword: (data: { current_password: string; new_password: string; confirm_password: string }): Promise<{ message: string }> =>
+    apiRequest(API_ENDPOINTS.AUTH.CHANGE_PASSWORD, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  getEmailNotifications: (): Promise<{ email_notifications: any }> =>
+    apiRequest(API_ENDPOINTS.AUTH.EMAIL_NOTIFICATIONS),
+
+  updateEmailNotifications: (data: any): Promise<{ message: string }> =>
+    apiRequest(API_ENDPOINTS.AUTH.EMAIL_NOTIFICATIONS, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  deleteAccount: (data: { password: string; confirmation: string }): Promise<{ message: string }> =>
+    apiRequest(API_ENDPOINTS.AUTH.DELETE_ACCOUNT, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
   checkAvailability: (params: { username?: string; email?: string }) => {
     const searchParams = new URLSearchParams();
     if (params.username) searchParams.set('username', params.username);
@@ -374,4 +410,23 @@ export const pastQuestionsAPI = {
 
   getPaperDetail: (id: number) =>
     apiRequest(API_ENDPOINTS.PAST_QUESTIONS.PAPER_DETAIL(id)),
+};
+
+export interface Announcement {
+  id: number;
+  title: string;
+  message: string;
+  priority: 'low' | 'normal' | 'high' | 'urgent';
+  created_at: string;
+  time_ago: string;
+}
+
+export interface AnnouncementsResponse {
+  announcements: Announcement[];
+  total_count: number;
+}
+
+export const announcementsAPI = {
+  getAnnouncements: (): Promise<AnnouncementsResponse> =>
+    apiRequest(API_ENDPOINTS.COURSES.ANNOUNCEMENTS),
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import { useAuth } from "../contexts/AuthContext";
-import { studentsAPI, DashboardSubject, API_ENDPOINTS } from "../../shared/api";
+import { studentsAPI, DashboardSubject, API_ENDPOINTS, announcementsAPI, Announcement } from "../../shared/api";
 import {
   Card,
   CardContent,
@@ -42,6 +42,22 @@ export default function Dashboard() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+
+  // Load announcements
+  useEffect(() => {
+    const loadAnnouncements = async () => {
+      try {
+        const data = await announcementsAPI.getAnnouncements();
+        setAnnouncements(data.announcements);
+      } catch (err) {
+        console.error("Failed to load announcements:", err);
+        // Don't show error to user, just use empty announcements
+      }
+    };
+
+    loadAnnouncements();
+  }, []);
 
   // Load student dashboard data
   useEffect(() => {
@@ -194,20 +210,7 @@ export default function Dashboard() {
     },
   ];
 
-  const announcements = [
-    {
-      title: "New WASSCE Past Questions Added",
-      message: "2023 past questions now available in your study materials",
-      time: "1 day ago",
-      type: "info",
-    },
-    {
-      title: "Mock Exam Schedule Released",
-      message: "Check your calendar for upcoming mock examination dates",
-      time: "3 days ago",
-      type: "important",
-    },
-  ];
+
 
   // Show loading state
   if (isLoading) {
@@ -561,30 +564,60 @@ export default function Dashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {announcements.map((announcement, index) => (
-                    <div key={index} className="p-3 border rounded-lg">
-                      <div className="flex items-start gap-2">
-                        {announcement.type === "important" ? (
-                          <AlertCircle className="h-4 w-4 text-red-600 mt-0.5" />
-                        ) : (
-                          <Bell className="h-4 w-4 text-blue-600 mt-0.5" />
-                        )}
-                        <div className="flex-1">
-                          <h5 className="font-medium text-gray-900 text-sm">
-                            {announcement.title}
-                          </h5>
-                          <p className="text-xs text-gray-600 mt-1">
-                            {announcement.message}
-                          </p>
-                          <p className="text-xs text-gray-500 mt-2">
-                            {announcement.time}
-                          </p>
+                {announcements.length === 0 ? (
+                  <p className="text-sm text-gray-500 text-center py-4">
+                    No announcements at this time
+                  </p>
+                ) : (
+                  <div className="space-y-4">
+                    {announcements.map((announcement) => (
+                      <div 
+                        key={announcement.id} 
+                        className={`p-3 border rounded-lg ${
+                          announcement.priority === 'urgent' ? 'border-red-300 bg-red-50' :
+                          announcement.priority === 'high' ? 'border-orange-300 bg-orange-50' :
+                          announcement.priority === 'normal' ? 'border-blue-300 bg-blue-50' :
+                          'border-gray-300 bg-gray-50'
+                        }`}
+                      >
+                        <div className="flex items-start gap-2">
+                          {announcement.priority === 'urgent' || announcement.priority === 'high' ? (
+                            <AlertCircle className={`h-4 w-4 mt-0.5 ${
+                              announcement.priority === 'urgent' ? 'text-red-600' : 'text-orange-600'
+                            }`} />
+                          ) : (
+                            <Bell className="h-4 w-4 text-blue-600 mt-0.5" />
+                          )}
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h5 className="font-medium text-gray-900 text-sm">
+                                {announcement.title}
+                              </h5>
+                              {announcement.priority !== 'normal' && (
+                                <Badge 
+                                  variant="secondary"
+                                  className={`text-xs ${
+                                    announcement.priority === 'urgent' ? 'bg-red-100 text-red-800' :
+                                    announcement.priority === 'high' ? 'bg-orange-100 text-orange-800' :
+                                    'bg-gray-100 text-gray-800'
+                                  }`}
+                                >
+                                  {announcement.priority}
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-xs text-gray-600 mt-1">
+                              {announcement.message}
+                            </p>
+                            <p className="text-xs text-gray-500 mt-2">
+                              {announcement.time_ago}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
 
