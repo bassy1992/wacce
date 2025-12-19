@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Lesson Notes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .lesson-info {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .notes-section {
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #3b82f6;
+        }
+        .notes-content {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            color: #374151;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .error {
+            background: #fee;
+            color: #c00;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #efe;
+            color: #060;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Lesson Notes Test</h1>
+        <div id="content">
+            <div class="loading">Loading lesson data...</div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api/courses/subjects/1/';
+
+        async function loadLessonNotes() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                const content = document.getElementById('content');
+                
+                // Get first topic and first lesson
+                const firstTopic = data.topics[0];
+                const firstLesson = firstTopic.lessons[0];
+
+                let html = `
+                    <div class="success">
+                        ✓ API Response successful!
+                    </div>
+
+                    <div class="lesson-info">
+                        <h2>Lesson Information</h2>
+                        <p><strong>Subject:</strong> ${data.name}</p>
+                        <p><strong>Topic:</strong> ${firstTopic.title}</p>
+                        <p><strong>Lesson:</strong> ${firstLesson.title}</p>
+                        <p><strong>Type:</strong> ${firstLesson.lesson_type}</p>
+                        <p><strong>Duration:</strong> ${firstLesson.video_duration_minutes || 15} minutes</p>
+                        <p><strong>Has Notes:</strong> ${firstLesson.notes ? 'Yes ✓' : 'No ✗'}</p>
+                        <p><strong>Notes Length:</strong> ${firstLesson.notes ? firstLesson.notes.length : 0} characters</p>
+                    </div>
+                `;
+
+                if (firstLesson.notes) {
+                    html += `
+                        <div class="notes-section">
+                            <h3>📄 Lesson Notes</h3>
+                            <div class="notes-content">${firstLesson.notes}</div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="error">
+                            ✗ No notes found for this lesson
+                        </div>
+                    `;
+                }
+
+                content.innerHTML = html;
+
+            } catch (error) {
+                document.getElementById('content').innerHTML = `
+                    <div class="error">
+                        <h3>Error Loading Data</h3>
+                        <p>${error.message}</p>
+                        <p>Make sure Django server is running on http://localhost:8000</p>
+                    </div>
+                `;
+            }
+        }
+
+        loadLessonNotes();
+    </script>
+</body>
+</html>

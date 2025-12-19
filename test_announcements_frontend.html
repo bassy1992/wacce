@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Announcements API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .announcement {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ccc;
+        }
+        .announcement.urgent {
+            border-left-color: #dc2626;
+            background-color: #fef2f2;
+        }
+        .announcement.high {
+            border-left-color: #ea580c;
+            background-color: #fff7ed;
+        }
+        .announcement.normal {
+            border-left-color: #2563eb;
+            background-color: #eff6ff;
+        }
+        .announcement.low {
+            border-left-color: #6b7280;
+            background-color: #f9fafb;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .message {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .time {
+            color: #999;
+            font-size: 12px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-left: 10px;
+            text-transform: uppercase;
+        }
+        .badge.urgent {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .badge.high {
+            background-color: #ffedd5;
+            color: #9a3412;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        .error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📢 Announcements Test</h1>
+    <div id="content">
+        <div class="loading">Loading announcements...</div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api/courses/announcements/';
+
+        async function loadAnnouncements() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                const content = document.getElementById('content');
+                
+                if (data.announcements.length === 0) {
+                    content.innerHTML = '<p>No announcements at this time.</p>';
+                    return;
+                }
+                
+                let html = `<p><strong>Total: ${data.total_count} announcements</strong></p>`;
+                
+                data.announcements.forEach(announcement => {
+                    html += `
+                        <div class="announcement ${announcement.priority}">
+                            <div class="title">
+                                ${announcement.title}
+                                ${announcement.priority !== 'normal' ? 
+                                    `<span class="badge ${announcement.priority}">${announcement.priority}</span>` : 
+                                    ''}
+                            </div>
+                            <div class="message">${announcement.message}</div>
+                            <div class="time">${announcement.time_ago}</div>
+                        </div>
+                    `;
+                });
+                
+                content.innerHTML = html;
+            } catch (error) {
+                document.getElementById('content').innerHTML = 
+                    `<div class="error">Error loading announcements: ${error.message}</div>`;
+            }
+        }
+
+        loadAnnouncements();
+    </script>
+</body>
+</html>

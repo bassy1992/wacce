@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import Navigation from "../components/Navigation";
 import { useAuth } from "../contexts/AuthContext";
 import { coursesAPI, Topic as TopicType } from "../../shared/api";
@@ -297,10 +299,13 @@ export default function Topic() {
                     Lesson Notes
                   </h3>
                   {currentLesson.notes ? (
-                    <div className="prose prose-sm md:prose max-w-none">
-                      <div className="text-sm md:text-base text-gray-700 leading-relaxed whitespace-pre-wrap">
+                    <div className="max-h-96 overflow-y-auto prose prose-sm md:prose max-w-none pr-2">
+                      <ReactMarkdown 
+                        remarkPlugins={[remarkGfm]}
+                        className="text-sm md:text-base text-gray-700 leading-relaxed"
+                      >
                         {currentLesson.notes}
-                      </div>
+                      </ReactMarkdown>
                     </div>
                   ) : (
                     <div className="text-sm text-gray-500 italic">

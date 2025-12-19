@@ -19,157 +19,133 @@ django.setup()
 
 from courses.models import Lesson
 
-# Sample notes templates
-ENGLISH_NOTES = """# Key Points to Remember
+# Sample notes templates with rich markdown formatting
+ENGLISH_NOTES = """## 📚 Key Points to Remember
 
-## Grammar Fundamentals
-- Parts of speech: nouns, verbs, adjectives, adverbs
-- Sentence structure: subject, predicate, object
-- Tenses: past, present, future (simple, continuous, perfect)
+### Grammar Fundamentals
+- **Parts of speech:** nouns, verbs, adjectives, adverbs
+- **Sentence structure:** subject, predicate, object
+- **Tenses:** past, present, future (*simple, continuous, perfect*)
 
-## Writing Skills
-- Essay structure: introduction, body paragraphs, conclusion
-- Paragraph development: topic sentence, supporting details, concluding sentence
-- Transition words: however, therefore, moreover, consequently
+### Writing Skills
+- **Essay structure:** introduction, body paragraphs, conclusion
+- **Paragraph development:** topic sentence, supporting details, concluding sentence
+- **Transition words:** *however, therefore, moreover, consequently*
 
-## Reading Comprehension
-- Identify main ideas and supporting details
-- Understand author's purpose and tone
+### Reading Comprehension
+- Identify **main ideas** and supporting details
+- Understand author's *purpose* and *tone*
 - Make inferences from context clues
 - Analyze literary devices
 
-## Practice Tips
-1. Read widely - newspapers, novels, academic texts
-2. Practice writing daily
-3. Review grammar rules regularly
-4. Build your vocabulary systematically
+### 💡 Practice Tips
+1. **Read widely** - newspapers, novels, academic texts
+2. **Practice writing daily** to improve your skills
+3. **Review grammar rules** regularly
+4. **Build your vocabulary** systematically
 
-## Exam Strategy
-- Read questions carefully before answering
-- Plan your essays before writing
-- Manage your time effectively
-- Proofread your work
+> **Exam Strategy:** Read questions carefully, plan your essays, manage time effectively, and always proofread!
 """
 
-MATH_NOTES = """# Important Concepts
+MATH_NOTES = """## 🔢 Important Concepts
 
-## Algebraic Expressions
+### Key Formulas
+- **Quadratic formula:** `x = (-b ± √(b²-4ac)) / 2a`
+- **Area of circle:** `πr²`
+- **Pythagoras theorem:** `a² + b² = c²`
+- **Distance formula:** `d = √[(x₂-x₁)² + (y₂-y₁)²]`
+
+### Algebraic Expressions
 - Simplifying expressions
-- Factorization techniques
-- Solving linear equations
-- Quadratic equations and formulas
+- **Factorization** techniques
+- Solving *linear* and *quadratic* equations
+- Working with **polynomials**
 
-## Geometry
+### Geometry & Trigonometry
 - Properties of shapes and angles
-- Pythagoras theorem
-- Area and perimeter calculations
-- Volume and surface area
+- **Pythagoras theorem** applications
+- Basic ratios: *sin, cos, tan*
+- Area, perimeter, volume calculations
 
-## Trigonometry
-- Basic ratios: sin, cos, tan
-- Trigonometric identities
-- Solving triangles
-- Applications in real-world problems
+### 💡 Study Tips
+1. **Practice problems daily** - consistency is key
+2. **Understand concepts**, don't just memorize formulas
+3. **Show all working** in exams for partial credit
+4. **Check your answers** by substituting back
+5. **Review mistakes** to learn from them
 
-## Key Formulas
-- Quadratic formula: x = (-b ± √(b²-4ac)) / 2a
-- Area of circle: πr²
-- Pythagoras: a² + b² = c²
-- Distance formula: d = √[(x₂-x₁)² + (y₂-y₁)²]
-
-## Study Tips
-- Practice problems daily
-- Understand concepts, don't just memorize
-- Show all working in exams
-- Check your answers
-- Review mistakes to learn from them
-
-## Common Mistakes to Avoid
-- Forgetting to simplify final answers
-- Sign errors in calculations
-- Not showing working steps
-- Rushing through problems
+> **Common Mistakes to Avoid:** Forgetting to simplify, sign errors, not showing working steps, rushing through problems
 """
 
-SCIENCE_NOTES = """# Scientific Concepts
+SCIENCE_NOTES = """## 🔬 Scientific Concepts
 
-## Key Principles
-- Observation and experimentation
-- Scientific method: hypothesis, test, analyze, conclude
-- Measurement and units
-- Data collection and analysis
+### Key Principles
+- **Observation** and experimentation
+- **Scientific method:** hypothesis → test → analyze → conclude
+- **Measurement** and units (SI units)
+- **Data collection** and analysis
 
-## Important Topics
-- Matter and its properties
-- Energy and its forms
-- Forces and motion
-- Chemical reactions
-- Living systems
+### Important Topics
+- **Matter** and its properties (*solid, liquid, gas*)
+- **Energy** and its forms (*kinetic, potential, thermal*)
+- **Forces** and motion
+- **Chemical reactions** and equations
+- **Living systems** and biological processes
 
-## Laboratory Skills
+### Laboratory Skills
 - Safe handling of equipment
-- Accurate measurements
-- Recording observations
-- Drawing conclusions from data
+- **Accurate measurements** and recordings
+- Recording **observations** systematically
+- Drawing **conclusions** from data
 
-## Study Strategies
-1. Understand concepts before memorizing
-2. Practice drawing diagrams
-3. Learn scientific terminology
-4. Connect theory to real-world examples
-5. Review practical experiments
+### 💡 Study Strategies
+1. **Understand concepts** before memorizing facts
+2. **Practice drawing diagrams** and labeling them
+3. **Learn scientific terminology** and definitions
+4. **Connect theory** to real-world examples
+5. **Review practical experiments** and their results
 
-## Exam Tips
-- Define terms clearly
-- Use scientific vocabulary
-- Draw labeled diagrams
-- Show calculations step by step
-- Relate answers to the question
+> **Exam Tips:** Define terms clearly, use scientific vocabulary, draw labeled diagrams, show calculations step by step
 """
 
-GENERAL_NOTES = """# Lesson Overview
+GENERAL_NOTES = """## 📖 Lesson Overview
 
-## Learning Objectives
+### Learning Objectives
 By the end of this lesson, you should be able to:
-- Understand the key concepts presented
-- Apply the knowledge to practical situations
-- Solve related problems independently
-- Explain concepts in your own words
+- ✅ **Understand** the key concepts presented
+- ✅ **Apply** the knowledge to practical situations
+- ✅ **Solve** related problems independently
+- ✅ **Explain** concepts in your own words
 
-## Important Points
-- Pay attention to definitions and terminology
-- Note examples and how they illustrate concepts
-- Practice with exercises to reinforce learning
-- Review regularly to retain information
+### Important Points
+- Pay attention to **definitions** and terminology
+- Note **examples** and how they illustrate concepts
+- Practice with **exercises** to reinforce learning
+- **Review regularly** to retain information
 
-## Study Strategies
-1. Take notes while watching the video
-2. Pause and replay difficult sections
-3. Complete practice exercises
-4. Ask questions if anything is unclear
-5. Review notes before exams
-6. Form study groups for discussion
+### 💡 Study Strategies
+1. **Take notes** while watching the video
+2. **Pause and replay** difficult sections
+3. **Complete practice exercises** after each lesson
+4. **Ask questions** if anything is unclear
+5. **Review notes** before exams
+6. **Form study groups** for discussion
 
-## Additional Resources
-- Refer to your textbook for more examples
-- Practice past questions on this topic
-- Join study groups for discussion
-- Consult your teacher for clarification
-- Use online resources for extra practice
+### Additional Resources
+- 📚 Refer to your **textbook** for more examples
+- 📝 Practice **past questions** on this topic
+- 👥 Join **study groups** for discussion
+- 👨‍🏫 Consult your **teacher** for clarification
+- 🌐 Use **online resources** for extra practice
 
-## Time Management
-- Set aside regular study time
-- Break topics into manageable chunks
-- Review previous lessons regularly
-- Don't cram - study consistently
-- Take breaks to avoid burnout
+### ⏰ Time Management
+- Set aside **regular study time** each day
+- Break topics into **manageable chunks**
+- Review **previous lessons** regularly
+- Don't cram - **study consistently**
+- Take **breaks** to avoid burnout
 
-## Exam Preparation
-- Start revision early
-- Create summary notes
-- Practice past questions
-- Time yourself during practice
-- Get adequate rest before exams
+> **Exam Preparation:** Start revision early, create summary notes, practice past questions, time yourself during practice, and get adequate rest before exams
 """
 
 def get_notes_for_subject(subject_name):

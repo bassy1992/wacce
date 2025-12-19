@@ -1,21 +1,26 @@
 """
-Django management command to populate lesson notes
-Usage: python manage.py populate_lesson_notes
+Update lesson notes with markdown formatting on Railway database
+Run this on Railway to update all lesson notes with rich formatting
 """
-from django.core.management.base import BaseCommand
+import os
+import sys
+import django
+
+# Add the wacebackend directory to the path
+script_dir = os.path.dirname(os.path.abspath(__file__))
+wacebackend_dir = os.path.join(script_dir, 'wacebackend')
+sys.path.insert(0, wacebackend_dir)
+
+# Change to wacebackend directory
+os.chdir(wacebackend_dir)
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wace_api.settings')
+django.setup()
+
 from courses.models import Lesson
 
-
-class Command(BaseCommand):
-    help = 'Populate lesson notes for all lessons'
-
-    def handle(self, *args, **options):
-        self.stdout.write("=" * 70)
-        self.stdout.write(self.style.SUCCESS("POPULATING LESSON NOTES"))
-        self.stdout.write("=" * 70)
-        
-        # Notes templates with rich markdown formatting
-        english_notes = """## 📚 Key Points to Remember
+# Sample notes templates with rich markdown formatting
+ENGLISH_NOTES = """## 📚 Key Points to Remember
 
 ### Grammar Fundamentals
 - **Parts of speech:** nouns, verbs, adjectives, adverbs
@@ -42,7 +47,7 @@ class Command(BaseCommand):
 > **Exam Strategy:** Read questions carefully, plan your essays, manage time effectively, and always proofread!
 """
 
-        math_notes = """## 🔢 Important Concepts
+MATH_NOTES = """## 🔢 Important Concepts
 
 ### Key Formulas
 - **Quadratic formula:** `x = (-b ± √(b²-4ac)) / 2a`
@@ -72,7 +77,7 @@ class Command(BaseCommand):
 > **Common Mistakes to Avoid:** Forgetting to simplify, sign errors, not showing working steps, rushing through problems
 """
 
-        science_notes = """## 🔬 Scientific Concepts
+SCIENCE_NOTES = """## 🔬 Scientific Concepts
 
 ### Key Principles
 - **Observation** and experimentation
@@ -103,7 +108,7 @@ class Command(BaseCommand):
 > **Exam Tips:** Define terms clearly, use scientific vocabulary, draw labeled diagrams, show calculations step by step
 """
 
-        general_notes = """## 📖 Lesson Overview
+GENERAL_NOTES = """## 📖 Lesson Overview
 
 ### Learning Objectives
 By the end of this lesson, you should be able to:
@@ -143,35 +148,36 @@ By the end of this lesson, you should be able to:
 > **Exam Preparation:** Start revision early, create summary notes, practice past questions, time yourself during practice, and get adequate rest before exams
 """
 
-        # Process lessons
-        lessons = Lesson.objects.all()
-        total = lessons.count()
-        updated = 0
-        skipped = 0
+def get_notes_for_subject(subject_name):
+    """Return appropriate notes based on subject"""
+    if 'English' in subject_name or 'Literature' in subject_name:
+        return ENGLISH_NOTES
+    elif 'Math' in subject_name:
+        return MATH_NOTES
+    elif 'Science' in subject_name or 'Physics' in subject_name or 'Chemistry' in subject_name or 'Biology' in subject_name:
+        return SCIENCE_NOTES
+    else:
+        return GENERAL_NOTES
+
+def update_notes():
+    """Update notes for all lessons with markdown formatting"""
+    print("=" * 70)
+    print("UPDATING LESSON NOTES WITH MARKDOWN FORMATTING ON RAILWAY")
+    print("=" * 70)
+    
+    lessons = Lesson.objects.all()
+    total = lessons.count()
+    updated = 0
+    
+    print(f"\nFound {total} lessons")
+    print("\nUpdating with formatted notes...")
+    
+    for i, lesson in enumerate(lessons, 1):
+        subject_name = lesson.topic.subject.name
+        base_notes = get_notes_for_subject(subject_name)
         
-        self.stdout.write(f"\nFound {total} lessons\n")
-        self.stdout.write("Processing...\n")
-        
-        for i, lesson in enumerate(lessons, 1):
-            # Skip if already has notes
-            if lesson.notes:
-                skipped += 1
-                continue
-            
-            subject_name = lesson.topic.subject.name
-            
-            # Choose appropriate notes
-            if 'English' in subject_name or 'Literature' in subject_name:
-                base_notes = english_notes
-            elif 'Math' in subject_name:
-                base_notes = math_notes
-            elif 'Science' in subject_name or 'Physics' in subject_name or 'Chemistry' in subject_name or 'Biology' in subject_name:
-                base_notes = science_notes
-            else:
-                base_notes = general_notes
-            
-            # Customize with lesson info
-            lesson.notes = f"""# {lesson.title}
+        # Customize notes with lesson-specific information
+        lesson.notes = f"""# {lesson.title}
 
 {base_notes}
 
@@ -187,21 +193,28 @@ By the end of this lesson, you should be able to:
 
 *These notes supplement the video content. Watch the video for complete understanding.*
 """
-            
-            lesson.save()
-            updated += 1
-            
-            # Progress indicator
-            if i % 10 == 0:
-                self.stdout.write(f"  Processed {i}/{total} lessons...")
         
-        # Summary
-        self.stdout.write("\n" + "=" * 70)
-        self.stdout.write(self.style.SUCCESS("SUMMARY"))
-        self.stdout.write("=" * 70)
-        self.stdout.write(f"Total lessons: {total}")
-        self.stdout.write(self.style.SUCCESS(f"Updated: {updated}"))
-        self.stdout.write(f"Skipped (already had notes): {skipped}")
-        self.stdout.write("=" * 70)
-        self.stdout.write(self.style.SUCCESS("\n✓ Done! All lessons now have notes."))
-        self.stdout.write("\nYou can now see lesson notes on the topic pages!\n")
+        lesson.save()
+        updated += 1
+        
+        # Progress indicator
+        if i % 10 == 0:
+            print(f"  Updated {i}/{total} lessons...")
+    
+    print("\n" + "=" * 70)
+    print("SUMMARY")
+    print("=" * 70)
+    print(f"Total lessons: {total}")
+    print(f"Updated: {updated}")
+    print("=" * 70)
+    print("\n✓ Done! All lesson notes updated with markdown formatting.")
+    print("\nThe notes now include bold, italic, emojis, and better structure!")
+
+if __name__ == '__main__':
+    try:
+        update_notes()
+    except Exception as e:
+        print(f"\n✗ Error: {e}")
+        print("\nMake sure you're connected to the Railway database.")
+        import traceback
+        traceback.print_exc()

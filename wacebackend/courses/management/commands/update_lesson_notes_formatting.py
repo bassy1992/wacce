@@ -1,17 +1,17 @@
 """
-Django management command to populate lesson notes
-Usage: python manage.py populate_lesson_notes
+Django management command to update lesson notes with markdown formatting
+Usage: python manage.py update_lesson_notes_formatting
 """
 from django.core.management.base import BaseCommand
 from courses.models import Lesson
 
 
 class Command(BaseCommand):
-    help = 'Populate lesson notes for all lessons'
+    help = 'Update lesson notes with rich markdown formatting'
 
     def handle(self, *args, **options):
         self.stdout.write("=" * 70)
-        self.stdout.write(self.style.SUCCESS("POPULATING LESSON NOTES"))
+        self.stdout.write(self.style.SUCCESS("UPDATING LESSON NOTES WITH MARKDOWN FORMATTING"))
         self.stdout.write("=" * 70)
         
         # Notes templates with rich markdown formatting
@@ -147,17 +147,11 @@ By the end of this lesson, you should be able to:
         lessons = Lesson.objects.all()
         total = lessons.count()
         updated = 0
-        skipped = 0
         
         self.stdout.write(f"\nFound {total} lessons\n")
-        self.stdout.write("Processing...\n")
+        self.stdout.write("Updating with formatted notes...\n")
         
         for i, lesson in enumerate(lessons, 1):
-            # Skip if already has notes
-            if lesson.notes:
-                skipped += 1
-                continue
-            
             subject_name = lesson.topic.subject.name
             
             # Choose appropriate notes
@@ -193,7 +187,7 @@ By the end of this lesson, you should be able to:
             
             # Progress indicator
             if i % 10 == 0:
-                self.stdout.write(f"  Processed {i}/{total} lessons...")
+                self.stdout.write(f"  Updated {i}/{total} lessons...")
         
         # Summary
         self.stdout.write("\n" + "=" * 70)
@@ -201,7 +195,6 @@ By the end of this lesson, you should be able to:
         self.stdout.write("=" * 70)
         self.stdout.write(f"Total lessons: {total}")
         self.stdout.write(self.style.SUCCESS(f"Updated: {updated}"))
-        self.stdout.write(f"Skipped (already had notes): {skipped}")
         self.stdout.write("=" * 70)
-        self.stdout.write(self.style.SUCCESS("\n✓ Done! All lessons now have notes."))
-        self.stdout.write("\nYou can now see lesson notes on the topic pages!\n")
+        self.stdout.write(self.style.SUCCESS("\n✓ Done! All lesson notes updated with markdown formatting."))
+        self.stdout.write("\nThe notes now include bold, italic, emojis, and better structure!\n")
