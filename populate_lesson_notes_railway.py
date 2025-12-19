@@ -3,7 +3,16 @@ Populate lesson notes on Railway database
 Run this script to add notes to all lessons
 """
 import os
+import sys
 import django
+
+# Add the wacebackend directory to the path
+script_dir = os.path.dirname(os.path.abspath(__file__))
+wacebackend_dir = os.path.join(script_dir, 'wacebackend')
+sys.path.insert(0, wacebackend_dir)
+
+# Change to wacebackend directory
+os.chdir(wacebackend_dir)
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wace_api.settings')
 django.setup()
