@@ -1,5 +1,6 @@
 import React from "react";
 import Navigation from "../components/Navigation";
+import TeamSection from "../components/TeamSection";
 import {
   Card,
   CardContent,
@@ -20,40 +21,6 @@ import {
 } from "lucide-react";
 
 export default function About() {
-  const teamMembers = [
-    {
-      name: "Dr. Kwame Asante",
-      role: "Principal & Mathematics Specialist",
-      qualifications: "PhD Mathematics Education, University of Ghana",
-      experience: "15+ years",
-      image: "👨‍🏫",
-      specialties: ["Mathematics", "Physics", "Statistics"],
-    },
-    {
-      name: "Mrs. Akosua Mensah",
-      role: "Academic Director & English Literature",
-      qualifications: "MA English Literature, University of Cape Coast",
-      experience: "12+ years",
-      image: "👩‍🏫",
-      specialties: ["English Literature", "History", "French"],
-    },
-    {
-      name: "Mr. John Boateng",
-      role: "Science Department Head",
-      qualifications: "MSc Chemistry, KNUST",
-      experience: "10+ years",
-      image: "👨‍🔬",
-      specialties: ["Chemistry", "Biology", "Physics"],
-    },
-    {
-      name: "Ms. Grace Owusu",
-      role: "Business Studies Coordinator",
-      qualifications: "MBA, University of Ghana Business School",
-      experience: "8+ years",
-      image: "👩‍💼",
-      specialties: ["Accounting", "Economics", "Management"],
-    },
-  ];
 
   const values = [
     {
@@ -462,82 +429,11 @@ export default function About() {
         </div>
       </section>
 
-      {/* Our Team */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Meet Our Expert Team
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Experienced educators dedicated to your academic success
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, index) => (
-              <Card
-                key={index}
-                className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 group"
-              >
-                <CardHeader className="text-center">
-                  <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300 group-hover:animate-bounce">
-                    {member.image}
-                  </div>
-                  <CardTitle
-                    className="text-xl group-hover:text-[#00ADB5] transition-colors duration-300"
-                    style={{ color: "#222831" }}
-                  >
-                    {member.name}
-                  </CardTitle>
-                  <CardDescription
-                    className="font-medium group-hover:text-[#00ADB5] transition-colors duration-300"
-                    style={{ color: "#393E46" }}
-                  >
-                    {member.role}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <p
-                      className="text-sm mb-2 group-hover:text-gray-800 transition-colors duration-300"
-                      style={{ color: "#393E46" }}
-                    >
-                      {member.qualifications}
-                    </p>
-                    <Badge
-                      variant="secondary"
-                      className="bg-green-100 text-green-800 group-hover:scale-105 transition-transform duration-300"
-                    >
-                      {member.experience}
-                    </Badge>
-                  </div>
-                  <div>
-                    <h5
-                      className="font-medium mb-2 group-hover:text-[#00ADB5] transition-colors duration-300"
-                      style={{ color: "#222831" }}
-                    >
-                      Specialties:
-                    </h5>
-                    <div className="flex flex-wrap gap-1">
-                      {member.specialties.map((specialty, idx) => (
-                        <Badge
-                          key={idx}
-                          variant="outline"
-                          className="text-xs hover:scale-105 transition-transform duration-200"
-                          style={{ borderColor: "#393E46", color: "#393E46" }}
-                        >
-                          {specialty}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Our Team - Dynamic from Database */}
+      <TeamSection 
+        title="Meet Our Expert Team"
+        subtitle="Experienced educators dedicated to your academic success"
+      />
 
       {/* Achievements */}
       <section className="py-16 bg-white">
