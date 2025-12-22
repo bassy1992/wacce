@@ -66,10 +66,13 @@ MIDDLEWARE = [
 
 # CSRF settings for API
 CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
     "http://localhost:8081",
     "http://127.0.0.1:8081",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://wacce-production.up.railway.app",  # Railway production
 ]
 
 # Add production origins from environment
