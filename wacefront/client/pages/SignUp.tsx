@@ -129,6 +129,8 @@ export default function SignUp() {
 
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
+    } else if (!/^\+?[\d\s\-\(\)]{10,15}$/.test(formData.phone.trim())) {
+      newErrors.phone = "Phone must be 10-15 digits (e.g., +233 XX XXX XXXX or 0XXXXXXXXX)";
     }
 
     if (formData.password.length < 8) {
@@ -175,6 +177,13 @@ export default function SignUp() {
     }
 
     try {
+      // Generate a unique index number if not provided
+      const generateIndexNumber = () => {
+        const timestamp = Date.now().toString().slice(-8);
+        const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return `IDX${timestamp}${random}`;
+      };
+
       const signupData = {
         username: formData.username,
         email: formData.email,
@@ -186,7 +195,7 @@ export default function SignUp() {
         programme_id: parseInt(formData.programmeId),
         previous_school: formData.highSchool,
         wassce_year: new Date().getFullYear(), // Current year
-        index_number: "N/A", // Default value
+        index_number: generateIndexNumber(), // Generate unique index number
       };
 
       console.log("Sending signup data:", signupData);
