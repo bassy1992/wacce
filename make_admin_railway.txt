@@ -1,0 +1,9 @@
+Copy and paste these commands ONE AT A TIME into the Railway Python shell:
+
+from django.contrib.auth.models import User
+user = User.objects.get(username='bassy')
+user.is_staff = True
+user.is_superuser = True
+user.save()
+print('✅ bassy is now admin!')
+exit()

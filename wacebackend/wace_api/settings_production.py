@@ -122,7 +122,7 @@ CSRF_COOKIE_HTTPONLY = False  # Must be False for JavaScript access
 if 'whitenoise.middleware.WhiteNoiseMiddleware' not in MIDDLEWARE:
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# WhiteNoise is configured in STORAGES in main settings.py
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Disable HTTPS redirect for Railway health checks
