@@ -215,6 +215,10 @@ CSRF_COOKIE_SAMESITE = 'None' if not DEBUG else 'Lax'
 CSRF_COOKIE_SECURE = not DEBUG  # True in production
 CSRF_COOKIE_HTTPONLY = False  # Must be False for JavaScript access
 
+# For admin panel access on Railway
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_DOMAIN = None
+
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
