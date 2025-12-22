@@ -26,6 +26,7 @@ export const API_ENDPOINTS = {
     UNMARK_LESSON_COMPLETE: (id: number) => `${API_BASE_URL}/courses/lessons/${id}/uncomplete/`,
     TOPIC_PROGRESS: (id: number) => `${API_BASE_URL}/courses/topics/${id}/progress/`,
     ANNOUNCEMENTS: `${API_BASE_URL}/courses/announcements/`,
+    INSTRUCTORS: `${API_BASE_URL}/courses/instructors/`,
   },
   STUDENTS: {
     PROFILE: `${API_BASE_URL}/students/profile/`,
@@ -430,7 +431,46 @@ export interface AnnouncementsResponse {
   total_count: number;
 }
 
+export interface InstructorSpecialty {
+  id: number;
+  name: string;
+  is_primary: boolean;
+}
+
+export interface Instructor {
+  id: number;
+  title: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  role: string;
+  position_title: string;
+  highest_degree: string;
+  institution: string;
+  years_experience: number;
+  experience_text: string;
+  bio: string;
+  photo: string;
+  email: string;
+  specialties: InstructorSpecialty[];
+  is_featured: boolean;
+}
+
+export interface InstructorsResponse {
+  instructors: Instructor[];
+  total_count: number;
+}
+
 export const announcementsAPI = {
   getAnnouncements: (): Promise<AnnouncementsResponse> =>
     apiRequest(API_ENDPOINTS.COURSES.ANNOUNCEMENTS),
+};
+
+export const instructorsAPI = {
+  getInstructors: (featured?: boolean): Promise<InstructorsResponse> => {
+    const url = featured 
+      ? `${API_ENDPOINTS.COURSES.INSTRUCTORS}?featured=true`
+      : API_ENDPOINTS.COURSES.INSTRUCTORS;
+    return apiRequest(url);
+  },
 };

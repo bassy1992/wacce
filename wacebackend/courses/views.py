@@ -334,3 +334,55 @@ def get_announcements(request):
         'announcements': announcements_data,
         'total_count': len(announcements_data)
     })
+
+
+@api_view(['GET'])
+@permission_classes([])  # Allow any user (authenticated or not)
+def get_instructors(request):
+    """Get all active instructors with their specialties"""
+    from .models import Instructor, InstructorSpecialty
+    
+    # Get query parameters
+    featured_only = request.GET.get('featured', 'false').lower() == 'true'
+    
+    # Filter instructors
+    instructors = Instructor.objects.filter(is_active=True)
+    if featured_only:
+        instructors = instructors.filter(is_featured=True)
+    
+    instructors = instructors.prefetch_related('specialties__subject').order_by('display_order', 'last_name')
+    
+    instructors_data = []
+    for instructor in instructors:
+        # Get specialties
+        specialties = []
+        for specialty in instructor.specialties.all():
+            specialties.append({
+                'id': specialty.subject.id,
+                'name': specialty.subject.name,
+                'is_primary': specialty.is_primary
+            })
+        
+        instructors_data.append({
+            'id': instructor.id,
+            'title': instructor.get_title_display(),
+            'first_name': instructor.first_name,
+            'last_name': instructor.last_name,
+            'full_name': instructor.full_name,
+            'role': instructor.get_role_display(),
+            'position_title': instructor.position_title,
+            'highest_degree': instructor.highest_degree,
+            'institution': instructor.institution,
+            'years_experience': instructor.years_experience,
+            'experience_text': instructor.experience_text,
+            'bio': instructor.bio,
+            'photo': instructor.photo,
+            'email': instructor.email,
+            'specialties': specialties,
+            'is_featured': instructor.is_featured
+        })
+    
+    return Response({
+        'instructors': instructors_data,
+        'total_count': len(instructors_data)
+    })

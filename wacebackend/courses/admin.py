@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Subject, ProgrammeSubject, Topic, Lesson, LessonResource, Announcement
+from .models import (
+    Subject, ProgrammeSubject, Topic, Lesson, LessonResource, 
+    Announcement, Instructor, InstructorSpecialty
+)
 
 
 class TopicInline(admin.TabularInline):
@@ -108,3 +111,46 @@ class AnnouncementAdmin(admin.ModelAdmin):
             'description': 'Set expiration date if announcement should auto-expire'
         }),
     )
+
+
+class InstructorSpecialtyInline(admin.TabularInline):
+    model = InstructorSpecialty
+    extra = 1
+    fields = ['subject', 'is_primary']
+
+
+@admin.register(Instructor)
+class InstructorAdmin(admin.ModelAdmin):
+    list_display = ['full_name', 'position_title', 'years_experience', 'is_active', 'is_featured', 'display_order']
+    list_filter = ['role', 'is_active', 'is_featured', 'title']
+    search_fields = ['first_name', 'last_name', 'position_title', 'email']
+    ordering = ['display_order', 'last_name']
+    inlines = [InstructorSpecialtyInline]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'first_name', 'last_name', 'role', 'position_title')
+        }),
+        ('Qualifications', {
+            'fields': ('highest_degree', 'institution', 'years_experience')
+        }),
+        ('Profile', {
+            'fields': ('bio', 'photo', 'email')
+        }),
+        ('Display Settings', {
+            'fields': ('display_order', 'is_active', 'is_featured'),
+            'description': 'Control how and where this instructor appears'
+        }),
+    )
+    
+    def full_name(self, obj):
+        return obj.full_name
+    full_name.short_description = 'Name'
+
+
+@admin.register(InstructorSpecialty)
+class InstructorSpecialtyAdmin(admin.ModelAdmin):
+    list_display = ['instructor', 'subject', 'is_primary']
+    list_filter = ['is_primary', 'subject__subject_type']
+    search_fields = ['instructor__first_name', 'instructor__last_name', 'subject__name']
+    ordering = ['instructor', '-is_primary', 'subject']
