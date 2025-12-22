@@ -203,7 +203,8 @@ export interface ApiError {
 // API Helper Functions
 export const apiRequest = async <T>(
   url: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  skipAuth: boolean = false
 ): Promise<T> => {
   // Add timeout for mobile networks (30 seconds)
   const controller = new AbortController();
@@ -218,8 +219,8 @@ export const apiRequest = async <T>(
       ...(options.headers as Record<string, string>),
     };
     
-    // Add token to headers if available
-    if (token) {
+    // Add token to headers if available (unless skipAuth is true)
+    if (token && !skipAuth) {
       headers['Authorization'] = `Token ${token}`;
     }
     
@@ -325,10 +326,10 @@ export const authAPI = {
 
 export const coursesAPI = {
   getProgrammes: (): Promise<{ programmes: Programme[]; total_count: number }> =>
-    apiRequest(API_ENDPOINTS.COURSES.PROGRAMMES),
+    apiRequest(API_ENDPOINTS.COURSES.PROGRAMMES, {}, true), // Skip auth for public endpoint
 
   getProgrammeDetail: (id: number): Promise<Programme> =>
-    apiRequest(API_ENDPOINTS.COURSES.PROGRAMME_DETAIL(id)),
+    apiRequest(API_ENDPOINTS.COURSES.PROGRAMME_DETAIL(id), {}, true), // Skip auth for public endpoint
 
   getSubjectDetail: (id: number): Promise<SubjectDetail> =>
     apiRequest(API_ENDPOINTS.COURSES.SUBJECT_DETAIL(id)),
@@ -406,7 +407,7 @@ export const studentsAPI = {
     apiRequest(API_ENDPOINTS.STUDENTS.DASHBOARD),
 
   getHighSchools: (): Promise<{ schools: string[]; total_count: number }> =>
-    apiRequest(API_ENDPOINTS.STUDENTS.HIGH_SCHOOLS),
+    apiRequest(API_ENDPOINTS.STUDENTS.HIGH_SCHOOLS, {}, true), // Skip auth for public endpoint
 };
 
 export const pastQuestionsAPI = {
@@ -463,7 +464,7 @@ export interface InstructorsResponse {
 
 export const announcementsAPI = {
   getAnnouncements: (): Promise<AnnouncementsResponse> =>
-    apiRequest(API_ENDPOINTS.COURSES.ANNOUNCEMENTS),
+    apiRequest(API_ENDPOINTS.COURSES.ANNOUNCEMENTS, {}, true), // Skip auth for public endpoint
 };
 
 export const instructorsAPI = {
@@ -471,6 +472,6 @@ export const instructorsAPI = {
     const url = featured 
       ? `${API_ENDPOINTS.COURSES.INSTRUCTORS}?featured=true`
       : API_ENDPOINTS.COURSES.INSTRUCTORS;
-    return apiRequest(url);
+    return apiRequest(url, {}, true); // Skip auth for public endpoint
   },
 };
