@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('courses', '0002_announcement_lessoncompletion'),
+        ('courses', '0005_lesson_notes'),
     ]
 
     operations = [

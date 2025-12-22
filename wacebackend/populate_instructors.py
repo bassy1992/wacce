@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 """
 Script to populate instructors based on your team data
+Run from wacebackend directory: python populate_instructors.py
 """
 import os
 import sys
 import django
 
 # Setup Django
-sys.path.insert(0, os.path.dirname(__file__))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'wacebackend'))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wacebackend.settings')
 django.setup()
 
