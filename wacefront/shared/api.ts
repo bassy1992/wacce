@@ -30,6 +30,7 @@ export const API_ENDPOINTS = {
   STUDENTS: {
     PROFILE: `${API_BASE_URL}/students/profile/`,
     DASHBOARD: `${API_BASE_URL}/students/dashboard/`,
+    HIGH_SCHOOLS: `${API_BASE_URL}/students/high-schools/`,
   },
   PAST_QUESTIONS: {
     STUDENT_PAPERS: `${API_BASE_URL}/past-questions/student/`,
@@ -402,6 +403,9 @@ export const studentsAPI = {
 
   getDashboard: (): Promise<DashboardData> =>
     apiRequest(API_ENDPOINTS.STUDENTS.DASHBOARD),
+
+  getHighSchools: (): Promise<{ schools: string[]; total_count: number }> =>
+    apiRequest(API_ENDPOINTS.STUDENTS.HIGH_SCHOOLS),
 };
 
 export const pastQuestionsAPI = {

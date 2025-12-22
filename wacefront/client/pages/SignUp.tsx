@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
-import { authAPI, coursesAPI, Programme, ApiError } from "../../shared/api";
+import { authAPI, coursesAPI, studentsAPI, Programme, ApiError } from "../../shared/api";
 import { useAuth } from "../contexts/AuthContext";
 import {
   Card,
@@ -50,9 +50,11 @@ export default function SignUp() {
     password: "",
     confirmPassword: "",
     programmeId: "",
+    highSchool: "",
     agreeTerms: false,
   });
   const [programmes, setProgrammes] = useState<Programme[]>([]);
+  const [highSchools, setHighSchools] = useState<string[]>([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,6 +62,7 @@ export default function SignUp() {
   const [generalError, setGeneralError] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [isLoadingProgrammes, setIsLoadingProgrammes] = useState(true);
+  const [isLoadingSchools, setIsLoadingSchools] = useState(true);
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -84,6 +87,23 @@ export default function SignUp() {
     };
 
     fetchProgrammes();
+  }, []);
+
+  // Fetch high schools on component mount
+  useEffect(() => {
+    const fetchHighSchools = async () => {
+      try {
+        setIsLoadingSchools(true);
+        const data = await studentsAPI.getHighSchools();
+        setHighSchools(data.schools);
+      } catch (error) {
+        console.error("Failed to fetch high schools:", error);
+      } finally {
+        setIsLoadingSchools(false);
+      }
+    };
+
+    fetchHighSchools();
   }, []);
 
   const validateForm = () => {
@@ -125,6 +145,10 @@ export default function SignUp() {
       newErrors.programmeId = "Invalid programme selection";
     }
 
+    if (!formData.highSchool.trim()) {
+      newErrors.highSchool = "Please select your high school";
+    }
+
     if (!formData.agreeTerms) {
       newErrors.agreeTerms = "You must agree to the Terms of Service";
     }
@@ -160,7 +184,7 @@ export default function SignUp() {
         phone_number: formData.phone,
         date_of_birth: "2000-01-01", // Default value
         programme_id: parseInt(formData.programmeId),
-        previous_school: "N/A", // Default value
+        previous_school: formData.highSchool,
         wassce_year: new Date().getFullYear(), // Current year
         index_number: "N/A", // Default value
       };
@@ -435,6 +459,38 @@ export default function SignUp() {
                     </Select>
                     {errors.programmeId && (
                       <p className="text-sm text-red-600">{errors.programmeId}</p>
+                    )}
+                  </div>
+
+                  {/* High School Selection */}
+                  <div className="space-y-2">
+                    <Label htmlFor="highSchool">Previous High School</Label>
+                    <Select
+                      value={formData.highSchool}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, highSchool: value })
+                      }
+                      disabled={isLoadingSchools}
+                    >
+                      <SelectTrigger>
+                        <SelectValue 
+                          placeholder={
+                            isLoadingSchools 
+                              ? "Loading schools..." 
+                              : "Select your high school"
+                          } 
+                        />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[300px]">
+                        {highSchools.map((school) => (
+                          <SelectItem key={school} value={school}>
+                            {school}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.highSchool && (
+                      <p className="text-sm text-red-600">{errors.highSchool}</p>
                     )}
                   </div>
 

@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login
-from .models import Student, Programme, StudentProgress
+from .models import Student, Programme, StudentProgress, GHANA_HIGH_SCHOOLS
 from .serializers import (
     StudentSerializer, ProgrammeSerializer, 
     StudentProgressSerializer, StudentRegistrationSerializer
@@ -13,6 +13,18 @@ class ProgrammeListView(generics.ListAPIView):
     queryset = Programme.objects.all()
     serializer_class = ProgrammeSerializer
     permission_classes = [AllowAny]
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_high_schools(request):
+    """
+    Get list of Ghana high schools for signup form
+    """
+    return Response({
+        'schools': GHANA_HIGH_SCHOOLS,
+        'total_count': len(GHANA_HIGH_SCHOOLS)
+    })
 
 @api_view(['POST'])
 @permission_classes([AllowAny])

@@ -212,8 +212,10 @@ export default function Topic() {
                         src={currentLesson.video_url}
                         className="w-full h-full"
                         controls
-                        controlsList="nodownload"
+                        controlsList="nodownload noremoteplayback"
+                        disablePictureInPicture
                         preload="metadata"
+                        onContextMenu={(e) => e.preventDefault()}
                       >
                         Your browser does not support the video tag.
                       </video>

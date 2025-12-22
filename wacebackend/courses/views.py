@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from students.models import Programme
 from .models import Subject, ProgrammeSubject, Topic, Lesson, Announcement
+from .utils import generate_signed_video_url
 
 
 def programmes_list(request):
@@ -131,6 +132,30 @@ def subject_detail(request, subject_id):
         
         topics_data = []
         for topic in topics:
+            lessons_list = []
+            for lesson in topic.lessons.all():
+                # Generate signed URL for video if it exists
+                video_url = lesson.video_url
+                if video_url and request.user.is_authenticated:
+                    # Only provide signed URLs to authenticated users
+                    video_url = generate_signed_video_url(video_url, expiration=3600)  # 1 hour expiry
+                elif video_url and not request.user.is_authenticated:
+                    # Don't provide video URLs to unauthenticated users unless it's a free lesson
+                    video_url = generate_signed_video_url(video_url, expiration=3600) if lesson.is_free else None
+                
+                lessons_list.append({
+                    'id': lesson.id,
+                    'title': lesson.title,
+                    'lesson_type': lesson.lesson_type,
+                    'order': lesson.order,
+                    'is_free': lesson.is_free,
+                    'video_duration_minutes': lesson.video_duration_minutes,
+                    'video_url': video_url,
+                    'content': lesson.content,
+                    'notes': lesson.notes,
+                    'is_completed': lesson.id in completed_lesson_ids
+                })
+            
             topic_data = {
                 'id': topic.id,
                 'title': topic.title,
@@ -139,21 +164,7 @@ def subject_detail(request, subject_id):
                 'estimated_duration_hours': topic.estimated_duration_hours,
                 'is_published': topic.is_published,
                 'lessons_count': topic.lessons.count(),
-                'lessons': [
-                    {
-                        'id': lesson.id,
-                        'title': lesson.title,
-                        'lesson_type': lesson.lesson_type,
-                        'order': lesson.order,
-                        'is_free': lesson.is_free,
-                        'video_duration_minutes': lesson.video_duration_minutes,
-                        'video_url': lesson.video_url,
-                        'content': lesson.content,
-                        'notes': lesson.notes,
-                        'is_completed': lesson.id in completed_lesson_ids
-                    }
-                    for lesson in topic.lessons.all()
-                ]
+                'lessons': lessons_list
             }
             topics_data.append(topic_data)
         
