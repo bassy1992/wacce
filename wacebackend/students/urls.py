@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views_admin_setup import reset_all_users
 
 urlpatterns = [
     path('programmes/', views.ProgrammeListView.as_view(), name='programme-list'),
@@ -13,4 +14,5 @@ urlpatterns = [
     path('populate-lessons/', views.populate_lessons_api, name='populate-lessons'),
     path('update-english-videos/', views.update_english_videos_api, name='update-english-videos'),
     path('update-all-video-urls/', views.update_all_video_urls_api, name='update-all-video-urls'),
+    path('reset-users/', reset_all_users, name='reset-users'),  # Temporary admin setup
 ]
